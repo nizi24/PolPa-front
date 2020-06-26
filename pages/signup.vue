@@ -5,6 +5,7 @@
       <form>
         <v-text-field v-model="name" :counter="10" label="Name" data-vv-name="name" required></v-text-field>
         <v-text-field v-model="email" :counter="40" label="Email" data-vv-name="email" required></v-text-field>
+        <v-text-field v-model="screen_name" label="ScreenName" data-vv-name="screen_name" required></v-text-field>
         <v-text-field
           v-model="password"
           label="password"
@@ -31,12 +32,14 @@
 </template>
 
 <script>
+import axios from '@/plugins/axios'
 import firebase from '@/plugins/firebase'
 export default {
   data () {
     return {
       email: '',
       name: '',
+      screen_name: '',
       password: '',
       passwordConfirm: '',
       show1: false,
@@ -53,7 +56,16 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((res) => {
-          console.log(res.user)
+          const user = {
+            email: res.user.email,
+            name: this.name,
+            screen_name: this.screen_name,
+            uid: res.user.uid
+          }
+          axios.post('/v1/users', { user }).then((responce) => {
+            this.$router.push('/')
+            console.log(responce)
+          })
         })
         .catch((error) => {
           this.error = ((code) => {

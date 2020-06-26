@@ -38,6 +38,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    '@/plugins/auth-check'
   ],
   /*
   ** Auto import components
