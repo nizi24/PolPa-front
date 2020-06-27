@@ -1,14 +1,16 @@
 <template>
-  <v-row>
-    <v-col cols="12" md="4">
-      <h2>Sign Up</h2>
-      <form>
-        <v-text-field v-model="name" :counter="10" label="Name" data-vv-name="name" required></v-text-field>
-        <v-text-field v-model="email" :counter="40" label="Email" data-vv-name="email" required></v-text-field>
-        <v-text-field v-model="screen_name" label="ScreenName" data-vv-name="screen_name" required></v-text-field>
+  <v-card class="mx-auto mt-5 pa-5" width="500px">
+    <v-card-title>
+      <h1 class="display-1">新規登録</h1>
+    </v-card-title>
+    <v-card-text>
+      <v-form>
+        <v-text-field v-model="name" :counter="10" label="名前" data-vv-name="name" required></v-text-field>
+        <v-text-field v-model="email" label="メールアドレス" data-vv-name="email" required></v-text-field>
+        <v-text-field v-model="screen_name" label="ユーザーID" data-vv-name="screen_name" required></v-text-field>
         <v-text-field
           v-model="password"
-          label="password"
+          label="パスワード"
           data-vv-name="password"
           required
           :type="show1 ? 'text' : 'password'"
@@ -17,18 +19,18 @@
         ></v-text-field>
         <v-text-field
           v-model="passwordConfirm"
-          label="passwordConfirm"
+          label="パスワードの確認"
           data-vv-name="passwordConfirm"
           required
           :type="show2 ? 'text' : 'password'"
           :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="show2 = !show2"
         ></v-text-field>
-        <v-btn class="mr-4" @click="signup">submit</v-btn>
+        <v-btn class="mr-4 light-green lighten-3 mx-auto" @click="signup">登録</v-btn>
         <p v-if="error" class="errors">{{error}}</p>
-      </form>
-    </v-col>
-  </v-row>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

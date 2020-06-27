@@ -4,7 +4,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export const state = () => ({
-  currentUser: null
+  currentUser: {
+    name: '',
+    email: '',
+    screen_name: ''
+  }
 })
 
 export const getters = {

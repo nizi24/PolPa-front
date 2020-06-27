@@ -1,22 +1,26 @@
 <template>
   <v-row>
-    <v-col cols="12" md="4">
-      <h2>Login</h2>
-      <form>
-        <v-text-field v-model="email" :counter="20" label="email" data-vv-name="email" required></v-text-field>
-        <v-text-field
-          v-model="password"
-          label="password"
-          data-vv-name="password"
-          required
-          :type="show1 ? 'text' : 'password'"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="show1 = !show1"
-        ></v-text-field>
-        <v-btn class="mr-4" @click="login">submit</v-btn>
-        <p v-if="error" class="errors">{{error}}</p>
-      </form>
-    </v-col>
+    <v-card class="mx-auto mt-5 pa-5" width="500px">
+      <v-card-title>
+        <h1 class="display-1">ログイン</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form>
+          <v-text-field v-model="email" label="メールアドレス" data-vv-name="email" required></v-text-field>
+          <v-text-field
+            v-model="password"
+            label="パスワード"
+            data-vv-name="password"
+            required
+            :type="show1 ? 'text' : 'password'"
+            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="show1 = !show1"
+          ></v-text-field>
+          <v-btn class="mr-4 light-green lighten-3 mx-auto" @click="login">ログイン</v-btn>
+          <p v-if="error" class="errors">{{error}}</p>
+        </v-form>
+      </v-card-text>
+    </v-card>
   </v-row>
 </template>
 
