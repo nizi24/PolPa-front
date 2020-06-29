@@ -54,6 +54,7 @@ export default {
       if (this.password !== this.passwordConfirm) {
         this.error = '※パスワードとパスワード確認が一致していません'
       }
+      this.$store.commit('setLoading', true)
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
@@ -65,8 +66,9 @@ export default {
             uid: res.user.uid
           }
           axios.post('/v1/users', { user }).then((responce) => {
+            this.$store.commit('setLoading', false)
+            this.$store.commit('setUser', responce.data)
             this.$router.push('/')
-            console.log(responce)
           })
         })
         .catch((error) => {
