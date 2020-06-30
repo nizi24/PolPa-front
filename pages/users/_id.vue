@@ -62,7 +62,7 @@
 
 <script>
 import axios from '@/plugins/axios'
-import ErrorCard from '~/components/molecules/error-card.vue'
+import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Heatmap from '~/components/molecules/Heatmap.vue'
 
 export default {
