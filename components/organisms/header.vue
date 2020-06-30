@@ -69,13 +69,18 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <TimeReportModal />
   </v-app-bar>
 </template>
 
 <script>
+import TimeReportModal from './time-report-modal.vue'
 import firebase from '@/plugins/firebase'
 
 export default {
+  components: {
+    TimeReportModal
+  },
   data () {
     return {
       value: false,

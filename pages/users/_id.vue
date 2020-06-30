@@ -4,8 +4,7 @@
   :display="userNotFound"
   title="404 not find"
   message="ユーザーが存在しません。"
-  >
-  </ErrorCard>
+  />
   <v-container v-if="!userNotFound">
     <v-card class="mx-auto mt-5 pa-5" width="1000px">
       <v-row justify="center">
