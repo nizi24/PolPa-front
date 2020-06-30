@@ -10,7 +10,12 @@ export const state = () => ({
     email: '',
     screen_name: ''
   },
-  loading: false
+  loading: false,
+  flash: {
+    status: false,
+    type: '',
+    message: ''
+  }
 })
 
 export const mutations = {
@@ -19,5 +24,8 @@ export const mutations = {
   },
   setLoading (state, payload) {
     state.loading = payload
+  },
+  setFlash (state, payload) {
+    state.flash = payload
   }
 }
