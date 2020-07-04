@@ -54,7 +54,6 @@
       </v-row>
       <v-row justify="center">
         <Heatmap></Heatmap>
-        {{ currentUser }}
       </v-row>
     </v-card>
   </v-container>
@@ -138,6 +137,12 @@ export default {
         const experienceUserId = mutation.payload.experience.user_id.toString()
         if (experienceUserId === this.$route.params.id) {
           Object.assign(this.user, mutation.payload.experience)
+        }
+      } else if (mutation.type === 'experience/setRequiredExp') {
+        const currentUserId = this.currentUser.id.toString()
+        console.log(currentUserId)
+        if (currentUserId === this.$route.params.id) {
+          this.requiredExp = mutation.payload.requiredExp
         }
       }
     })
