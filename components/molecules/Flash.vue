@@ -27,7 +27,7 @@ export default {
 
 <style>
 .v-alert__wrapper {
-  display: block;
+  display: block !important;
 }
 
 .v-alert__icon {
@@ -40,7 +40,7 @@ export default {
 }
 
 .flash {
-  position: fixed;
+  position: fixed !important;
   width: 100%;
   z-index: 50;
   text-align: center;
