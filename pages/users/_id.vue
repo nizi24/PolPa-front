@@ -53,7 +53,7 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <Heatmap></Heatmap>
+        <Heatmap :timeReports="timeReports" />
       </v-row>
     </v-card>
   </v-container>
