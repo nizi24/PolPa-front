@@ -39,7 +39,8 @@ export default {
   */
   plugins: [
     '@/plugins/auth-check',
-    '@/plugins/vee-validate'
+    '@/plugins/vee-validate',
+    '@/plugins/vuetify'
   ],
   /*
   ** Auto import components
@@ -61,7 +62,7 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   /*
   ** Axios module configuration
@@ -97,13 +98,5 @@ export default {
     transpile: [
       'vee-validate/dist/rules'
     ]
-  },
-  fontawesome: {
-   imports: [
-     {
-       set: '@fortawesome/free-solid-svg-icons',
-       icons: ['fas']
-     }
-   ]
- },
+  }
 }

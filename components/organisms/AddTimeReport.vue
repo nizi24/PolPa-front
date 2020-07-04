@@ -97,15 +97,20 @@ export default {
           this.$emit('closeModal')
           const timeReport = res.data.time_report
           const experienceRecord = res.data.experience_record
-          this.$store.commit('setTimeReport', { timeReport })
-          this.$store.commit('setExperienceRecord', { experienceRecord })
-          this.$store.commit('setFlash', {
+          const experience = res.data.experience
+          const requiredExp = res.data.required_exp
+          this.$store.commit('timeReport/setTimeReport', { timeReport })
+          this.$store.commit('experience/setExperienceRecord',
+            { experienceRecord })
+          this.$store.commit('experience/setExperience', { experience })
+          this.$store.commit('experience/setRequiredExp', { requiredExp })
+          this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
             message: '時間を記録しました'
           })
           setTimeout(() => {
-            this.$store.commit('setFlash', {})
+            this.$store.commit('drawing/setFlash', {})
           }, 2000)
         })
     },

@@ -13,18 +13,19 @@
     "test": "jest"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.29",
-    "@fortawesome/vue-fontawesome": "^0.1.10",
     "@nuxtjs/axios": "^5.11.0",
     "firebase": "^7.15.5",
     "loaders.css": "^0.1.2",
     "nuxt": "^2.13.0",
-    "nuxt-fontawesome": "^0.4.0",
     "vee-validate": "^3.3.6",
     "vue-chart-heatmap": "^1.2.5",
     "vuejs-heatmap": "^1.1.7"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.29",
+    "@fortawesome/free-brands-svg-icons": "^5.13.1",
+    "@fortawesome/vue-fontawesome": "^0.1.10",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
@@ -37,6 +38,7 @@
     "eslint": "^7.2.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "jest": "^26.0.1",
+    "nuxt-fontawesome": "^0.4.0",
     "vue-jest": "^3.0.4"
   }
 }

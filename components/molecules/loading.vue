@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     loading () {
-      return this.$store.state.loading
+      return this.$store.state.drawing.loading
     }
   }
 }

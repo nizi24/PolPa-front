@@ -6,7 +6,9 @@
           <img src="~/assets/default_icon.jpeg" />
         </v-avatar>
         <span style="margin-left: 15px;">{{ user.name }}</span>
-      <small style="color: #BDBDBD; margin-left: 10px">@{{ user.screen_name }}</small>
+      <small style="color: #BDBDBD; margin-left: 10px">
+        @{{ user.screen_name }}
+      </small>
       </v-card-title>
       <v-card-text>
         {{ studyTime }}

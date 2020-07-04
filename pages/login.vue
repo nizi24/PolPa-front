@@ -41,13 +41,13 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          this.$store.commit('setFlash', {
+          this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
             message: 'ログインしました'
           })
           setTimeout(() => {
-            this.$store.commit('setFlash', {})
+            this.$store.commit('drawing/setFlash', {})
           }, 2000)
           this.$router.push('/')
         })
