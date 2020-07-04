@@ -52,7 +52,7 @@ export default {
           this.$router.push('/')
         })
         .catch((error) => {
-          console.error(error)
+          this.$store.commit('drawing/setFlash', {})
           this.error = ((code) => {
             switch (code) {
               case 'auth/user-not-found':

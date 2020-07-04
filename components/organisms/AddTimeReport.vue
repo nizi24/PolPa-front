@@ -59,9 +59,14 @@ export default {
     VAutoCompleteWithValidation,
     VTextAreaWithValidation
   },
+  props: {
+    editInitialValue: {
+      type: Object
+    }
+  },
   data: () => ({
-    hour: '0',
-    minute: '0',
+    hour: '',
+    minute: '',
     memo: ''
   }),
   computed: {
@@ -109,6 +114,9 @@ export default {
             type: 'success',
             message: '時間を記録しました'
           })
+          this.hour = '0'
+          this.minute = '1'
+          this.memo = ''
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
@@ -116,6 +124,20 @@ export default {
     },
     closeModal () {
       this.$emit('closeModal')
+    }
+  },
+  mounted () {
+    if (this.editInitialValue) {
+      const time = new Date(this.editInitialValue.study_time)
+      const hour = time.getUTCHours()
+      const minute = time.getUTCMinutes()
+      this.hour = hour.toString()
+      this.minute = minute.toString()
+      this.memo = this.editInitialValue.memo
+      console.log(this.minute)
+    } else {
+      this.hour = '0'
+      this.minute = '1'
     }
   }
 }
