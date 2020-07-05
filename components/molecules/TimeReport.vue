@@ -21,7 +21,7 @@
       </v-btn>
       <TimeReportModal
       :btnDisplay="false"
-      :dialog="modalDisplay"
+      :modalDisplay="modalDisplay"
       @closeModal="closeModal"
       :editInitialValue="time_report"
       />

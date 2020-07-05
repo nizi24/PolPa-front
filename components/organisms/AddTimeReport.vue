@@ -134,7 +134,6 @@ export default {
       this.hour = hour.toString()
       this.minute = minute.toString()
       this.memo = this.editInitialValue.memo
-      console.log(this.minute)
     } else {
       this.hour = '0'
       this.minute = '1'

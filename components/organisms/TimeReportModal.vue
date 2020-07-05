@@ -33,7 +33,7 @@ export default {
       type: Boolean,
       default: true
     },
-    dialog: {
+    modalDisplay: {
       type: Boolean,
       default: false
     },
@@ -41,10 +41,20 @@ export default {
       type: Object
     }
   },
+  data () {
+    return {
+      dialog: this.modalDisplay
+    }
+  },
   methods: {
     closeModal () {
       this.dialog = false
       this.$emit('closeModal')
+    }
+  },
+  watch: {
+    modalDisplay (newValue) {
+      this.dialog = newValue
     }
   }
 }
