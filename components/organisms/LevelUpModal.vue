@@ -42,8 +42,8 @@ export default {
   mounted () {
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === 'experience/setExperience') {
-        const level = mutation.payload.experience.level
-        if (level !== this.$store.state.currentUser.level) {
+        const level = mutation.payload.level
+        if (level > this.$store.state.currentUser.level) {
           this.levelUp = true
           this.level = level
           this.$store.commit('setLevel', level)

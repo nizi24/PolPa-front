@@ -63,6 +63,7 @@
   :index="index"
   :user="user"
   :time_report="time_report"
+  @updateTimeReport="updateExperience"
   />
 </div>
 </template>
@@ -105,6 +106,14 @@ export default {
       return this.requiredExp.required_exp - this.user.experience_to_next
     }
   },
+  methods: {
+    updateExperience (data) {
+      Object.assign(this.user, data.experience)
+      this.requiredExp = data.required_exp
+      this.$store.commit('experience/setExperience', data.experience)
+      this.$store.commit('setLevel', data.experience.level)
+    }
+  },
   mounted () {
     axios
       .get(`/v1/users/${this.$route.params.id}`)
@@ -126,19 +135,19 @@ export default {
       const currentUserId = this.currentUser.id.toString()
       if (mutation.type === 'timeReport/setTimeReport') {
         if (currentUserId === this.$route.params.id) {
-          this.timeReports.unshift(mutation.payload.timeReport)
+          this.timeReports.unshift(mutation.payload)
         }
       } else if (mutation.type === 'experience/setExperienceRecord') {
         if (currentUserId === this.$route.params.id) {
-          Object.assign(this.timeReports[0], mutation.payload.experienceRecord)
+          Object.assign(this.timeReports[0], mutation.payload)
         }
       } else if (mutation.type === 'experience/setExperience') {
         if (currentUserId === this.$route.params.id) {
-          Object.assign(this.user, mutation.payload.experience)
+          Object.assign(this.user, mutation.payload)
         }
       } else if (mutation.type === 'experience/setRequiredExp') {
         if (currentUserId === this.$route.params.id) {
-          this.requiredExp = mutation.payload.requiredExp
+          this.requiredExp = mutation.payload
         }
       }
     })

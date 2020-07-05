@@ -39,6 +39,7 @@ export default {
     }
   },
   computed: {
+    // timeReportを日付ごとにグループ化して返す
     entries () {
       const entries = this.timeReports.map((value) => {
         return {

@@ -22,8 +22,9 @@
       <TimeReportModal
       :btnDisplay="false"
       :modalDisplay="modalDisplay"
+      :editInitialValue="timeReport"
       @closeModal="closeModal"
-      :editInitialValue="time_report"
+      @updateTimeReport="updateTimeReport"
       />
       <v-icon small>
         far fa-trash-alt
@@ -31,8 +32,8 @@
       </v-card-title>
       <v-card-text>
         {{ studyTime }}
-        {{ time_report.memo }}
-        {{ time_report.experience_point }}
+        {{ timeReport.memo }}
+        {{ timeReport.experience_point }}
       </v-card-text>
     </v-card>
   </v-container>
@@ -59,18 +60,26 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    modalDisplay: false
-  }),
+  data () {
+    return {
+      modalDisplay: false,
+      timeReport: this.time_report
+    }
+  },
   computed: {
     studyTime () {
-      const time = new Date(this.time_report.study_time)
+      const time = new Date(this.timeReport.study_time)
       return time.getUTCHours() + '時間' + time.getUTCMinutes() + '分'
     }
   },
   methods: {
     closeModal () {
       this.modalDisplay = false
+    },
+    updateTimeReport (data) {
+      this.timeReport = data.time_report
+      this.timeReport.experience_point = data.experience_record.experience_point
+      this.$emit('updateTimeReport', data)
     }
   }
 }
