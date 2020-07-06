@@ -64,6 +64,7 @@
   :user="user"
   :time_report="time_report"
   @updateTimeReport="updateExperience"
+  @deleteTimeReport="deleteTimeReport"
   />
 </div>
 </template>
@@ -112,6 +113,11 @@ export default {
       this.requiredExp = data.required_exp
       this.$store.commit('experience/setExperience', data.experience)
       this.$store.commit('setLevel', data.experience.level)
+    },
+    deleteTimeReport (timeReportId) {
+      this.timeReports = this.timeReports.filter((t) => {
+        return t.id !== timeReportId
+      })
     }
   },
   mounted () {
@@ -132,22 +138,24 @@ export default {
       })
     // 新しい記録を一覧に追加
     this.$store.subscribe((mutation, state) => {
-      const currentUserId = this.currentUser.id.toString()
-      if (mutation.type === 'timeReport/setTimeReport') {
-        if (currentUserId === this.$route.params.id) {
-          this.timeReports.unshift(mutation.payload)
-        }
-      } else if (mutation.type === 'experience/setExperienceRecord') {
-        if (currentUserId === this.$route.params.id) {
-          Object.assign(this.timeReports[0], mutation.payload)
-        }
-      } else if (mutation.type === 'experience/setExperience') {
-        if (currentUserId === this.$route.params.id) {
-          Object.assign(this.user, mutation.payload)
-        }
-      } else if (mutation.type === 'experience/setRequiredExp') {
-        if (currentUserId === this.$route.params.id) {
-          this.requiredExp = mutation.payload
+      if (this.currentUser) {
+        const currentUserId = this.currentUser.id.toString()
+        if (mutation.type === 'timeReport/setTimeReport') {
+          if (currentUserId === this.$route.params.id) {
+            this.timeReports.unshift(mutation.payload)
+          }
+        } else if (mutation.type === 'experience/setExperienceRecord') {
+          if (currentUserId === this.$route.params.id) {
+            Object.assign(this.timeReports[0], mutation.payload)
+          }
+        } else if (mutation.type === 'experience/setExperience') {
+          if (currentUserId === this.$route.params.id) {
+            Object.assign(this.user, mutation.payload)
+          }
+        } else if (mutation.type === 'experience/setRequiredExp') {
+          if (currentUserId === this.$route.params.id) {
+            this.requiredExp = mutation.payload
+          }
         }
       }
     })
