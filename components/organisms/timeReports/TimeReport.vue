@@ -38,10 +38,26 @@
       v-if="authDisplay"
       />
       </v-card-title>
-      <v-card-text>
-        {{ studyTime }}
-        {{ timeReport.memo }}
-        {{ timeReport.experience_point }}
+      <v-card-text style="margin-top: 10px">
+        <v-row>
+          <v-col>
+            <v-icon small style="margin-left: 20px; margin-right: 10px">
+              far fa-clock
+            </v-icon>
+            <h1 :class="changeColor">{{ studyHour }}</h1>
+            <span>時間</span>
+            <h1 :class="changeColor">{{ studyMinute }}</h1>
+            <span>分</span>
+          </v-col>
+          <v-col>
+            <v-icon small style="margin-right: 10px">fas fa-pencil-alt</v-icon>
+            <h1 :class="changeColor">{{ timeReport.experience_point }}</h1>
+            <h3 style="display: inline-block">EXP</h3>
+          </v-col>
+        </v-row>
+        <p>
+          {{ timeReport.memo }}
+        </p>
       </v-card-text>
     </v-card>
   </v-container>
@@ -81,9 +97,13 @@ export default {
     }
   },
   computed: {
-    studyTime () {
+    studyHour () {
       const time = new Date(this.timeReport.study_time)
-      return time.getUTCHours() + '時間' + time.getUTCMinutes() + '分'
+      return time.getUTCHours()
+    },
+    studyMinute () {
+      const time = new Date(this.timeReport.study_time)
+      return time.getUTCMinutes()
     },
     currentUser () {
       return this.$store.state.currentUser
@@ -93,6 +113,20 @@ export default {
         return true
       } else {
         return false
+      }
+    },
+    changeColor () {
+      const time = Number(this.studyHour) * 60 + Number(this.studyMinute)
+      if (time >= 180) {
+        return 'amber--text text--darken-4'
+      } else if (time >= 120) {
+        return 'amber--text text--darken-3'
+      } else if (time >= 60) {
+        return 'amber--text text--darken-2'
+      } else if (time >= 30) {
+        return 'amber--text text--lighten-1'
+      } else {
+        return 'amber--text text--lighten-2'
       }
     }
   },
@@ -137,3 +171,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+h1 {
+  display: inline-block;
+  font-size: 3.0em;
+  margin-right: 5px;
+}
+</style>
