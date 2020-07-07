@@ -10,7 +10,7 @@
     "serve": "nuxt serve",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "yarn lint:js",
-    "test": "jest"
+    "test": "jest --maxWorkers=1 --config jest.config.js --silent=false --verbose false"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.11.0",

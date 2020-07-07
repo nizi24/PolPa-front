@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <v-form>
-        <v-text-field v-model="name" :counter="10" label="名前" data-vv-name="name" required></v-text-field>
+        <v-text-field v-model="name" :counter="20" label="名前" data-vv-name="name" required></v-text-field>
         <v-text-field v-model="email" label="メールアドレス" data-vv-name="email" required></v-text-field>
         <v-text-field v-model="screen_name" label="ユーザーID" data-vv-name="screen_name" required></v-text-field>
         <v-text-field
@@ -67,6 +67,14 @@ export default {
           }
           axios.post('/v1/users', { user }).then((responce) => {
             this.$store.commit('drawing/setLoading', false)
+            this.$store.commit('drawing/setFlash', {
+              status: true,
+              type: 'success',
+              message: 'ログインしました'
+            })
+            setTimeout(() => {
+              this.$store.commit('drawing/setFlash', {})
+            }, 2000)
             this.$store.commit('setUser', responce.data)
             this.$router.push('/')
           })
