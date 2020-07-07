@@ -10,15 +10,12 @@
         @{{ user.screen_name }}
       </small>
       <v-spacer />
-      <v-btn
-      icon
-      style="margin-right: 10px;"
+      <IconButtonWithAuth
+      type="far fa-edit"
+      :comparison="timeReport.user_id"
       @click.stop="modalDisplay = true"
-      >
-        <v-icon small v-if="authDisplay">
-          far fa-edit
-        </v-icon>
-      </v-btn>
+      small
+      />
       <TimeReportModal
       :btnDisplay="false"
       :modalDisplay="modalDisplay"
@@ -27,17 +24,18 @@
       @updateTimeReport="updateTimeReport"
       v-if="authDisplay"
       />
-      <v-icon
-      small
-      v-if="authDisplay"
+      <IconButtonWithAuth
+      type="far fa-trash-alt"
+      :comparison="timeReport.user_id"
+      style="margin-right: 10px;"
       @click="displayAlert = true"
-      >
-        far fa-trash-alt
-      </v-icon>
+      small
+      />
       <ExpReductionAlert
       :displayModal="displayAlert"
       @cancel="cancel"
       @understanding="understanding"
+      v-if="authDisplay"
       />
       </v-card-title>
       <v-card-text>
@@ -50,6 +48,7 @@
 </template>
 
 <script>
+import IconButtonWithAuth from '../../atoms/icons/IconButtonWithAuth.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'
 import TimeReportModal from './TimeReportModal.vue'
 import axios from '@/plugins/axios'
@@ -57,7 +56,8 @@ import axios from '@/plugins/axios'
 export default {
   components: {
     ExpReductionAlert,
-    TimeReportModal
+    TimeReportModal,
+    IconButtonWithAuth
   },
   props: {
     index: {
