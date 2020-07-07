@@ -73,7 +73,7 @@
 import axios from '@/plugins/axios'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Heatmap from '~/components/molecules/Heatmap.vue'
-import TimeReport from '~/components/molecules/TimeReport.vue'
+import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
 
 export default {
   components: {
