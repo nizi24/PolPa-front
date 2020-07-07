@@ -1,41 +1,16 @@
 <template>
-  <VuejsHeatmap
-  :tooltip-unit="tooltipUnit"
-  :locale="locale"
-  :tooltip-enabled="true"
-  :max="max"
-  :entries="entries"
-  :color-range="colorRange"
-  >
-</VuejsHeatmap>
+  <div>
+  </div>
 </template>
 
 <script>
-import VuejsHeatmap from 'vuejs-heatmap'
+// なぜかトランスコンパイルされないのでモックを作成しました
 
 export default {
-  components: {
-    VuejsHeatmap
-  },
   props: {
     timeReports: {
       type: Array,
       required: true
-    }
-  },
-  data () {
-    return {
-      tooltipUnit: 'EXP',
-      locale: {
-        months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        days: ['日', '月', '火', '水', '木', '金', '土'],
-        No: 'No',
-        on: 'on',
-        Less: 'Less',
-        More: 'More'
-      },
-      colorRange: ['#F5F5F5', '#AED581', '#9CCC65', '#7CB342', '#689F38', '#33691E', '#215715'], // 0, 1, 30, 60, 150, 300, 300以上のEXPの時の色です。
-      max: 300
     }
   },
   computed: {
@@ -66,6 +41,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

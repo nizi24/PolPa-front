@@ -69,13 +69,18 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <TimeReportModal />
   </v-app-bar>
 </template>
 
 <script>
+import TimeReportModal from './timeReports/TimeReportModal.vue'
 import firebase from '@/plugins/firebase'
 
 export default {
+  components: {
+    TimeReportModal
+  },
   data () {
     return {
       value: false,
@@ -104,13 +109,13 @@ export default {
         .signOut()
         .then(() => {
           this.$store.commit('setUser', null)
-          this.$store.commit('setFlash', {
+          this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
             message: 'ログアウトしました'
           })
           setTimeout(() => {
-            this.$store.commit('setFlash', {})
+            this.$store.commit('drawing/setFlash', {})
           }, 2000)
           this.$router.push('/login')
         })

@@ -8,7 +8,7 @@
   <v-container v-if="!userNotFound">
     <v-card class="mx-auto mt-5 pa-5" width="1000px">
       <v-row justify="center">
-        <v-col cols="2" :class="changeColor">
+        <v-col cols="2" style="color: #FFD54F;">
           <v-row justify="center" style="margin-top: 48px;">
             <h1>Lv.{{ user.level }}</h1>
           </v-row>
@@ -29,7 +29,7 @@
             <span>@{{ user.screen_name }}</span>
           </v-row>
         </v-col>
-        <v-col cols="2" :class="changeColor">
+        <v-col cols="2" style="color: #FFD54F;">
           <v-row justify="center" style="margin-top: 48px;">
             <h1>{{ user.total_experience }}</h1>
           </v-row>
@@ -38,9 +38,6 @@
           </v-row>
         </v-col>
       </v-row>
-      <!-- <v-row justify="center">
-        <img src="~/assets/goal.jpeg" width="32px" height="32px" />
-      </v-row> -->
       <v-row justify="center" align-content="center">
         <v-col cols="1">
         </v-col>
@@ -48,12 +45,12 @@
           <v-progress-linear height="10px" :value="progressProportion">
           </v-progress-linear>
         </v-col>
-        <v-col cols="2" style="padding-top: 6px; color: #B0BEC5;">
+        <v-col cols="1" style="padding-top: 6px; color: #B0BEC5;">
           {{ progressNumeretor }}/{{ requiredExp.required_exp }}
         </v-col>
       </v-row>
       <v-row justify="center">
-        <Heatmap :timeReports="timeReports" />
+        <!-- <Heatmap :timeReports="timeReports" /> -->
       </v-row>
     </v-card>
   </v-container>
@@ -70,15 +67,15 @@
 </template>
 
 <script>
-import axios from '@/plugins/axios'
+// import axios from '@/plugins/axios'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import Heatmap from '~/components/molecules/Heatmap.vue'
-import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
+// import Heatmap from '~/components/molecules/Heatmap.vue' トランスコンパイルに失敗する
+import TimeReport from '~/components/molecules/TimeReport.vue'
 
 export default {
   components: {
     ErrorCard,
-    Heatmap,
+    // Heatmap,
     TimeReport
   },
   data () {
@@ -105,20 +102,6 @@ export default {
     },
     progressNumeretor () {
       return this.requiredExp.required_exp - this.user.experience_to_next
-    },
-    changeColor () {
-      const level = this.user.level
-      if (level >= 100) {
-        return 'amber--text text--darken-4'
-      } else if (level >= 80) {
-        return 'amber--text text--darken-3'
-      } else if (level >= 50) {
-        return 'amber--text text--darken-2'
-      } else if (level >= 20) {
-        return 'amber--text text--lighten-1'
-      } else {
-        return 'amber--text text--lighten-2'
-      }
     }
   },
   methods: {
@@ -135,21 +118,21 @@ export default {
     }
   },
   mounted () {
-    axios
-      .get(`/v1/users/${this.$route.params.id}`)
-      .then((response) => {
-        this.user = response.data.user
-        this.timeReports = response.data.time_reports
-        this.requiredExp = response.data.required_exp
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          this.userNotFound = true
-          this.errorTitle = '404 not find'
-          this.errorMessage = 'ユーザーが存在しません。'
-        }
-        console.error(error)
-      })
+    // axios
+    //   .get(`/v1/users/${this.$route.params.id}`)
+    //   .then((response) => {
+    //     this.user = response.data.user
+    //     this.timeReports = response.data.time_reports
+    //     this.requiredExp = response.data.required_exp
+    //   })
+    //   .catch((error) => {
+    //     if (error.response.status === 404) {
+    //       this.userNotFound = true
+    //       this.errorTitle = '404 not find'
+    //       this.errorMessage = 'ユーザーが存在しません。'
+    //     }
+    //     console.error(error)
+    //   })
     // 新しい記録を一覧に追加
     this.$store.subscribe((mutation, state) => {
       if (this.currentUser) {

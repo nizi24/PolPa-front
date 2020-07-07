@@ -8,13 +8,8 @@ export const state = () => ({
     id: '',
     name: '',
     email: '',
-    screen_name: ''
-  },
-  loading: false,
-  flash: {
-    status: false,
-    type: '',
-    message: ''
+    screen_name: '',
+    level: 1
   }
 })
 
@@ -22,10 +17,7 @@ export const mutations = {
   setUser (state, payload) {
     state.currentUser = payload
   },
-  setLoading (state, payload) {
-    state.loading = payload
-  },
-  setFlash (state, payload) {
-    state.flash = payload
+  setLevel (state, payload) {
+    state.currentUser.level = payload
   }
 }
