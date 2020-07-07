@@ -1,5 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
+require('dotenv').config();
 export default {
   /*
   ** Nuxt rendering mode
@@ -37,6 +38,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    '@/plugins/auth-check'
   ],
   /*
   ** Auto import components
@@ -49,7 +51,9 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv',
+    '@nuxtjs/moment'
   ],
   /*
   ** Nuxt.js modules
@@ -70,7 +74,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -89,5 +93,13 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-  }
+  },
+  fontawesome: {
+   imports: [
+     {
+       set: '@fortawesome/free-solid-svg-icons',
+       icons: ['fas']
+     }
+   ]
+ },
 }
