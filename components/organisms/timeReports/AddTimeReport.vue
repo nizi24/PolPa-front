@@ -33,7 +33,9 @@ export default {
           const experienceRecord = res.data.experience_record
           const experience = res.data.experience
           const requiredExp = res.data.required_exp
+          const tags = res.data.tags
           this.$store.commit('timeReport/setTimeReport', timeReport)
+          this.$store.commit('timeReport/setTags', tags)
           this.$store.commit('experience/setExperienceRecord', experienceRecord)
           this.$store.commit('experience/setExperience', experience)
           this.$store.commit('experience/setRequiredExp', requiredExp)

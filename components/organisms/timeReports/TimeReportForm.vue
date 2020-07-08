@@ -34,6 +34,7 @@
             </v-row>
             <TagsInput
             v-model="tag"
+            :initTags="tags"
             @tags-changed="newTags => tags = newTags"
             />
             <v-row>
@@ -111,6 +112,13 @@ export default {
       const minutes = []
       for (let i = 0; i < 60; i++) { minutes.push(i.toString()) }
       return minutes
+    },
+    tagsProcessing () {
+      let tags = this.editInitialValue.tags
+      tags = tags.map((value) => {
+        return { text: value.name, tiClasses: ['ti-valid'] }
+      })
+      return tags
     }
   },
   methods: {
@@ -167,6 +175,7 @@ export default {
       this.hour = hour.toString()
       this.minute = minute.toString()
       this.memo = this.editInitialValue.memo
+      this.tags = this.tagsProcessing
       this.editInitHour = hour
       this.editInitMinute = minute
     } else {

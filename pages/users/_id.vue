@@ -154,21 +154,18 @@ export default {
     this.$store.subscribe((mutation, state) => {
       if (this.currentUser) {
         const currentUserId = this.currentUser.id.toString()
-        if (mutation.type === 'timeReport/setTimeReport') {
-          if (currentUserId === this.$route.params.id) {
+        if (currentUserId === this.$route.params.id) {
+          if (mutation.type === 'timeReport/setTimeReport') {
             this.timeReports.unshift(mutation.payload)
-          }
-        } else if (mutation.type === 'experience/setExperienceRecord') {
-          if (currentUserId === this.$route.params.id) {
+          } else if (mutation.type === 'experience/setExperienceRecord') {
             Object.assign(this.timeReports[0], mutation.payload)
-          }
-        } else if (mutation.type === 'experience/setExperience') {
-          if (currentUserId === this.$route.params.id) {
+          } else if (mutation.type === 'experience/setExperience') {
             Object.assign(this.user, mutation.payload)
-          }
-        } else if (mutation.type === 'experience/setRequiredExp') {
-          if (currentUserId === this.$route.params.id) {
+          } else if (mutation.type === 'experience/setRequiredExp') {
             this.requiredExp = mutation.payload
+          } else if (mutation.type === 'timeReport/setTags') {
+            const tags = mutation.payload
+            Object.assign(this.timeReports[0], { tags })
           }
         }
       }

@@ -8,9 +8,12 @@
     <v-col cols="11" style="padding-left: 0 !important">
       <vue-tags-input
       v-model="tag"
-      :tags="tags"
+      :tags="initTags"
+      :allow-edit-tags="true"
       @tags-changed="newTags => tags = newTags"
       placeholder="タグを追加"
+      :maxlength="50"
+      :max-tags="10"
       />
     </v-col>
   </v-row>
@@ -25,12 +28,18 @@ export default {
   props: {
     value: {
       type: null
+    },
+    initTags: {
+      type: Array,
+      default: () => { return [] }
     }
   },
-  data: () => ({
-    tag: '',
-    tags: []
-  }),
+  data () {
+    return {
+      tag: '',
+      tags: this.initTags
+    }
+  },
   watch: {
     tag (newVal) {
       this.$emit('input', newVal)
