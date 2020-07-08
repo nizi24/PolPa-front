@@ -93,7 +93,9 @@ export default {
     return {
       modalDisplay: false,
       timeReport: this.time_report,
-      displayAlert: false
+      displayAlert: false,
+      tag: '',
+      tags: []
     }
   },
   computed: {
@@ -150,7 +152,6 @@ export default {
         .then((res) => {
           this.$emit('updateTimeReport', res.data)
           this.$emit('deleteTimeReport', timeReportId)
-          console.log(res.data)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',

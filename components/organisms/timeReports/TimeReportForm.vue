@@ -31,6 +31,12 @@
                 :items="minutes"
                 />
               </v-col>
+            </v-row>
+            <TagsInput
+            v-model="tag"
+            @tags-changed="newTags => tags = newTags"
+            />
+            <v-row>
               <v-col cols="12">
                 <VTextAreaWithValidation
                 rules="max:280"
@@ -66,6 +72,7 @@
 import { ValidationObserver } from 'vee-validate' // テスト用にインポート
 import VAutoCompleteWithValidation from '../../molecules/inputs/VAutocompleteWithValidation.vue'
 import VTextAreaWithValidation from '../../molecules/inputs/VTextAreaWithValidation.vue'
+import TagsInput from '../../molecules/inputs/TagsInput.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'
 
 export default {
@@ -73,7 +80,8 @@ export default {
     VAutoCompleteWithValidation,
     VTextAreaWithValidation,
     ExpReductionAlert,
-    ValidationObserver
+    ValidationObserver,
+    TagsInput
   },
   props: {
     editInitialValue: {
@@ -86,7 +94,9 @@ export default {
     memo: '',
     editInitHour: 0,
     editInitMinute: 1,
-    displayAlert: false
+    displayAlert: false,
+    tag: '',
+    tags: []
   }),
   computed: {
     timeProcess () {
@@ -109,6 +119,9 @@ export default {
         study_time: this.timeProcess,
         memo: this.memo
       }
+      const tags = {
+        tags: this.tags
+      }
       // 再編集の場合
       if (this.editInitialValue) {
         timeReport.id = this.editInitialValue.id
@@ -118,10 +131,10 @@ export default {
         if (oldExp > nexExp) {
           this.displayAlert = true
         } else {
-          this.$emit('record', timeReport)
+          this.$emit('record', { timeReport, tags })
         }
       } else {
-        this.$emit('record', timeReport)
+        this.$emit('record', { timeReport, tags })
         this.hour = '0'
         this.minute = '1'
       }
@@ -138,8 +151,11 @@ export default {
         memo: this.memo,
         id: this.editInitialValue.id
       }
+      const tags = {
+        tags: this.tags
+      }
       this.displayAlert = false
-      this.$emit('record', timeReport)
+      this.$emit('record', { timeReport, tags })
     }
   },
   mounted () {
@@ -160,3 +176,6 @@ export default {
   }
 }
 </script>
+
+<style>
+</style>

@@ -20,11 +20,12 @@ export default {
     }
   },
   methods: {
-    addTimeReport (timeReport) {
+    addTimeReport (data) {
       axios
         .post('/v1/time_reports', {
-          time_report: timeReport,
-          user_id: this.currentUser.id
+          time_report: data.timeReport,
+          user_id: this.currentUser.id,
+          tags: data.tags
         })
         .then((res) => {
           this.$emit('closeModal')
