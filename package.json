@@ -13,6 +13,7 @@
     "test": "jest --maxWorkers=1 --config jest.config.js --silent=false --verbose false"
   },
   "dependencies": {
+    "@johmun/vue-tags-input": "^2.1.0",
     "@nuxtjs/axios": "^5.11.0",
     "firebase": "^7.15.5",
     "loaders.css": "^0.1.2",
