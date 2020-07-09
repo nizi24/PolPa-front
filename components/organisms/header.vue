@@ -133,4 +133,8 @@ h2.app-title {
   font-size: 1.5em;
   letter-spacing: 2px;
 }
+
+.v-avatar {
+  margin-right: 20px;
+}
 </style>
