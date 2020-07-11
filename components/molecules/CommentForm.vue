@@ -27,7 +27,7 @@ export default {
   },
   props: {
     timeReportId: {
-      type: String,
+      type: [String, Number],
       required: true
     }
   },
@@ -49,8 +49,7 @@ export default {
       axios
         .post('/v1/comments', { comment })
         .then((res) => {
-          const data = JSON.parse(res.data)
-          this.$emit('addComment', data)
+          this.$emit('addComment', res.data)
           this.comment = ''
           this.$store.commit('drawing/setFlash', {
             status: true,

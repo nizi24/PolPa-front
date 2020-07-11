@@ -12,6 +12,7 @@
       <v-spacer />
       <IconButtonWithAuth
       type="far fa-edit"
+      v-if="authDisplay"
       :comparison="timeReport.user_id"
       @click.stop="modalDisplay = true"
       small
@@ -26,6 +27,7 @@
       />
       <IconButtonWithAuth
       type="far fa-trash-alt"
+      v-if="authDisplay"
       :comparison="timeReport.user_id"
       style="margin-right: 10px;"
       @click="displayAlert = true"
@@ -55,7 +57,7 @@
             </v-col>
             <v-col>
               <v-icon small style="margin-right: 10px">fas fa-pencil-alt</v-icon>
-              <h1 :class="changeColor">
+              <h1 :class="changeColor" v-if="timeReport.experience_record">
                 {{ timeReport.experience_record.experience_point }}
               </h1>
               <h3 style="display: inline-block">EXP</h3>
@@ -72,15 +74,18 @@
           />
         </v-row>
         <CommentForm
-        v-if="commentForm"
+        v-if="commentForm && currentUser"
         :timeReportId="timeReport.id"
         @addComment="addComment"
         />
-        <Comment
-        v-for="comment in timeReport.comments"
-        :key="comment.id"
-        :comment="comment"
-        />
+        <template v-if="commentForm">
+          <Comment
+          v-for="comment in timeReport.comments"
+          :key="comment.id"
+          :comment="comment"
+          @deleteComment="deleteComment"
+          />
+        </template>
       </v-card-text>
     </v-card>
   </v-container>
@@ -119,7 +124,7 @@ export default {
   data () {
     return {
       modalDisplay: false,
-      timeReport: this.time_report,
+      timeReport: { ...this.time_report, comments: [] },
       displayAlert: false,
       commentForm: false
     }
@@ -164,6 +169,9 @@ export default {
   watch: {
     time_report (newValue) {
       this.timeReport = newValue
+    },
+    timeReport (newValue) {
+      this.timeReport = newValue
     }
   },
   methods: {
@@ -171,9 +179,11 @@ export default {
       this.modalDisplay = false
     },
     updateTimeReport (data) {
+      const comments = this.timeReport.comments
       this.timeReport = data.time_report
       this.timeReport.experience_record = data.experience_record
       this.timeReport.tags = data.tags
+      this.timeReport.comments = comments
       this.$emit('updateTimeReport', data)
     },
     deleteTimeReport () {
@@ -206,7 +216,15 @@ export default {
     },
     addComment (comment) {
       this.commentForm = false
-      this.timeReport.comments = comment
+      if (!this.timeReport.comments) {
+        this.timeReport.comments = []
+      }
+      this.timeReport.comments.unshift(comment)
+    },
+    deleteComment (commentId) {
+      this.timeReport.comments = this.timeReport.comments.filter((t) => {
+        return t.id !== commentId
+      })
     }
   }
 }

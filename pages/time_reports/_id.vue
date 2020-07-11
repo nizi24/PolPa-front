@@ -46,7 +46,8 @@ export default {
       .get(`/v1/time_reports/${this.$route.params.id}`)
       .then((response) => {
         const timeReport = JSON.parse(response.data.time_report)
-        this.user = response.data.user
+        const user = JSON.parse(response.data.user)
+        this.user = user
         this.timeReport = timeReport
       })
       .catch((error) => {

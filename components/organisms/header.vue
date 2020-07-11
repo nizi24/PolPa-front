@@ -69,7 +69,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <TimeReportModal style="margin-right: 200px" />
+    <TimeReportModal v-if="currentUser" style="margin-right: 200px" />
   </v-app-bar>
 </template>
 

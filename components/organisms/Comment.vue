@@ -12,6 +12,13 @@
         @{{ comment.user.screen_name }}
       </small>
       <v-spacer />
+      <IconButtonWithAuth
+      type="far fa-trash-alt"
+      :comparison="comment.user_id"
+      style="margin-right: 10px;"
+      @click="deleteComment"
+      small
+      />
       </v-card-title>
       <v-card-text>
         {{ comment.content }}
@@ -21,12 +28,37 @@
 </template>
 
 <script>
+import axios from '@/plugins/axios'
 export default {
   props: {
     comment: {
-      comment: {
-        type: Object,
-        required: true
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    currentUser () {
+      return this.$store.state.currentUser
+    }
+  },
+  methods: {
+    deleteComment () {
+      const confirm = window.confirm('削除しますか？') // eslint-disable-line
+      if (confirm) {
+        const commentId = this.comment.id
+        axios
+          .delete(`/v1/comments/${commentId}`)
+          .then((res) => {
+            this.$emit('deleteComment', commentId)
+            this.$store.commit('drawing/setFlash', {
+              status: true,
+              type: 'success',
+              message: 'コメントを削除しました'
+            })
+            setTimeout(() => {
+              this.$store.commit('drawing/setFlash', {})
+            }, 2000)
+          })
       }
     }
   }
