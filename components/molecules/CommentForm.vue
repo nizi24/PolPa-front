@@ -13,6 +13,7 @@
         text
         @click="passes(sendComment)"
         style="margin-top: 10px;"
+        :disabled="!currentUser"
         >Send</v-btn>
       </v-row>
   </ValidationObserver>

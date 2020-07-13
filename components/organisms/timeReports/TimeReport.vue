@@ -72,9 +72,15 @@
           type="far fa-comment-dots"
           @on="commentForm = !commentForm"
           />
+          <v-spacer />
+          <LikeButton
+          :objectId="timeReport.id"
+          objectType="TimeReport"
+          :likesCount="timeReport.likes_count"
+          />
         </v-row>
         <CommentForm
-        v-if="commentForm && currentUser"
+        v-if="commentForm"
         :timeReportId="timeReport.id"
         @addComment="addComment"
         />
@@ -97,6 +103,7 @@ import IconButton from '../../atoms/icons/IconButton.vue'
 import IconButtonWithAuth from '../../atoms/icons/IconButtonWithAuth.vue'
 import CommentForm from '../../molecules/CommentForm.vue'
 import Comment from '../Comment.vue'
+import LikeButton from '../../molecules/LikeButton.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'
 import TimeReportModal from './TimeReportModal.vue'
 import axios from '@/plugins/axios'
@@ -109,7 +116,8 @@ export default {
     Tag,
     IconButton,
     CommentForm,
-    Comment
+    Comment,
+    LikeButton
   },
   props: {
     time_report: {
@@ -124,7 +132,10 @@ export default {
   data () {
     return {
       modalDisplay: false,
-      timeReport: { ...this.time_report, comments: [] },
+      timeReport: {
+        ...this.time_report,
+        comments: [...this.time_report.comments]
+      },
       displayAlert: false,
       commentForm: false
     }

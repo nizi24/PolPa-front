@@ -29,7 +29,7 @@ export default {
         })
         .then((res) => {
           this.$emit('closeModal')
-          const timeReport = res.data.time_report
+          const timeReport = JSON.parse(res.data.time_report)
           const experience_record = res.data.experience_record // eslint-disable-line
           const experience = res.data.experience
           const requiredExp = res.data.required_exp

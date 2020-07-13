@@ -9,7 +9,8 @@ export const state = () => ({
     name: '',
     email: '',
     screen_name: '',
-    level: 1
+    level: 1,
+    liked: []
   }
 })
 
@@ -19,5 +20,17 @@ export const mutations = {
   },
   setLevel (state, payload) {
     state.currentUser.level = payload
+  },
+  setLiked (state, payload) {
+    state.currentUser.liked = payload
+  },
+  addLiked (state, payload) {
+    state.currentUser.liked.unshift(payload)
+  },
+  removeLiked (state, payload) {
+    state.currentUser.liked = state.currentUser.liked.filter((l) => {
+      return l.likeable_id !== payload.likeable_id &&
+      l.likeable_type !== payload.likeable_type
+    })
   }
 }
