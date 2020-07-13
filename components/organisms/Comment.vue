@@ -21,15 +21,29 @@
       />
       </v-card-title>
       <v-card-text>
-        {{ comment.content }}
+        <v-row>
+          {{ comment.content }}
+        </v-row>
+        <v-row>
+          <v-spacer />
+          <LikeButton
+          :objectId="comment.id"
+          objectType="Comment"
+          :likesCount="comment.likes_count"
+          />
+        </v-row>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
 
 <script>
+import LikeButton from '../molecules/LikeButton.vue'
 import axios from '@/plugins/axios'
 export default {
+  components: {
+    LikeButton
+  },
   props: {
     comment: {
       type: Object,
