@@ -30,6 +30,8 @@
           :objectId="comment.id"
           objectType="Comment"
           :likesCount="comment.likes_count"
+          @destroyLike="subCount"
+          @addLiked="addCount"
           />
         </v-row>
       </v-card-text>
@@ -74,6 +76,12 @@ export default {
             }, 2000)
           })
       }
+    },
+    subCount () {
+      this.$emit('subCommentLikesCount', this.comment.id)
+    },
+    addCount () {
+      this.$emit('addCommentLikesCount', this.comment.id)
     }
   }
 }

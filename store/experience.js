@@ -5,10 +5,6 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setExperienceRecord (state, payload) {
-    state.experienceRecord = payload
-    state.experienceRecord = {}
-  },
   setExperience (state, payload) {
     state.experience = payload
     state.experience = {}

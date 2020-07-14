@@ -58,12 +58,21 @@
     </v-card>
   </v-container>
   <TimeReport
-  v-for="time_report in timeReports"
+  v-for="time_report in displayTimeReports"
   :key="time_report.id"
   :user="user"
   :time_report="time_report"
   @updateTimeReport="updateExperience"
   @deleteTimeReport="deleteTimeReport"
+  @addLikesCount="addLikesCount"
+  @subLikesCount="subLikesCount"
+  @addCommentLikesCount="addCommentLikesCount"
+  @subCommentLikesCount="subCommentLikesCount"
+  />
+  <v-pagination
+  v-model="page"
+  :length="length"
+  @input="pageChange"
   />
 </div>
 </template>
@@ -84,8 +93,12 @@ export default {
     return {
       user: {},
       timeReports: [],
+      displayTimeReports: [],
       requiredExp: {},
-      userNotFound: false
+      userNotFound: false,
+      page: 1,
+      length: 0,
+      pageSize: 10
     }
   },
   computed: {
@@ -119,16 +132,76 @@ export default {
     }
   },
   methods: {
-    updateExperience (data) {
+    updateExperience (data, timeReport) {
+      this.updateTimeReport(timeReport)
       Object.assign(this.user, data.experience)
       this.requiredExp = data.required_exp
       this.$store.commit('experience/setExperience', data.experience)
       this.$store.commit('setLevel', data.experience.level)
     },
+    updateTimeReport (timeReport) {
+      if (timeReport) {
+        this.timeReports = this.timeReports.map((t) => {
+          if (t.id === timeReport.id) {
+            t = timeReport
+          }
+          return t
+        })
+      }
+    },
     deleteTimeReport (timeReportId) {
       this.timeReports = this.timeReports.filter((t) => {
+        console.log(t.id)
         return t.id !== timeReportId
       })
+      this.displayTimeReports = this.displayTimeReports.filter((t) => {
+        return t.id !== timeReportId
+      })
+    },
+    pageChange (pageNumber) {
+      this.displayTimeReports = this.timeReports
+        .slice(this.pageSize * (pageNumber - 1), this.pageSize * (pageNumber))
+    },
+    addLikesCount (id) {
+      this.timeReports = this.timeReports.map((t) => {
+        if (t.id === id) {
+          t.likes_count += 1
+        }
+        return t
+      })
+    },
+    subLikesCount (id) {
+      this.timeReports = this.timeReports.map((t) => {
+        if (t.id === id) {
+          t.likes_count -= 1
+        }
+        return t
+      })
+    },
+    addCommentLikesCount (commentId, timeReportId) {
+      const timeReport = this.timeReports.find((t) => {
+        return t.id === timeReportId
+      })
+      timeReport.comments = timeReport.comments.map((c) => {
+        if (c.id === commentId) {
+          c.likes_count += 1
+          console.log(c)
+        }
+        return c
+      })
+      this.updateTimeReport(timeReport)
+    },
+    subCommentLikesCount (commentId, timeReportId) {
+      const timeReport = this.timeReports.find((t) => {
+        return t.id === timeReportId
+      })
+      timeReport.comments = timeReport.comments.map((c) => {
+        if (c.id === commentId) {
+          c.likes_count -= 1
+        }
+        return c
+      })
+      this.updateTimeReport(timeReport)
     }
   },
   mounted () {
@@ -141,6 +214,9 @@ export default {
         this.user = user
         this.timeReports = timeReports
         this.requiredExp = response.data.required_exp
+        this.displayTimeReports = this.timeReports
+          .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
+        this.length = Math.ceil(this.timeReports.length / this.pageSize)
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -155,15 +231,11 @@ export default {
         if (currentUserId === this.$route.params.id) {
           if (mutation.type === 'timeReport/setTimeReport') {
             this.timeReports.unshift(mutation.payload)
-          } else if (mutation.type === 'experience/setExperienceRecord') {
-            Object.assign(this.timeReports[0], mutation.payload)
+            this.displayTimeReports.unshift(mutation.payload)
           } else if (mutation.type === 'experience/setExperience') {
             Object.assign(this.user, mutation.payload)
           } else if (mutation.type === 'experience/setRequiredExp') {
             this.requiredExp = mutation.payload
-          } else if (mutation.type === 'timeReport/setTags') {
-            const tags = mutation.payload
-            Object.assign(this.timeReports[0], { tags })
           }
         }
       }
