@@ -74,9 +74,12 @@
           />
           <v-spacer />
           <LikeButton
+          v-if="timeReport.id"
           :objectId="timeReport.id"
           objectType="TimeReport"
           :likesCount="timeReport.likes_count"
+          @destroyLike="subCount"
+          @addLiked="addCount"
           />
         </v-row>
         <CommentForm
@@ -90,6 +93,8 @@
           :key="comment.id"
           :comment="comment"
           @deleteComment="deleteComment"
+          @addCommentLikesCount="addCommentLikesCount"
+          @subCommentLikesCount="subCommentLikesCount"
           />
         </template>
       </v-card-text>
@@ -133,8 +138,7 @@ export default {
     return {
       modalDisplay: false,
       timeReport: {
-        ...this.time_report,
-        comments: [...this.time_report.comments]
+        ...this.time_report
       },
       displayAlert: false,
       commentForm: false
@@ -180,9 +184,13 @@ export default {
   watch: {
     time_report (newValue) {
       this.timeReport = newValue
+      this.timeReport.comments = newValue.comments
     },
-    timeReport (newValue) {
-      this.timeReport = newValue
+    'time_report.likes_count': function (newValue) { //eslint-disable-line
+      this.timeReport.likes_count = newValue
+    },
+    'time_report.comments': function (newValue) { //eslint-disable-line
+      this.timeReport.comments = newValue
     }
   },
   methods: {
@@ -190,12 +198,9 @@ export default {
       this.modalDisplay = false
     },
     updateTimeReport (data) {
-      const comments = this.timeReport.comments
-      this.timeReport = data.time_report
-      this.timeReport.experience_record = data.experience_record
-      this.timeReport.tags = data.tags
-      this.timeReport.comments = comments
-      this.$emit('updateTimeReport', data)
+      const timeReport = JSON.parse(data.time_report)
+      this.timeReport = timeReport
+      this.$emit('updateTimeReport', data, timeReport)
     },
     deleteTimeReport () {
       const timeReportId = this.timeReport.id
@@ -236,6 +241,18 @@ export default {
       this.timeReport.comments = this.timeReport.comments.filter((t) => {
         return t.id !== commentId
       })
+    },
+    subCount () {
+      this.$emit('subLikesCount', this.timeReport.id)
+    },
+    addCount () {
+      this.$emit('addLikesCount', this.timeReport.id)
+    },
+    subCommentLikesCount (commentId) {
+      this.$emit('subCommentLikesCount', commentId, this.timeReport.id)
+    },
+    addCommentLikesCount (commentId) {
+      this.$emit('addCommentLikesCount', commentId, this.timeReport.id)
     }
   }
 }

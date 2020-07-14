@@ -57,6 +57,7 @@
           text
           @click="passes(record)"
           id="save"
+          :disabled="disabled"
           >Save</v-btn>
         </v-card-actions>
       </v-form>
@@ -95,7 +96,8 @@ export default {
     memo: '',
     displayAlert: false,
     tag: '',
-    tags: []
+    tags: [],
+    disabled: false
   }),
   computed: {
     timeProcess () {
@@ -121,6 +123,8 @@ export default {
   },
   methods: {
     record () {
+      if (this.disabled) { return }
+      this.disabled = true
       const timeReport = {
         study_time: this.timeProcess,
         memo: this.memo
@@ -146,6 +150,9 @@ export default {
         this.memo = ''
         this.tags = []
       }
+      setTimeout(() => {
+        this.disabled = false
+      }, 200)
     },
     closeModal () {
       this.$emit('closeModal')

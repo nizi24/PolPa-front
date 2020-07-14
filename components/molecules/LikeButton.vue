@@ -4,12 +4,14 @@
     type="far fa-heart"
     @click="createLike"
     v-if="!liked"
+    :disabled="!currentUser && !disabled"
     />
     <IconButton
     style="color: #EC407A;"
     type="fas fa-heart"
     @click="destroyLike"
     v-if="liked"
+    :disabled="disabled"
     />
     <span style="font-size: 1.2em; vertical-align: -20%">
       {{ count }}
@@ -42,7 +44,8 @@ export default {
   data () {
     return {
       liked: false,
-      count: this.likesCount
+      count: this.likesCount,
+      disabled: false
     }
   },
   watch: {
@@ -57,6 +60,8 @@ export default {
   },
   methods: {
     createLike () {
+      if (this.disabled) { return }
+      this.disabled = true
       const likeParams = {
         likeable_type: this.objectType,
         likeable_id: this.objectId,
@@ -66,16 +71,20 @@ export default {
         .post('/v1/like', { like: likeParams })
         .then((res) => {
           this.liked = true
-          this.count += 1
           const likeable = {
             likeable_type: this.objectType,
-            likeable_id: this.objectId,
-            uncharted: true
+            likeable_id: this.objectId
           }
+          this.$emit('addLiked')
           this.$store.commit('addLiked', likeable)
         })
+      setTimeout(() => {
+        this.disabled = false
+      }, 200)
     },
     destroyLike () {
+      if (this.disabled) { return }
+      this.disabled = true
       const likeParams = {
         likeable_type: this.objectType,
         likeable_id: this.objectId,
@@ -85,12 +94,15 @@ export default {
         .delete('/v1/like/delete', { params: { like: likeParams } })
         .then(() => {
           this.liked = false
-          this.count -= 1
           const likeable = {
             likeable_type: this.objectType,
             likeable_id: this.objectId
           }
+          this.$emit('destroyLike')
           this.$store.commit('removeLiked', likeable)
+          setTimeout(() => {
+            this.disabled = false
+          }, 200)
         })
     }
   },
@@ -107,10 +119,6 @@ export default {
         l.likeable_type === likeable.likeable_type
       })
       if (judgment) { this.liked = true }
-      // judgment.uncharted は新しい(=作成してからリロードしていない)どうかを判定するフラグ
-      if (this.liked && this.objectType === 'Comment' && judgment.uncharted) {
-        this.count += 1
-      }
     }
   }
 }

@@ -29,8 +29,8 @@ export const mutations = {
   },
   removeLiked (state, payload) {
     state.currentUser.liked = state.currentUser.liked.filter((l) => {
-      return l.likeable_id !== payload.likeable_id &&
-      l.likeable_type !== payload.likeable_type
+      return !(l.likeable_id === payload.likeable_id &&
+      l.likeable_type === payload.likeable_type)
     })
   }
 }
