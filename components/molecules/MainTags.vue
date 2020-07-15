@@ -21,7 +21,6 @@
         />
       </v-col>
     </v-row>
-    {{ tags }}
   </v-container>
 </template>
 

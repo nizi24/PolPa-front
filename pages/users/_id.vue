@@ -65,6 +65,7 @@
       <v-card style="padding: 30px;">
         <TagSearch
         v-if="length"
+        @searchTimeReportInTags="searchTimeReportInTags"
         />
       </v-card>
     </v-col>
@@ -218,6 +219,11 @@ export default {
         return c
       })
       this.updateTimeReport(timeReport)
+    },
+    searchTimeReportInTags (ids) {
+      this.displayTimeReports = this.timeReports.filter((t) => {
+        return ids.includes(t.id)
+      })
     }
   },
   mounted () {
