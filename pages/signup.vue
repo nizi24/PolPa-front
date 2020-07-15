@@ -92,6 +92,7 @@ export default {
               this.$store.commit('drawing/setFlash', {})
             }, 2000)
             this.$store.commit('setUser', responce.data)
+            this.$store.commit('setLiked', [])
             this.$router.push('/')
           })
         })

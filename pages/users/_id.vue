@@ -52,11 +52,23 @@
           {{ progressNumeretor }}/{{ requiredExp.required_exp }}
         </v-col>
       </v-row>
+      <MainTags
+      :mainTags="mainTags"
+      />
       <v-row justify="center">
         <Heatmap :timeReports="timeReports" />
       </v-row>
     </v-card>
   </v-container>
+  <v-row justify="center">
+    <v-col cols="6">
+      <v-card style="padding: 30px;">
+        <TagSearch
+        v-if="length"
+        />
+      </v-card>
+    </v-col>
+  </v-row>
   <TimeReport
   v-for="time_report in displayTimeReports"
   :key="time_report.id"
@@ -70,6 +82,7 @@
   @subCommentLikesCount="subCommentLikesCount"
   />
   <v-pagination
+  v-if="length"
   v-model="page"
   :length="length"
   @input="pageChange"
@@ -82,12 +95,16 @@ import axios from '@/plugins/axios'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Heatmap from '~/components/molecules/Heatmap.vue'
 import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
+import TagSearch from '~/components/molecules/TagSearch.vue'
+import MainTags from '~/components/molecules/MainTags.vue'
 
 export default {
   components: {
     ErrorCard,
     Heatmap,
-    TimeReport
+    TimeReport,
+    TagSearch,
+    MainTags
   },
   data () {
     return {
@@ -95,6 +112,7 @@ export default {
       timeReports: [],
       displayTimeReports: [],
       requiredExp: {},
+      mainTags: [],
       userNotFound: false,
       page: 1,
       length: 0,
@@ -151,7 +169,6 @@ export default {
     },
     deleteTimeReport (timeReportId) {
       this.timeReports = this.timeReports.filter((t) => {
-        console.log(t.id)
         return t.id !== timeReportId
       })
       this.displayTimeReports = this.displayTimeReports.filter((t) => {
@@ -185,7 +202,6 @@ export default {
       timeReport.comments = timeReport.comments.map((c) => {
         if (c.id === commentId) {
           c.likes_count += 1
-          console.log(c)
         }
         return c
       })
@@ -214,6 +230,7 @@ export default {
         this.user = user
         this.timeReports = timeReports
         this.requiredExp = response.data.required_exp
+        this.mainTags = response.data.main_tags
         this.displayTimeReports = this.timeReports
           .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
         this.length = Math.ceil(this.timeReports.length / this.pageSize)
