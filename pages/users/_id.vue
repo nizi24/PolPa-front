@@ -56,7 +56,8 @@
       :mainTags="mainTags"
       />
       <WeeklyTarget
-      :weeklyTarget="weeklyTarget"
+      v-if="user.target_of_the_week"
+      :target="user.target_of_the_week[0]"
       />
       <v-row justify="center">
         <Heatmap :timeReports="timeReports" />
@@ -92,6 +93,7 @@
   v-if="length"
   v-model="page"
   :length="length"
+  total-visible="10"
   @input="pageChange"
   />
 </div>
@@ -122,7 +124,6 @@ export default {
       displayTimeReports: [],
       requiredExp: {},
       mainTags: [],
-      weeklyTarget: {},
       userNotFound: false,
       page: 1,
       length: 0,

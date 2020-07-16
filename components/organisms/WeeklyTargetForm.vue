@@ -83,7 +83,16 @@ export default {
           target_time
         })
         .then((res) => {
-          this.$emit('addTarget', res.data.weekly_target_setting)
+          this.$store.commit('drawing/setFlash', {
+            status: true,
+            type: 'success',
+            message: '今週の目標を設定しました'
+          })
+          setTimeout(() => {
+            this.$store.commit('drawing/setFlash', {})
+          }, 2000)
+          this.$emit('addTarget', res.data.weekly_target)
+          this.$emit('closeTargetForm')
         })
     }
   }
