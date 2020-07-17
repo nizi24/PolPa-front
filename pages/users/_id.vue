@@ -273,6 +273,9 @@ export default {
             Object.assign(this.user, mutation.payload)
           } else if (mutation.type === 'experience/setRequiredExp') {
             this.requiredExp = mutation.payload
+          } else if (mutation.type === 'setWeeklyTarget') {
+            this.user.target_of_the_week = []
+            this.user.target_of_the_week.unshift(mutation.payload)
           }
         }
       }

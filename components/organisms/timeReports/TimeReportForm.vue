@@ -30,17 +30,22 @@
                   </span>
                 </v-row>
               </v-col>
-              <v-date-picker
-              v-if="datePicker"
-              v-model="studyDate"
-              locale="ja"
-              id="datePicker"
-              :allowed-dates="allowedDates"
-              @input="datePicker = false"
-              ></v-date-picker>
+              <ValidationProvider
+              vid="学習日時"
+              >
+                <input type="hidden" v-model="studyDate"/>
+                <v-date-picker
+                v-if="datePicker"
+                v-model="studyDate"
+                locale="ja"
+                id="datePicker"
+                :allowed-dates="allowedDates"
+                @input="datePicker = false"
+                ></v-date-picker>
+              </ValidationProvider>
               <v-col cols="2">
                 <VAutoCompleteWithValidation
-                rules="max_value:23"
+                rules="max_value:23|validDate:@分 ,@学習日時"
                 v-model="studyDateHour"
                 label="時 "
                 :items="hours"
@@ -48,7 +53,7 @@
               </v-col>
               <v-col cols="2">
                 <VAutoCompleteWithValidation
-                rules="max_value:59"
+                rules="max_value:59|validDateMinutes:@時 ,@学習日時"
                 v-model="studyDateMinute"
                 label="分 "
                 :items="minutes"

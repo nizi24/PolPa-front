@@ -17,7 +17,7 @@
               <v-row>
                 <v-col cols="4">
                   <VTextFieldWithValidation
-                  rules="numeric|max_value:167|validTime:@分|required|"
+                  rules="numeric|max_value:167|validTime:@分|required"
                   v-model="hour"
                   label="時"
                   />
