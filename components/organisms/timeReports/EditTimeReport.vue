@@ -1,6 +1,8 @@
 <template>
   <TimeReportForm
   :editInitialValue="editInitialValue"
+  :initStudyDateHours="initStudyDateHours"
+  :initStudyDateMinutes="initStudyDateMinutes"
   @record="editTimeReport"
   @closeModal="closeModal"
   >
@@ -19,6 +21,12 @@ export default {
     editInitialValue: {
       type: Object,
       required: true
+    },
+    initStudyDateHours: {
+      type: String
+    },
+    initStudyDateMinutes: {
+      type: String
     }
   },
   computed: {

@@ -55,19 +55,25 @@
       <MainTags
       :mainTags="mainTags"
       />
+      <WeeklyTarget
+      :weeklyTarget="weeklyTarget"
+      />
       <v-row justify="center">
         <Heatmap :timeReports="timeReports" />
       </v-row>
     </v-card>
   </v-container>
   <v-row justify="center">
-    <v-col cols="6">
+    <v-col cols="6" v-if="timeReports.length">
       <v-card style="padding: 30px;">
         <TagSearch
         v-if="length"
         @searchTimeReportInTags="searchTimeReportInTags"
+        @restoration="restoration"
         />
       </v-card>
+    </v-col>
+    <v-col cols="6" v-else>
     </v-col>
   </v-row>
   <TimeReport
@@ -98,6 +104,7 @@ import Heatmap from '~/components/molecules/Heatmap.vue'
 import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
 import TagSearch from '~/components/molecules/TagSearch.vue'
 import MainTags from '~/components/molecules/MainTags.vue'
+import WeeklyTarget from '~/components/organisms/WeeklyTarget.vue'
 
 export default {
   components: {
@@ -105,7 +112,8 @@ export default {
     Heatmap,
     TimeReport,
     TagSearch,
-    MainTags
+    MainTags,
+    WeeklyTarget
   },
   data () {
     return {
@@ -114,6 +122,7 @@ export default {
       displayTimeReports: [],
       requiredExp: {},
       mainTags: [],
+      weeklyTarget: {},
       userNotFound: false,
       page: 1,
       length: 0,
@@ -224,6 +233,10 @@ export default {
       this.displayTimeReports = this.timeReports.filter((t) => {
         return ids.includes(t.id)
       })
+    },
+    restoration () {
+      this.displayTimeReports = this.timeReports
+        .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
     }
   },
   mounted () {

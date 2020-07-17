@@ -16,6 +16,8 @@
       <EditTimeReport
       v-if="editInitialValue"
       :editInitialValue="editInitialValue"
+      :initStudyDateHours="initStudyDateHours"
+      :initStudyDateMinutes="initStudyDateMinutes"
       @closeModal="closeModal"
       @updateTimeReport="updateTimeReport"
       />
@@ -47,6 +49,12 @@ export default {
     },
     editInitialValue: {
       type: Object
+    },
+    initStudyDateHours: {
+      type: String
+    },
+    initStudyDateMinutes: {
+      type: String
     }
   },
   data () {

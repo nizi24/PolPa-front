@@ -1,13 +1,14 @@
 <template>
   <v-btn
-  icon
+  :icon="icon"
   v-bind="$attrs"
   v-on="$listeners"
   v-if="authDisplay"
   >
-    <v-icon v-if="authDisplay" v-bind="$attrs">
+    <v-icon v-if="authDisplay" v-bind="$attrs" style="margin-right: 3px;">
       {{ type }}
     </v-icon>
+    <slot></slot>
   </v-btn>
 </template>
 
@@ -21,6 +22,10 @@ export default {
     comparison: {
       type: Number,
       required: true
+    },
+    icon: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

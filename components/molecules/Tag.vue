@@ -4,6 +4,7 @@
   color="#FFA000"
   label
   text-color="white"
+  v-if="tag"
 >
   <v-icon small style="margin-right: 10px;">
     fas fa-tag
@@ -16,7 +17,6 @@
 export default {
   props: {
     tag: {
-      type: String,
       required: true
     }
   }
