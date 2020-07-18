@@ -79,7 +79,7 @@ export default {
     record () {
       const target_time = this.hour + ':' + this.minute //eslint-disable-line
       axios
-        .post(`/v1/users/${this.currentUser.id}/weekly_target_setting`, {
+        .post(`/v1/users/${this.currentUser.id}/weekly_target`, {
           target_time
         })
         .then((res) => {

@@ -133,6 +133,10 @@ export default {
     addTarget (data) {
       this.weeklyTarget = data
     }
+  },
+  mounted () {
+    setInterval(() => {
+    }, 300000)
   }
 }
 </script>

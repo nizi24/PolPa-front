@@ -235,7 +235,7 @@ export default {
         })
         .then((res) => {
           this.$emit('updateTimeReport', res.data)
-          this.$emit('deleteTimeReport', timeReportId)
+          this.$emit('deleteTimeReport', timeReportId, res.data.weekly_target)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',

@@ -120,7 +120,7 @@ export default {
           l.likeable_type === likeable.likeable_type
         })
         if (judgment) { this.liked = true }
-      }, 200)
+      }, 500)
     }
   }
 }

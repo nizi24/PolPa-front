@@ -165,6 +165,10 @@ export default {
       this.updateTimeReport(timeReport)
       Object.assign(this.user, data.experience)
       this.requiredExp = data.required_exp
+      if (data.weekly_target) {
+        this.user.target_of_the_week = []
+        this.user.target_of_the_week.unshift(data.weekly_target)
+      }
       this.$store.commit('experience/setExperience', data.experience)
       this.$store.commit('setLevel', data.experience.level)
     },
@@ -178,13 +182,17 @@ export default {
         })
       }
     },
-    deleteTimeReport (timeReportId) {
+    deleteTimeReport (timeReportId, weeklyTarget) {
       this.timeReports = this.timeReports.filter((t) => {
         return t.id !== timeReportId
       })
       this.displayTimeReports = this.displayTimeReports.filter((t) => {
         return t.id !== timeReportId
       })
+      if (weeklyTarget) {
+        this.user.target_of_the_week = []
+        this.user.target_of_the_week.unshift(weeklyTarget)
+      }
     },
     pageChange (pageNumber) {
       this.displayTimeReports = this.timeReports

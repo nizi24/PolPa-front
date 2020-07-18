@@ -29,7 +29,6 @@ const validDateMinutes = {
 
   validate (minutes, { hours, date }) {
     const dateTime = new Date(`${date} ${hours}:${minutes}`)
-    console.log(dateTime)
     return dateTime <= new Date()
   },
 
