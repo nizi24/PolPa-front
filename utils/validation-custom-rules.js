@@ -10,4 +10,31 @@ const validTime = {
   }
 }
 
-export { validTime }
+const validDate = {
+  params: ['minutes', 'date'],
+
+  validate (hours, { minutes, date }) {
+    const dateTime = new Date(`${date} ${hours}:${minutes}`)
+    return dateTime <= new Date()
+  },
+
+  message () {
+    return '未来の時刻は選択できません'
+  }
+}
+
+// エラーメッセージを表示するため
+const validDateMinutes = {
+  params: ['hours', 'date'],
+
+  validate (minutes, { hours, date }) {
+    const dateTime = new Date(`${date} ${hours}:${minutes}`)
+    return dateTime <= new Date()
+  },
+
+  message () {
+    return '未来の時刻は選択できません'
+  }
+}
+
+export { validTime, validDate, validDateMinutes }

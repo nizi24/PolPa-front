@@ -44,7 +44,7 @@ export default {
       const entries = this.timeReports.map((value) => {
         return {
           counting: value.experience_record.experience_point,
-          created_at: value.created_at.split('T')[0]
+          created_at: value.study_date.split('T')[0]
         }
       })
       const group = entries.reduce((result, current) => {

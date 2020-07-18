@@ -10,7 +10,8 @@ export const state = () => ({
     email: '',
     screen_name: '',
     level: 1,
-    liked: []
+    liked: [],
+    weeklyTarget: {}
   }
 })
 
@@ -32,5 +33,8 @@ export const mutations = {
       return !(l.likeable_id === payload.likeable_id &&
       l.likeable_type === payload.likeable_type)
     })
+  },
+  setWeeklyTarget (state, payload) {
+    state.currentUser.weeklyTarget = payload
   }
 }

@@ -21,6 +21,8 @@
       :btnDisplay="false"
       :modalDisplay="modalDisplay"
       :editInitialValue="timeReport"
+      :initStudyDateHours="initStudyDateHours"
+      :initStudyDateMinutes="initStudyDateMinutes"
       @closeModal="closeModal"
       @updateTimeReport="updateTimeReport"
       v-if="authDisplay"
@@ -42,6 +44,12 @@
       </v-card-title>
       <v-card-text style="margin-top: 10px">
         <nuxt-link :to="toLink" style="color: inherit; text-decoration: none;">
+          <v-row style="margin-left: 20px; margin-bottom: 10px;">
+            <v-icon small style="margin-right: 10px">
+              far fa-calendar-alt
+            </v-icon>
+            <span v-if="timeReport.study_date">{{ studyDate }}</span>
+          </v-row>
           <v-row style="margin-left: 20px; margin-bottom: 10px;">
             <Tag v-for="tag in timeReport.tags" :tag="tag.name" :key="tag.id" />
           </v-row>
@@ -147,11 +155,11 @@ export default {
   computed: {
     studyHour () {
       const time = new Date(this.timeReport.study_time)
-      return time.getUTCHours()
+      return time.getHours()
     },
     studyMinute () {
       const time = new Date(this.timeReport.study_time)
-      return time.getUTCMinutes()
+      return time.getMinutes()
     },
     currentUser () {
       return this.$store.state.currentUser
@@ -179,6 +187,21 @@ export default {
     },
     toLink () {
       return `/time_reports/${this.timeReport.id}`
+    },
+    initStudyDateHours () {
+      const timeReport = new Date(this.timeReport.study_date)
+      return timeReport.getHours().toString()
+    },
+    initStudyDateMinutes () {
+      const timeReport = new Date(this.timeReport.study_date)
+      return timeReport.getMinutes().toString()
+    },
+    studyDate () {
+      const studyDate = this.timeReport.study_date
+      const date = studyDate.substr(0, 16).split('T')[0]
+        .replace(/(\d{4})-(\d{2})-(\d{2})/, '$1年$2月$3日')
+      const time = studyDate.substr(0, 16).split('T')[1]
+      return date + ' ' + time
     }
   },
   watch: {
@@ -212,7 +235,7 @@ export default {
         })
         .then((res) => {
           this.$emit('updateTimeReport', res.data)
-          this.$emit('deleteTimeReport', timeReportId)
+          this.$emit('deleteTimeReport', timeReportId, res.data.weekly_target)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',

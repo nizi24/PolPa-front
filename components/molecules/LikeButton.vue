@@ -108,17 +108,19 @@ export default {
   },
   mounted () {
     if (this.currentUser) {
-      const liked = this.currentUser.liked
-      const likeable = {
-        likeable_type: this.objectType,
-        likeable_id: this.objectId
-      }
-      // currentUserがいいねしているかどうか判定
-      const judgment = liked.find((l) => {
-        return l.likeable_id === likeable.likeable_id &&
-        l.likeable_type === likeable.likeable_type
-      })
-      if (judgment) { this.liked = true }
+      setTimeout(() => {
+        const liked = this.currentUser.liked
+        const likeable = {
+          likeable_type: this.objectType,
+          likeable_id: this.objectId
+        }
+        // currentUserがいいねしているかどうか判定
+        const judgment = liked.find((l) => {
+          return l.likeable_id === likeable.likeable_id &&
+          l.likeable_type === likeable.likeable_type
+        })
+        if (judgment) { this.liked = true }
+      }, 500)
     }
   }
 }

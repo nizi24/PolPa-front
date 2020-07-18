@@ -32,9 +32,13 @@ export default {
           const timeReport = JSON.parse(res.data.time_report)
           const experience = res.data.experience
           const requiredExp = res.data.required_exp
+          const weeklyTarget = res.data.weekly_target
           this.$store.commit('timeReport/setTimeReport', timeReport)
           this.$store.commit('experience/setExperience', experience)
           this.$store.commit('experience/setRequiredExp', requiredExp)
+          if (weeklyTarget) {
+            this.$store.commit('setWeeklyTarget', weeklyTarget)
+          }
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',

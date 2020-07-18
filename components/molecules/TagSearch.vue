@@ -2,13 +2,13 @@
   <v-text-field
   hint="タグで検索できます"
   v-model="name"
-  @input="search"
   >
     <v-icon slot="prepend">fas fa-search</v-icon>
   </v-text-field>
 </template>
 
 <script>
+import _ from 'lodash'
 import axios from '@/plugins/axios'
 export default {
   data () {
@@ -16,8 +16,17 @@ export default {
       name: ''
     }
   },
+  watch: {
+    name () {
+      this.delayFunc()
+    }
+  },
   methods: {
     search () {
+      if (this.name === '') {
+        this.$emit('restoration')
+        return
+      }
       axios
         .get(`/v1/users/${this.$route.params.id}/tags/search`, {
           params: {
@@ -28,6 +37,9 @@ export default {
           this.$emit('searchTimeReportInTags', ids)
         })
     }
+  },
+  created () {
+    this.delayFunc = _.debounce(this.search, 500)
   }
 }
 </script>

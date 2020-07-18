@@ -5,6 +5,12 @@
   title="404 not find"
   message="ユーザーが存在しません。"
   />
+  <PrevWeeklyTargetModal
+  v-if="prevWeeklyTargetModal"
+  :prevWeeklyTargetModal="prevWeeklyTargetModal"
+  :prevWeeklyTarget="prevWeeklyTarget"
+  @addTarget="addTarget"
+  />
   <v-container v-if="!userNotFound">
     <v-card class="mx-auto mt-5 pa-5" width="1000px">
       <v-row justify="center">
@@ -55,19 +61,26 @@
       <MainTags
       :mainTags="mainTags"
       />
+      <WeeklyTarget
+      v-if="user.target_of_the_week"
+      :target="user.target_of_the_week[0]"
+      />
       <v-row justify="center">
         <Heatmap :timeReports="timeReports" />
       </v-row>
     </v-card>
   </v-container>
   <v-row justify="center">
-    <v-col cols="6">
+    <v-col cols="6" v-if="timeReports.length">
       <v-card style="padding: 30px;">
         <TagSearch
         v-if="length"
         @searchTimeReportInTags="searchTimeReportInTags"
+        @restoration="restoration"
         />
       </v-card>
+    </v-col>
+    <v-col cols="6" v-else>
     </v-col>
   </v-row>
   <TimeReport
@@ -86,6 +99,7 @@
   v-if="length"
   v-model="page"
   :length="length"
+  total-visible="10"
   @input="pageChange"
   />
 </div>
@@ -98,6 +112,8 @@ import Heatmap from '~/components/molecules/Heatmap.vue'
 import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
 import TagSearch from '~/components/molecules/TagSearch.vue'
 import MainTags from '~/components/molecules/MainTags.vue'
+import WeeklyTarget from '~/components/organisms/WeeklyTarget.vue'
+import PrevWeeklyTargetModal from '~/components/organisms/PrevWeeklyTargetModal.vue'
 
 export default {
   components: {
@@ -105,7 +121,9 @@ export default {
     Heatmap,
     TimeReport,
     TagSearch,
-    MainTags
+    MainTags,
+    WeeklyTarget,
+    PrevWeeklyTargetModal
   },
   data () {
     return {
@@ -114,6 +132,8 @@ export default {
       displayTimeReports: [],
       requiredExp: {},
       mainTags: [],
+      prevWeeklyTarget: {},
+      prevWeeklyTargetModal: false,
       userNotFound: false,
       page: 1,
       length: 0,
@@ -155,6 +175,10 @@ export default {
       this.updateTimeReport(timeReport)
       Object.assign(this.user, data.experience)
       this.requiredExp = data.required_exp
+      if (data.weekly_target) {
+        this.user.target_of_the_week = []
+        this.user.target_of_the_week.unshift(data.weekly_target)
+      }
       this.$store.commit('experience/setExperience', data.experience)
       this.$store.commit('setLevel', data.experience.level)
     },
@@ -168,13 +192,17 @@ export default {
         })
       }
     },
-    deleteTimeReport (timeReportId) {
+    deleteTimeReport (timeReportId, weeklyTarget) {
       this.timeReports = this.timeReports.filter((t) => {
         return t.id !== timeReportId
       })
       this.displayTimeReports = this.displayTimeReports.filter((t) => {
         return t.id !== timeReportId
       })
+      if (weeklyTarget) {
+        this.user.target_of_the_week = []
+        this.user.target_of_the_week.unshift(weeklyTarget)
+      }
     },
     pageChange (pageNumber) {
       this.displayTimeReports = this.timeReports
@@ -224,6 +252,14 @@ export default {
       this.displayTimeReports = this.timeReports.filter((t) => {
         return ids.includes(t.id)
       })
+    },
+    restoration () {
+      this.displayTimeReports = this.timeReports
+        .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
+    },
+    addTarget (weeklyTarget) {
+      this.user.target_of_the_week = []
+      this.user.target_of_the_week.unshift(weeklyTarget)
     }
   },
   mounted () {
@@ -237,6 +273,9 @@ export default {
         this.timeReports = timeReports
         this.requiredExp = response.data.required_exp
         this.mainTags = response.data.main_tags
+        const prevWeeklyTarget = JSON.parse(response.data.prev_weekly_target)
+        this.prevWeeklyTarget = prevWeeklyTarget
+        if (this.prevWeeklyTarget) { this.prevWeeklyTargetModal = true }
         this.displayTimeReports = this.timeReports
           .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
         this.length = Math.ceil(this.timeReports.length / this.pageSize)
@@ -259,6 +298,9 @@ export default {
             Object.assign(this.user, mutation.payload)
           } else if (mutation.type === 'experience/setRequiredExp') {
             this.requiredExp = mutation.payload
+          } else if (mutation.type === 'setWeeklyTarget') {
+            this.user.target_of_the_week = []
+            this.user.target_of_the_week.unshift(mutation.payload)
           }
         }
       }
