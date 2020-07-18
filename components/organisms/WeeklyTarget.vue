@@ -97,6 +97,9 @@ export default {
     paramsUserId () {
       return Number(this.$route.params.id)
     },
+    currentUser () {
+      return this.$store.state.currentUser
+    },
     weekly () {
       const start = this.weeklyTarget.start_date
         .replace(/^\d{4}-0?(\d{1,2})-(\d{2})/, '$1月$2日').split('T')[0]
@@ -112,11 +115,7 @@ export default {
       const target = targetDate.getHours() * 60 +
         targetDate.getMinutes()
       const proportion = progress / target * 100
-      if (proportion === 100) {
-        return 0
-      } else {
-        return proportion
-      }
+      return proportion
     },
     progressTime () {
       const progress = new Date(this.weeklyTarget.progress)
@@ -133,10 +132,6 @@ export default {
     addTarget (data) {
       this.weeklyTarget = data
     }
-  },
-  mounted () {
-    setInterval(() => {
-    }, 300000)
   }
 }
 </script>

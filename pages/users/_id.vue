@@ -5,6 +5,12 @@
   title="404 not find"
   message="ユーザーが存在しません。"
   />
+  <PrevWeeklyTargetModal
+  v-if="prevWeeklyTargetModal"
+  :prevWeeklyTargetModal="prevWeeklyTargetModal"
+  :prevWeeklyTarget="prevWeeklyTarget"
+  @addTarget="addTarget"
+  />
   <v-container v-if="!userNotFound">
     <v-card class="mx-auto mt-5 pa-5" width="1000px">
       <v-row justify="center">
@@ -107,6 +113,7 @@ import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
 import TagSearch from '~/components/molecules/TagSearch.vue'
 import MainTags from '~/components/molecules/MainTags.vue'
 import WeeklyTarget from '~/components/organisms/WeeklyTarget.vue'
+import PrevWeeklyTargetModal from '~/components/organisms/PrevWeeklyTargetModal.vue'
 
 export default {
   components: {
@@ -115,7 +122,8 @@ export default {
     TimeReport,
     TagSearch,
     MainTags,
-    WeeklyTarget
+    WeeklyTarget,
+    PrevWeeklyTargetModal
   },
   data () {
     return {
@@ -124,6 +132,8 @@ export default {
       displayTimeReports: [],
       requiredExp: {},
       mainTags: [],
+      prevWeeklyTarget: {},
+      prevWeeklyTargetModal: false,
       userNotFound: false,
       page: 1,
       length: 0,
@@ -246,6 +256,10 @@ export default {
     restoration () {
       this.displayTimeReports = this.timeReports
         .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
+    },
+    addTarget (weeklyTarget) {
+      this.user.target_of_the_week = []
+      this.user.target_of_the_week.unshift(weeklyTarget)
     }
   },
   mounted () {
@@ -259,6 +273,9 @@ export default {
         this.timeReports = timeReports
         this.requiredExp = response.data.required_exp
         this.mainTags = response.data.main_tags
+        const prevWeeklyTarget = JSON.parse(response.data.prev_weekly_target)
+        this.prevWeeklyTarget = prevWeeklyTarget
+        if (this.prevWeeklyTarget) { this.prevWeeklyTargetModal = true }
         this.displayTimeReports = this.timeReports
           .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
         this.length = Math.ceil(this.timeReports.length / this.pageSize)

@@ -26,7 +26,7 @@
               >
                 <v-row justify="center" style="margin-top: 20px">
                   <span style="font-size: 1.4em">
-                    {{ studyDate.split(' ')[0] }}
+                    {{ studyDate }}
                   </span>
                 </v-row>
               </v-col>
@@ -151,8 +151,7 @@ export default {
       memo: '',
       displayAlert: false,
       tag: '',
-      studyDate: new Date().toLocaleString().substr(0, 10).replace(/\//g, '-')
-        .trim().replace(/(^\d+-)(\d-\d+$)/, '$10$2'),
+      studyDate: new Date().toLocaleDateString().replace(/\//g, '-'),
       studyDateHour: this.initStudyDateHours,
       studyDateMinute: this.initStudyDateMinutes,
       tags: [],
@@ -215,8 +214,7 @@ export default {
         this.minute = '1'
         this.memo = ''
         this.tags = []
-        this.studyDate = new Date().toLocaleString().substr(0, 10)
-          .replace(/\//g, '-').trim().replace(/(^\d+-)(\d-\d+$)/, '$10$2')
+        this.studyDate = this.dateFormat(new Date())
         this.studyDateHour = new Date().getHours().toString()
         this.studyDateMinute = new Date().getMinutes().toString()
       }
@@ -242,18 +240,24 @@ export default {
       this.displayAlert = false
       this.$emit('record', { timeReport, tags })
     },
-    allowedDates: (val) => {
+    allowedDates (val) {
       const today = new Date()
       let week = []
       week.unshift(new Date(today))
       for (let i = 0; i < 7; i++) {
         week.unshift(new Date(today.setDate(today.getDate() - 1)))
       }
+      const that = this
       week = week.map((dt) => {
-        return dt.toLocaleString().substr(0, 10).replace(/\//g, '-').trim()
-          .replace(/(^\d+-)(\d-\d+$)/, '$10$2')
+        return that.dateFormat(dt)
       })
       return week.includes(val)
+    },
+    dateFormat (dt) {
+      const [year, month, day] = dt.toLocaleDateString().split('/')
+      const monthStr = ('0' + month).slice(-2)
+      const dayStr = ('0' + day).slice(-2)
+      return `${year}-${monthStr}-${dayStr}`
     }
   },
   mounted () {
@@ -266,8 +270,7 @@ export default {
       this.minute = minute.toString()
       this.memo = this.editInitialValue.memo
       const studyDate = new Date(this.editInitialValue.study_date)
-      this.studyDate = studyDate.toLocaleString().substr(0, 10)
-        .replace(/\//g, '-').trim().replace(/(^\d+-)(\d-\d+$)/, '$10$2')
+      this.studyDate = this.dateFormat(studyDate)
       this.tags = this.tagsProcessing
     } else {
       this.hour = '0'
