@@ -107,6 +107,7 @@ export default {
     }
   },
   mounted () {
+    this.disabled = true
     if (this.currentUser) {
       setTimeout(() => {
         const liked = this.currentUser.liked
@@ -122,6 +123,7 @@ export default {
         if (judgment) { this.liked = true }
       }, 500)
     }
+    this.disabled = false
   }
 }
 </script>

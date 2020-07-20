@@ -11,7 +11,8 @@ export const state = () => ({
     screen_name: '',
     level: 1,
     liked: [],
-    weeklyTarget: {}
+    weeklyTarget: {},
+    following: []
   }
 })
 
@@ -36,5 +37,18 @@ export const mutations = {
   },
   setWeeklyTarget (state, payload) {
     state.currentUser.weeklyTarget = payload
+  },
+  setFollowing (state, payload) {
+    state.currentUser.following = payload.map((p) => {
+      return p.id
+    })
+  },
+  addFollowing (state, payload) {
+    state.currentUser.following.unshift(payload)
+  },
+  removeFollowing (state, payload) {
+    state.currentUser.following = state.currentUser.following.filter((l) => {
+      return l.id !== payload
+    })
   }
 }

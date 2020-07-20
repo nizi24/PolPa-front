@@ -58,6 +58,13 @@
           {{ progressNumeretor }}/{{ requiredExp.required_exp }}
         </v-col>
       </v-row>
+      <Relationship
+      v-if="Object.keys(user).length"
+      :followerCount="user.follower_count"
+      :followingCount="user.following_count"
+      @addFollower="user.follower_count++"
+      @subFollower="user.follower_count--"
+      />
       <MainTags
       :mainTags="mainTags"
       />
@@ -109,6 +116,7 @@
 import axios from '@/plugins/axios'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Heatmap from '~/components/molecules/Heatmap.vue'
+import Relationship from '~/components/molecules/Relationship.vue'
 import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
 import TagSearch from '~/components/molecules/TagSearch.vue'
 import MainTags from '~/components/molecules/MainTags.vue'
@@ -119,6 +127,7 @@ export default {
   components: {
     ErrorCard,
     Heatmap,
+    Relationship,
     TimeReport,
     TagSearch,
     MainTags,
@@ -168,6 +177,9 @@ export default {
       } else {
         return 'amber--text text--lighten-2'
       }
+    },
+    paramsUserId () {
+      return this.$route.params.id
     }
   },
   methods: {

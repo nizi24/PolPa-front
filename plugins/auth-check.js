@@ -7,7 +7,9 @@ const authCheck = ({ store, redirect }) => {
       const { data } = await axios.get(`/v1/users?uid=${user.uid}`)
       store.commit('setUser', data.user)
       const liked = JSON.parse(data.likes)
+      const following = JSON.parse(data.following)
       store.commit('setLiked', liked)
+      store.commit('setFollowing', following)
     } else {
       store.commit('setUser', null)
     }
