@@ -4,7 +4,8 @@ export const state = () => ({
     status: false,
     type: '',
     message: ''
-  }
+  },
+  overlay: false
 })
 
 export const mutations = {
@@ -13,5 +14,8 @@ export const mutations = {
   },
   setFlash (state, payload) {
     state.flash = payload
+  },
+  setOverlay (state, payload) {
+    state.overlay = payload
   }
 }

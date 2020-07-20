@@ -1,9 +1,10 @@
 <template>
-  <v-app style="background-color: #F1F8E9">
+  <v-app style="background-color: #F1F8E9;">
     <Flash />
     <Loading />
     <LevelUpModal />
     <Header />
+    <Overlay />
     <v-content>
       <v-container>
         <nuxt />
@@ -17,6 +18,7 @@
 import Header from '~/components/organisms/Header.vue'
 import Footer from '~/components/organisms/Footer.vue'
 import Loading from '~/components/molecules/Loading.vue'
+import Overlay from '~/components/molecules/Overlay.vue'
 import Flash from '~/components/molecules/Flash.vue'
 import LevelUpModal from '~/components/organisms/LevelUpModal.vue'
 
@@ -26,7 +28,8 @@ export default {
     Footer,
     Loading,
     Flash,
-    LevelUpModal
+    LevelUpModal,
+    Overlay
   },
   data () {
     return {

@@ -6,6 +6,7 @@
   @click="click"
   >
     <v-icon v-bind="$attrs">
+      <slot></slot>
       {{ type }}
     </v-icon>
   </v-btn>
