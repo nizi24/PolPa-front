@@ -59,7 +59,7 @@
         </v-col>
       </v-row>
       <Relationship
-      v-if="user"
+      v-if="Object.keys(user).length"
       :followerCount="user.follower_count"
       :followingCount="user.following_count"
       @addFollower="user.follower_count++"

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-col cols="2" v-if="Number(paramsUserId) !== currentUser.id">
+      <v-col cols="2" v-if="currentUser && Number(paramsUserId) !== currentUser.id">
       </v-col>
       <v-col cols="2">
         <v-row justify="center">
@@ -19,7 +19,7 @@
           <h3>{{ followerCount }}</h3>
         </v-row>
       </v-col>
-      <v-col cols="2" v-if="Number(paramsUserId) !== currentUser.id">
+      <v-col cols="2" v-if="currentUser && Number(paramsUserId) !== currentUser.id">
         <v-btn
         small
         class="ma-2"
