@@ -34,6 +34,12 @@
           >
             あなたのコメントに@{{ notice.screen_name }}さんがいいねしました。
           </div>
+          <div
+          v-if="notice.noticeable_type === 'Relationship'"
+          @click="closeField"
+          >
+            @{{ notice.screen_name }}さんにフォローされました。
+          </div>
         </nuxt-link>
       </v-col>
     </v-row>
@@ -52,6 +58,8 @@ export default {
     noticeLink () {
       if (this.notice.time_report_id) {
         return `/time_reports/${this.notice.time_report_id}`
+      } else if (this.notice.noticeable_type === 'Relationship') {
+        return `/users/${this.notice.action_user_id}`
       }
       return ''
     },
@@ -63,6 +71,9 @@ export default {
     closeField () {
       this.$emit('closeField')
     }
+  },
+  mounted () {
+    return this.notice
   }
 }
 </script>
