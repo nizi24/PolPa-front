@@ -31,6 +31,9 @@
   >
     新規登録
   </v-btn>
+    <NoticeField
+    v-if="currentUser"
+    />
     <v-menu
     v-model="value"
     :offset-y="true"
@@ -74,12 +77,14 @@
 </template>
 
 <script>
+import NoticeField from '../molecules/notices/NoticeField.vue'
 import TimeReportModal from './timeReports/TimeReportModal.vue'
 import firebase from '@/plugins/firebase'
 
 export default {
   components: {
-    TimeReportModal
+    TimeReportModal,
+    NoticeField
   },
   data () {
     return {
@@ -136,5 +141,6 @@ h2.app-title {
 
 .v-avatar {
   margin-right: 20px;
+  margin-left: 20px;
 }
 </style>
