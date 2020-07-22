@@ -9,6 +9,7 @@ export const state = () => ({
     name: '',
     email: '',
     screen_name: '',
+    avatar_url: '',
     level: 1,
     liked: [],
     weeklyTarget: {},
@@ -19,6 +20,9 @@ export const state = () => ({
 export const mutations = {
   setUser (state, payload) {
     state.currentUser = payload
+  },
+  setAvatarUrl (state, payload) {
+    state.currentUser.avatar_url = payload
   },
   setLevel (state, payload) {
     state.currentUser.level = payload

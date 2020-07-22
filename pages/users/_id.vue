@@ -25,7 +25,14 @@
         <v-col cols="4">
           <v-row justify="center">
             <v-avatar size="80">
-              <img src="~/assets/default_icon.jpeg" />
+              <img
+              v-if="user.avatar_url"
+              :src="user.avatar_url"
+              />
+              <img
+              v-else
+              src="~/assets/default_icon.jpeg"
+              />
             </v-avatar>
           </v-row>
           <v-row justify="center">

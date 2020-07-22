@@ -5,7 +5,8 @@ const authCheck = ({ store, redirect }) => {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
       const { data } = await axios.get(`/v1/users?uid=${user.uid}`)
-      store.commit('setUser', data.user)
+      const userParams = JSON.parse(data.user)
+      store.commit('setUser', userParams)
       const liked = JSON.parse(data.likes)
       const following = JSON.parse(data.following)
       store.commit('setLiked', liked)
