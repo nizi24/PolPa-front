@@ -80,22 +80,20 @@ export default {
         if (!mutation.payload) { this.noticeField = false }
       }
     })
-    if (this.currentUser) {
-      const that = this
-      const getNotice = function () {
-        axios
-          .get(`/v1/users/${that.currentUser.id}/notices`, {
-            params: {
-              limit: true
-            }
-          })
-          .then((res) => {
-            that.notices = res.data.notice
-          })
-      }
-      setTimeout(getNotice, 3000)
-      setInterval(getNotice, 60000)
+    const that = this
+    const getNotice = function () {
+      axios
+        .get(`/v1/users/${that.currentUser.id}/notices`, {
+          params: {
+            limit: true
+          }
+        })
+        .then((res) => {
+          that.notices = res.data.notice
+        })
     }
+    setTimeout(getNotice, 3000)
+    setInterval(getNotice, 60000)
   }
 }
 </script>

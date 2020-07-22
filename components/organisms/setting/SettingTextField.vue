@@ -1,0 +1,116 @@
+<template>
+  <ValidationObserver ef="obs" v-slot="{ passes }">
+    <div class="input-block">
+      <v-row>
+        <v-col cols="4" class="input-label-block">
+          <v-icon small>{{ icon }}</v-icon>
+          <span class="input-label">{{ label }}</span>
+          <span style="margin-left: 10px;">
+            <Hint
+            v-if="hint"
+            :explanation="hint"
+            class="hint"
+            />
+          </span>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col cols="6">
+          <VTextFieldWithValidation
+          v-model="innerValue"
+          :rules="rules"
+          :label="label"
+          />
+        </v-col>
+        <v-col cols="6" class="input-btn-block">
+          <v-btn
+          @click="passes(update)"
+          color="primary"
+          depressed
+          style="margin-top: 30px;"
+          :disabled="disabled"
+          >変更</v-btn>
+        </v-col>
+        <v-spacer />
+      </v-row>
+    </div>
+  </ValidationObserver>
+</template>
+
+<script>
+import VTextFieldWithValidation from '~/components/molecules/inputs/VTextFieldWithValidation.vue'
+export default {
+  components: {
+    VTextFieldWithValidation
+  },
+  props: {
+    rules: {
+      type: [Object, String],
+      default: ''
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    icon: {
+      type: String,
+      required: true
+    },
+    disabled: {
+      type: Boolean,
+      required: true
+    },
+    hint: {
+      type: String
+    },
+    value: {
+      type: null
+    }
+  },
+  data: () => ({
+    innerValue: ''
+  }),
+  watch: {
+    innerValue (newVal) {
+      this.$emit('input', newVal)
+    },
+    value (newVal) {
+      this.innerValue = newVal
+    }
+  },
+  created () {
+    if (this.value) {
+      this.innerValue = this.value
+    }
+  },
+  methods: {
+    update () {
+      this.$emit('on')
+    }
+  }
+}
+</script>
+
+<style scoped>
+.input-block {
+  margin-left: 20px;
+  margin-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.input-label-block {
+  padding-bottom: 0px !important;
+  padding-right: 0px !important;
+}
+
+.input-label {
+  color: #555555;
+  margin-left: 4px;
+  vertical-align: -5%;
+}
+
+.input-btn-block {
+  padding-top: 0 !important;
+}
+</style>

@@ -95,6 +95,9 @@ export default {
             this.$store.commit('setLiked', [])
             this.$router.push('/')
           })
+            .catch(() => {
+              this.$store.commit('drawing/setLoading', false)
+            })
         })
         .catch((error) => {
           this.error = ((code) => {

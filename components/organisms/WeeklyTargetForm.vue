@@ -10,6 +10,11 @@
           <span
           class="headline"
           >今週の目標を設定する</span>
+          <v-col cols="1" style="margin-left: 20px;">
+            <Hint
+            explanation="一度設定すると翌週になるまで変更できません。"
+            />
+          </v-col>
         </v-card-title>
         <v-form>
           <v-card-text>
@@ -48,11 +53,13 @@
 </template>
 
 <script>
+import Hint from '../molecules/Hint.vue'
 import VTextFieldWithValidation from '../molecules/inputs/VTextFieldWithValidation.vue'
 import axios from '@/plugins/axios'
 
 export default {
   components: {
+    Hint,
     VTextFieldWithValidation
   },
   props: {

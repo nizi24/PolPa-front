@@ -102,6 +102,10 @@ export default {
         {
           title: 'マイページ',
           to: `/users/${this.currentUser.id}`
+        },
+        {
+          title: '設定',
+          to: '/users/setting/profile'
         }
       ]
       return items
