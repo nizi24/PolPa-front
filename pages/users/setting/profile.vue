@@ -6,7 +6,7 @@
     </v-col>
     <v-col cols="7">
       <v-card style="padding: 20px;">
-        <v-card-title>
+        <v-card-title id="setting-title">
           <h4>プロフィール</h4>
         </v-card-title>
         <v-form>
@@ -33,12 +33,15 @@
             :btnHidden="true"
             :counter="160"
             />
-            <v-btn
-            @click="passes(updateProfile)"
-            color="primary"
-            depressed
-            :disabled="disabled"
-            >変更</v-btn>
+            <v-row justify="center">
+              <v-btn
+              style="margin-top: 20px;"
+              @click="passes(updateProfile)"
+              color="primary"
+              depressed
+              :disabled="disabled"
+              >変更</v-btn>
+            </v-row>
           </ValidationObserver>
         </v-form>
       </v-card>
@@ -99,11 +102,11 @@ export default {
     },
     updateProfile () {
       const user = {
-        name: this.name
+        name: this.name,
+        profile: this.profile
       }
       axios.patch(`/v1/users/${this.currentUser.id}`, { user })
         .then((res) => {
-          this.name = res.data.user.name
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
@@ -133,6 +136,7 @@ export default {
           .get(`/v1/users/${that.currentUser.id}/edit`)
           .then((res) => {
             that.name = res.data.user.name
+            that.profile = res.data.user.profile
             that.disabled = false
           })
       } catch {
@@ -143,3 +147,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#setting-title {
+  border-bottom: 1px solid #e8e8e8;
+}
+</style>

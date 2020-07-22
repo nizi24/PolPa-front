@@ -26,8 +26,8 @@
           <v-row justify="center">
             <v-avatar size="80">
               <img
-              v-if="currentUser.avatar_url"
-              :src="currentUser.avatar_url"
+              v-if="user.avatar_url"
+              :src="user.avatar_url"
               />
               <img
               v-else
