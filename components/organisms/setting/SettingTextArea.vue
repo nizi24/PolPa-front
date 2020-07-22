@@ -15,11 +15,12 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="6">
-          <VTextFieldWithValidation
+        <v-col cols="12">
+          <VTextAreaWithValidation
           v-model="innerValue"
           :rules="rules"
           :label="label"
+          v-bind="$attrs"
           />
         </v-col>
         <v-col cols="6" class="input-btn-block">
@@ -39,10 +40,10 @@
 </template>
 
 <script>
-import VTextFieldWithValidation from '~/components/molecules/inputs/VTextFieldWithValidation.vue'
+import VTextAreaWithValidation from '~/components/molecules/inputs/VTextAreaWithValidation.vue'
 export default {
   components: {
-    VTextFieldWithValidation
+    VTextAreaWithValidation
   },
   props: {
     rules: {

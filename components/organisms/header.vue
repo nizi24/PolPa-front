@@ -46,7 +46,14 @@
         v-bind="attrs"
         v-on="on"
         >
-          <img src="~/assets/default_icon.jpeg" />
+          <img
+          v-if="currentUser.avatar_url"
+          :src="currentUser.avatar_url"
+          >
+          <img
+          v-else
+          src="~/assets/default_icon.jpeg"
+          />
         </v-avatar>
       </template>
       <v-list
