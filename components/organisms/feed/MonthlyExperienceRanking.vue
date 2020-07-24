@@ -1,5 +1,13 @@
 <template>
   <div>
+    <template v-if="users.length === 0">
+      <v-skeleton-loader
+      v-for="n in 10"
+      :key="n"
+      class="mx-auto"
+      type="list-item-avatar"
+      />
+    </template>
     <RankingUserCard
     v-for="(user, i) in users"
     :key="user.id"

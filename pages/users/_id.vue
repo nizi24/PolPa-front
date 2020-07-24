@@ -100,8 +100,6 @@
   @deleteTimeReport="deleteTimeReport"
   @addLikesCount="addLikesCount"
   @subLikesCount="subLikesCount"
-  @addCommentLikesCount="addCommentLikesCount"
-  @subCommentLikesCount="subCommentLikesCount"
   />
   <v-pagination
   v-if="length"
@@ -227,30 +225,6 @@ export default {
         }
         return t
       })
-    },
-    addCommentLikesCount (commentId, timeReportId) {
-      const timeReport = this.timeReports.find((t) => {
-        return t.id === timeReportId
-      })
-      timeReport.comments = timeReport.comments.map((c) => {
-        if (c.id === commentId) {
-          c.likes_count += 1
-        }
-        return c
-      })
-      this.updateTimeReport(timeReport)
-    },
-    subCommentLikesCount (commentId, timeReportId) {
-      const timeReport = this.timeReports.find((t) => {
-        return t.id === timeReportId
-      })
-      timeReport.comments = timeReport.comments.map((c) => {
-        if (c.id === commentId) {
-          c.likes_count -= 1
-        }
-        return c
-      })
-      this.updateTimeReport(timeReport)
     },
     searchTimeReportInTags (ids) {
       this.displayTimeReports = this.timeReports.filter((t) => {

@@ -3,7 +3,8 @@
     <v-card class="mx-auto mt-5 pa-5" width="600px">
       <v-card-title>
         <v-avatar size="40">
-          <img src="~/assets/default_icon.jpeg" />
+          <img v-if="comment.user.avatar_url" :src="comment.user.avatar_url" />
+          <img v-else src="~/assets/default_icon.jpeg" />
         </v-avatar>
         <span style="margin-left: 15px;">
           {{ comment.user.name }}
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import LikeButton from '../molecules/LikeButton.vue'
+import LikeButton from '../../molecules/LikeButton.vue'
 import axios from '@/plugins/axios'
 export default {
   components: {

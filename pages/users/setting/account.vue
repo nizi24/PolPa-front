@@ -204,7 +204,7 @@ export default {
   },
   mounted () {
     this.disabled = true
-    setTimeout(() => {
+    const getter = () => {
       if (this.currentUser.id) {
         axios
           .get(`/v1/users/${this.currentUser.id}/edit`)
@@ -215,7 +215,12 @@ export default {
           })
       }
       this.disabled = false
-    }, 1000)
+    }
+    if (this.currentUser.id) {
+      getter()
+    } else {
+      setTimeout(getter, 1000)
+    }
   }
 }
 </script>

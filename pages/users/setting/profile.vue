@@ -133,7 +133,9 @@ export default {
     }
     async function mount () {
       try {
-        await wait(1)
+        if (!that.currentUser.id) {
+          await wait(1)
+        }
         axios
           .get(`/v1/users/${that.currentUser.id}/edit`)
           .then((res) => {

@@ -1,46 +1,52 @@
 <template>
   <v-container>
-    <v-card class="mx-auto mt-5 pa-5" width="600px">
+    <v-card class="mx-auto mt-3 pa-5" width="600px">
       <v-card-title>
         <v-avatar size="40">
-          <img src="~/assets/default_icon.jpeg" />
+          <img v-if="user.avatar_url" :src="user.avatar_url" />
+          <img v-else src="~/assets/default_icon.jpeg" />
         </v-avatar>
-        <span style="margin-left: 15px;">{{ user.name }}</span>
-      <small style="color: #BDBDBD; margin-left: 10px">
-        @{{ user.screen_name }}
-      </small>
-      <v-spacer />
-      <IconButtonWithAuth
-      type="far fa-edit"
-      v-if="authDisplay"
-      :comparison="timeReport.user_id"
-      @click.stop="modalDisplay = true"
-      small
-      />
-      <TimeReportModal
-      :btnDisplay="false"
-      :modalDisplay="modalDisplay"
-      :editInitialValue="timeReport"
-      :initStudyDateHours="initStudyDateHours"
-      :initStudyDateMinutes="initStudyDateMinutes"
-      @closeModal="closeModal"
-      @updateTimeReport="updateTimeReport"
-      v-if="authDisplay"
-      />
-      <IconButtonWithAuth
-      type="far fa-trash-alt"
-      v-if="authDisplay"
-      :comparison="timeReport.user_id"
-      style="margin-right: 10px;"
-      @click="displayAlert = true"
-      small
-      />
-      <ExpReductionAlert
-      :displayModal="displayAlert"
-      @cancel="cancel"
-      @understanding="understanding"
-      v-if="authDisplay"
-      />
+        <nuxt-link
+        :to="toUserLink"
+        style="color: inherit; text-decoration: none;"
+        >
+          <span style="margin-left: 15px;">{{ user.name }}</span>
+          <small style="color: #BDBDBD; margin-left: 10px">
+            @{{ user.screen_name }}
+          </small>
+        </nuxt-link>
+        <v-spacer />
+        <IconButtonWithAuth
+        type="far fa-edit"
+        v-if="authDisplay"
+        :comparison="timeReport.user_id"
+        @click.stop="modalDisplay = true"
+        small
+        />
+        <TimeReportModal
+        :btnDisplay="false"
+        :modalDisplay="modalDisplay"
+        :editInitialValue="timeReport"
+        :initStudyDateHours="initStudyDateHours"
+        :initStudyDateMinutes="initStudyDateMinutes"
+        @closeModal="closeModal"
+        @updateTimeReport="updateTimeReport"
+        v-if="authDisplay"
+        />
+        <IconButtonWithAuth
+        type="far fa-trash-alt"
+        v-if="authDisplay"
+        :comparison="timeReport.user_id"
+        style="margin-right: 10px;"
+        @click="displayAlert = true"
+        small
+        />
+        <ExpReductionAlert
+        :displayModal="displayAlert"
+        @cancel="cancel"
+        @understanding="understanding"
+        v-if="authDisplay"
+        />
       </v-card-title>
       <v-card-text style="margin-top: 10px">
         <nuxt-link :to="toLink" style="color: inherit; text-decoration: none;">
@@ -78,7 +84,7 @@
         <v-row style="margin-top: 10px; margin-left: 5px;">
           <IconButton
           type="far fa-comment-dots"
-          @on="commentForm = !commentForm"
+          @on="commentField = !commentField"
           />
           <v-spacer />
           <LikeButton
@@ -90,21 +96,11 @@
           @addLiked="addCount"
           />
         </v-row>
-        <CommentForm
-        v-if="commentForm"
-        :timeReportId="timeReport.id"
-        @addComment="addComment"
+        <CommentField
+        :timeReportId="time_report.id"
+        @closeField="commentField = false"
+        v-if="commentField"
         />
-        <template v-if="commentForm">
-          <Comment
-          v-for="comment in timeReport.comments"
-          :key="comment.id"
-          :comment="comment"
-          @deleteComment="deleteComment"
-          @addCommentLikesCount="addCommentLikesCount"
-          @subCommentLikesCount="subCommentLikesCount"
-          />
-        </template>
       </v-card-text>
     </v-card>
   </v-container>
@@ -114,9 +110,8 @@
 import Tag from '../../molecules/Tag.vue'
 import IconButton from '../../atoms/icons/IconButton.vue'
 import IconButtonWithAuth from '../../atoms/icons/IconButtonWithAuth.vue'
-import CommentForm from '../../molecules/CommentForm.vue'
-import Comment from '../Comment.vue'
 import LikeButton from '../../molecules/LikeButton.vue'
+import CommentField from '../comments/CommentField.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'
 import TimeReportModal from './TimeReportModal.vue'
 import axios from '@/plugins/axios'
@@ -128,9 +123,8 @@ export default {
     IconButtonWithAuth,
     Tag,
     IconButton,
-    CommentForm,
-    Comment,
-    LikeButton
+    LikeButton,
+    CommentField
   },
   props: {
     time_report: {
@@ -149,7 +143,7 @@ export default {
         ...this.time_report
       },
       displayAlert: false,
-      commentForm: false
+      commentField: false
     }
   },
   computed: {
@@ -187,6 +181,9 @@ export default {
     },
     toLink () {
       return `/time_reports/${this.timeReport.id}`
+    },
+    toUserLink () {
+      return `/users/${this.user.id}`
     },
     initStudyDateHours () {
       const timeReport = new Date(this.timeReport.study_date)
@@ -253,29 +250,11 @@ export default {
       this.displayAlert = false
       this.deleteTimeReport()
     },
-    addComment (comment) {
-      this.commentForm = false
-      if (!this.timeReport.comments) {
-        this.timeReport.comments = []
-      }
-      this.timeReport.comments.unshift(comment)
-    },
-    deleteComment (commentId) {
-      this.timeReport.comments = this.timeReport.comments.filter((t) => {
-        return t.id !== commentId
-      })
-    },
     subCount () {
       this.$emit('subLikesCount', this.timeReport.id)
     },
     addCount () {
       this.$emit('addLikesCount', this.timeReport.id)
-    },
-    subCommentLikesCount (commentId) {
-      this.$emit('subCommentLikesCount', commentId, this.timeReport.id)
-    },
-    addCommentLikesCount (commentId) {
-      this.$emit('addCommentLikesCount', commentId, this.timeReport.id)
     }
   }
 }
