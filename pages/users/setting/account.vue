@@ -164,7 +164,7 @@ export default {
           user: { screen_name: this.screenName }
         })
         .then((res) => {
-          this.prevEmail = res.data.user.email
+          this.$store.commit('setScreenName', res.data.user.screen_name)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
@@ -173,7 +173,8 @@ export default {
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
-        }).catch(() => {
+        }).catch((err) => {
+          console.error(err)
         })
     },
     updatePassword () {

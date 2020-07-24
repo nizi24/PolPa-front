@@ -18,7 +18,7 @@
             />
             <SettingTextField
             v-model="name"
-            rules="required|max:30"
+            rules="required|max:20"
             label="名前"
             icon="fas fa-user-tag"
             :disabled="disabled"
@@ -107,6 +107,8 @@ export default {
       }
       axios.patch(`/v1/users/${this.currentUser.id}`, { user })
         .then((res) => {
+          this.$store.commit('setProfile', res.data.user.profile)
+          this.$store.commit('setName', res.data.user.name)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',

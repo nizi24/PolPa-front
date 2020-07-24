@@ -11,6 +11,7 @@ const authCheck = ({ store, redirect }) => {
       const following = JSON.parse(data.following)
       store.commit('setLiked', liked)
       store.commit('setFollowing', following)
+      store.commit('setRequiredExp', data.required_exp)
     } else {
       store.commit('setUser', null)
     }

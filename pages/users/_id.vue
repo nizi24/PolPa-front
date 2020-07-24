@@ -54,17 +54,11 @@
       <!-- <v-row justify="center">
         <img src="~/assets/goal.jpeg" width="32px" height="32px" />
       </v-row> -->
-      <v-row justify="center" align-content="center">
-        <v-col cols="1">
-        </v-col>
-        <v-col cols="7">
-          <v-progress-linear height="10px" :value="progressProportion">
-          </v-progress-linear>
-        </v-col>
-        <v-col cols="2" style="padding-top: 6px; color: #B0BEC5;">
-          {{ progressNumeretor }}/{{ requiredExp.required_exp }}
-        </v-col>
-      </v-row>
+      <ExperienceProgressLinear
+      v-if="Object.keys(user).length"
+      :requiredExp="requiredExp.required_exp"
+      :experienceToNext="user.experience_to_next"
+      />
       <Relationship
       v-if="Object.keys(user).length"
       :followerCount="user.follower_count"
@@ -123,6 +117,7 @@
 import axios from '@/plugins/axios'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import Heatmap from '~/components/molecules/Heatmap.vue'
+import ExperienceProgressLinear from '~/components/molecules/ExperienceProgressLinear.vue'
 import Relationship from '~/components/molecules/Relationship.vue'
 import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
 import TagSearch from '~/components/molecules/TagSearch.vue'
@@ -134,6 +129,7 @@ export default {
   components: {
     ErrorCard,
     Heatmap,
+    ExperienceProgressLinear,
     Relationship,
     TimeReport,
     TagSearch,
@@ -159,17 +155,6 @@ export default {
   computed: {
     currentUser () {
       return this.$store.state.currentUser
-    },
-    progressProportion () {
-      const proportion = 100 - this.user.experience_to_next / this.requiredExp.required_exp * 100
-      if (proportion === 100) {
-        return 0
-      } else {
-        return proportion
-      }
-    },
-    progressNumeretor () {
-      return this.requiredExp.required_exp - this.user.experience_to_next
     },
     changeColor () {
       const level = this.user.level

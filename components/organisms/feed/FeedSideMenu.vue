@@ -18,7 +18,12 @@ export default {
       items: [
         {
           text: 'タイムライン',
-          icon: 'far fa-address-card',
+          icon: 'fas fa-history',
+          to: '/users/setting/profile'
+        },
+        {
+          text: 'タグフィード',
+          icon: 'fas fa-tags',
           to: '/users/setting/profile'
         }
       ]
