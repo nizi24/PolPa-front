@@ -252,9 +252,11 @@ export default {
     },
     subCount () {
       this.$emit('subLikesCount', this.timeReport.id)
+      this.timeReport.likes_count -= 1
     },
     addCount () {
       this.$emit('addLikesCount', this.timeReport.id)
+      this.timeReport.likes_count += 1
     }
   }
 }
