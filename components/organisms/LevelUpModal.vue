@@ -46,8 +46,8 @@ export default {
         if (level > this.$store.state.currentUser.level) {
           this.levelUp = true
           this.level = level
-          this.$store.commit('setLevel', level)
         }
+        this.$store.commit('setLevel', level)
       }
     })
   }

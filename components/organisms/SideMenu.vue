@@ -8,6 +8,7 @@
         :key="i"
         :to="item.to"
         :id="item.id"
+        @click="select(item.name)"
       >
         <v-list-item-icon>
           <v-icon v-text="item.icon"></v-icon>
@@ -24,13 +25,14 @@
 <script>
 export default {
   props: {
-    item: {
-      type: Number,
-      required: true
-    },
     items: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    select (itemName) {
+      this.$emit(`${itemName}`)
     }
   }
 }
@@ -46,5 +48,9 @@ export default {
 
 #profile .v-list-item__icon {
   margin-right: 29px !important;
+}
+
+#tag-feed-selecter .v-list-item__icon {
+  margin-right: 26px !important;
 }
 </style>

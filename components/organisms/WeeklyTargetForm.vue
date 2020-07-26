@@ -84,7 +84,11 @@ export default {
       this.$emit('closeTargetForm')
     },
     record () {
-      const target_time = this.hour + ':' + this.minute //eslint-disable-line
+      const hourNumber = Number(this.hour)
+      let target_time //eslint-disable-line
+      const day = Math.floor(hourNumber / 24)
+      const hour = hourNumber % 24
+      target_time = `2000-01-0${day + 1} ${hour}:${this.minute}` //eslint-disable-line
       axios
         .post(`/v1/users/${this.currentUser.id}/weekly_target`, {
           target_time

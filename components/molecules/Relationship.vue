@@ -1,9 +1,7 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-col cols="2" v-if="currentUser && Number(paramsUserId) !== currentUser.id">
-      </v-col>
-      <v-col cols="2">
+      <v-col cols="6">
         <v-row justify="center">
           <span>フォロー</span>
         </v-row>
@@ -11,7 +9,7 @@
           <h3>{{ followingCount }}</h3>
         </v-row>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="6">
         <v-row justify="center">
           <span>フォロワー</span>
         </v-row>
@@ -19,35 +17,41 @@
           <h3>{{ followerCount }}</h3>
         </v-row>
       </v-col>
-      <v-col cols="2" v-if="currentUser && Number(paramsUserId) !== currentUser.id">
-        <v-btn
-        small
-        class="ma-2"
-        outlined
-        color="primary"
-        @click="follow"
-        v-if="!followed"
-        :disabled="disabled"
-        >
-          <v-icon x-small style="margin-right: 10px;">
-            fas fa-plus
-          </v-icon>
-          <span style="margin-bottom: 2px">フォロー</span>
-        </v-btn>
-        <v-btn
-        small
-        class="ma-2"
-        color="primary"
-        @click="unfollow"
-        :disabled="disabled"
-        v-else
-        >
-          <v-icon x-small style="margin-right: 10px;">
-            fas fa-minus
-          </v-icon>
-          <span style="margin-bottom: 2px">フォロー解除</span>
-        </v-btn>
-      </v-col>
+      <v-row justify="center">
+        <v-col cols="5" v-if="currentUser && Number(paramsUserId) !== currentUser.id">
+          <v-skeleton-loader
+          v-if="loading"
+          type="button"
+          />
+          <v-btn
+          small
+          class="ma-2"
+          outlined
+          color="primary"
+          @click="follow"
+          v-if="!followed && !loading"
+          :disabled="disabled"
+          >
+            <v-icon x-small style="margin-right: 10px;">
+              fas fa-plus
+            </v-icon>
+            <span style="margin-bottom: 2px">フォロー</span>
+          </v-btn>
+          <v-btn
+          small
+          class="ma-2"
+          color="primary"
+          @click="unfollow"
+          :disabled="disabled"
+          v-if="followed && !loading"
+          >
+            <v-icon x-small style="margin-right: 10px;">
+              fas fa-minus
+            </v-icon>
+            <span style="margin-bottom: 2px">フォロー解除</span>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-row>
   </div>
 </template>
@@ -68,7 +72,8 @@ export default {
   data () {
     return {
       followed: false,
-      disabled: false
+      disabled: false,
+      loading: false
     }
   },
   computed: {
@@ -115,6 +120,7 @@ export default {
     }
   },
   mounted () {
+    this.loading = true
     this.disabled = true
     setTimeout(() => {
       if (this.currentUser) {
@@ -125,6 +131,7 @@ export default {
         })
         if (followed) { this.followed = true }
       }
+      this.loading = false
       this.disabled = false
     }, 2000)
   }

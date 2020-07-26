@@ -89,7 +89,7 @@ export default {
           }
         })
         .then((res) => {
-          that.notices = res.data.notice
+          that.notices = res.data
         })
     }
     setTimeout(getNotice, 3000)

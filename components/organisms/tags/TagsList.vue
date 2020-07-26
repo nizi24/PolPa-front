@@ -1,50 +1,50 @@
 <template>
-  <v-container>
+  <v-container v-if="tags" style="padding: 20px;">
     <v-row justify="center">
-      <v-spacer />
-      <v-col cols="10" style="padding-bottom: 0 !important">
+      <v-col style="padding-bottom: 0 !important">
         <v-icon style="color: #FFB300; margin-right: 5px;" small>
           fas fa-tags
         </v-icon>
         <span
         style="font-size: 1.0em; color: #FFB300; font-weight: bold;
         vertical-align: -10%"
-        >主な使用タグ</span>
+        >{{ title }}</span>
       </v-col>
     </v-row>
-    <v-row justify="center" v-if="mainTags[0]">
-      <v-spacer />
+    <v-row justify="center">
       <v-col
-      cols="10"
       style="padding-top: 0 !important;"
-      v-if="mainTags[0].count"
+      v-if="tags.length && tags[0].name"
       >
         <Tag
-        v-for="tag in mainTags"
+        v-for="tag in tags"
         :key="tag.name"
-        :tag="tag.name"
+        :tag="tag"
         />
       </v-col>
       <v-col
-      cols="10"
       style="padding-top: 0 !important;"
       v-else
       >
-        <span>まだタグがありません。</span>
+        <span>{{ nonTagMessage }}</span>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import Tag from './Tag.vue'
 export default {
-  components: {
-    Tag
-  },
   props: {
-    mainTags: {
+    title: {
+      type: String,
+      required: true
+    },
+    tags: {
       type: Array,
+      required: true
+    },
+    nonTagMessage: {
+      type: String,
       required: true
     }
   }

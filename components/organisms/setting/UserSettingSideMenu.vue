@@ -1,6 +1,5 @@
 <template>
 <SideMenu
-:item="item"
 :items="items"
 >
 </SideMenu>
@@ -14,7 +13,6 @@ export default {
   },
   data () {
     return {
-      item: 3,
       items: [
         {
           text: 'プロフィール',

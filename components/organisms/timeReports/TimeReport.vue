@@ -57,7 +57,7 @@
             <span v-if="timeReport.study_date">{{ studyDate }}</span>
           </v-row>
           <v-row style="margin-left: 20px; margin-bottom: 10px;">
-            <Tag v-for="tag in timeReport.tags" :tag="tag.name" :key="tag.id" />
+            <Tag v-for="tag in timeReport.tags" :tag="tag" :key="tag.id" />
           </v-row>
           <v-row>
             <v-col>

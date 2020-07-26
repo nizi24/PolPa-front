@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="notice">
     <v-row class="notice-item">
       <v-col cols="2">
         <nuxt-link
@@ -7,7 +7,14 @@
         class="no-link-style"
         >
           <v-avatar size="30" @click="closeField">
-            <img src="~/assets/default_icon.jpeg" />
+            <img
+            v-if="notice.action_user.avatar_url"
+            :src="notice.action_user.avatar_url"
+            >
+            <img
+            v-else
+            src="~/assets/default_icon.jpeg"
+            />
           </v-avatar>
         </nuxt-link>
       </v-col>
@@ -20,25 +27,25 @@
           v-if="notice.noticeable_type === 'Comment'"
           @click="closeField"
           >
-            あなたの記録に@{{ notice.screen_name }}さんがコメントしました。
+            あなたの記録に@{{ notice.action_user.screen_name }}さんがコメントしました。
           </div>
           <div
           v-if="notice.like_type === 'TimeReport'"
           @click="closeField"
           >
-            あなたの記録に@{{ notice.screen_name }}さんがいいねしました。
+            あなたの記録に@{{ notice.action_user.screen_name }}さんがいいねしました。
           </div>
           <div
           v-if="notice.like_type === 'Comment'"
           @click="closeField"
           >
-            あなたのコメントに@{{ notice.screen_name }}さんがいいねしました。
+            あなたのコメントに@{{ notice.action_user.screen_name }}さんがいいねしました。
           </div>
           <div
           v-if="notice.noticeable_type === 'Relationship'"
           @click="closeField"
           >
-            @{{ notice.screen_name }}さんにフォローされました。
+            @{{ notice.action_user.screen_name }}さんにフォローされました。
           </div>
         </nuxt-link>
       </v-col>

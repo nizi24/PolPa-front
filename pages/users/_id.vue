@@ -12,127 +12,69 @@
   @addTarget="addTarget"
   />
   <v-container v-if="!userNotFound">
-    <v-card class="mx-auto mt-5 pa-5" width="1000px">
-      <v-row justify="center">
-        <v-col cols="2" :class="changeColor">
-          <v-row justify="center" style="margin-top: 48px;">
-            <h1>Lv.{{ user.level }}</h1>
-          </v-row>
-          <v-row justify="center">
-            <span>current Level</span>
-          </v-row>
-        </v-col>
-        <v-col cols="4">
-          <v-row justify="center">
-            <v-avatar size="80">
-              <img
-              v-if="user.avatar_url"
-              :src="user.avatar_url"
-              />
-              <img
-              v-else
-              src="~/assets/default_icon.jpeg"
-              />
-            </v-avatar>
-          </v-row>
-          <v-row justify="center">
-            <h2>{{ user.name }}</h2>
-          </v-row>
-          <v-row justify="center">
-            <span>@{{ user.screen_name }}</span>
-          </v-row>
-        </v-col>
-        <v-col cols="2" :class="changeColor">
-          <v-row justify="center" style="margin-top: 48px;">
-            <h1>{{ user.total_experience }}</h1>
-          </v-row>
-          <v-row justify="center">
-            <span>Total EXP</span>
-          </v-row>
-        </v-col>
-      </v-row>
-      <!-- <v-row justify="center">
-        <img src="~/assets/goal.jpeg" width="32px" height="32px" />
-      </v-row> -->
-      <ExperienceProgressLinear
-      v-if="Object.keys(user).length"
-      :requiredExp="requiredExp.required_exp"
-      :experienceToNext="user.experience_to_next"
-      />
-      <Relationship
-      v-if="Object.keys(user).length"
-      :followerCount="user.follower_count"
-      :followingCount="user.following_count"
-      @addFollower="user.follower_count++"
-      @subFollower="user.follower_count--"
-      />
-      <MainTags
-      :mainTags="mainTags"
-      />
-      <WeeklyTarget
-      v-if="user.target_of_the_week"
-      :target="user.target_of_the_week[0]"
-      />
-      <v-row justify="center">
-        <Heatmap :timeReports="timeReports" />
-      </v-row>
-    </v-card>
-  </v-container>
-  <v-row justify="center">
-    <v-col cols="6" v-if="timeReports.length">
-      <v-card style="padding: 30px;">
-        <TagSearch
-        v-if="length"
-        @searchTimeReportInTags="searchTimeReportInTags"
-        @restoration="restoration"
+    <v-row>
+      <v-col cols="4">
+        <UserSideBar :user="user" />
+        <UserTagField
+        style="margin-top: 20px;"
+        :mainTags="mainTags"
         />
-      </v-card>
-    </v-col>
-    <v-col cols="6" v-else>
-    </v-col>
-  </v-row>
-  <TimeReport
-  v-for="time_report in displayTimeReports"
-  :key="time_report.id"
-  :user="user"
-  :time_report="time_report"
-  @updateTimeReport="updateExperience"
-  @deleteTimeReport="deleteTimeReport"
-  @addLikesCount="addLikesCount"
-  @subLikesCount="subLikesCount"
-  />
-  <v-pagination
-  v-if="length"
-  v-model="page"
-  :length="length"
-  total-visible="10"
-  @input="pageChange"
-  />
+      </v-col>
+      <v-col cols="8">
+        <UserExperienceCard
+        :user="user"
+        :requiredExp="requiredExp"
+        :timeReports="timeReports"
+        />
+        <v-row justify="center">
+          <v-col cols="8">
+            <v-card
+            style="margin-top: 20px; padding: 20px"
+            v-if="timeReports.length"
+            >
+              <TagSearch
+              @searchTimeReportInTags="searchTimeReportInTags"
+              @restoration="restoration"
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+        <TimeReportsWithPagination
+        :time_reports="timeReports"
+        :user="user"
+        :ids="ids"
+        :restore="restore"
+        :tagSearch="tagSearch"
+        :newTimeReport="newTimeReport"
+        @tagSearchComplete="tagSearch = false"
+        @updateExperience="updateExperience"
+        @restorationComplete="restore = false"
+        @additionTimeReportCondition="additionTimeReportCondition"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </div>
 </template>
 
 <script>
 import axios from '@/plugins/axios'
 import ErrorCard from '~/components/molecules/ErrorCard.vue'
-import Heatmap from '~/components/molecules/Heatmap.vue'
-import ExperienceProgressLinear from '~/components/molecules/ExperienceProgressLinear.vue'
-import Relationship from '~/components/molecules/Relationship.vue'
-import TimeReport from '~/components/organisms/timeReports/TimeReport.vue'
+import UserSideBar from '~/components/organisms/UserSideBar.vue'
+import UserExperienceCard from '~/components/organisms/UserExperienceCard.vue'
+import UserTagField from '~/components/organisms/tags/UserTagField.vue'
+import TimeReportsWithPagination from '~/components/organisms/timeReports/TimeReportsWithPagination.vue'
 import TagSearch from '~/components/molecules/TagSearch.vue'
-import MainTags from '~/components/molecules/MainTags.vue'
-import WeeklyTarget from '~/components/organisms/WeeklyTarget.vue'
 import PrevWeeklyTargetModal from '~/components/organisms/PrevWeeklyTargetModal.vue'
 
 export default {
   components: {
     ErrorCard,
-    Heatmap,
-    ExperienceProgressLinear,
-    Relationship,
-    TimeReport,
+    UserSideBar,
+    UserExperienceCard,
+    UserTagField,
+    TimeReportsWithPagination,
     TagSearch,
-    MainTags,
-    WeeklyTarget,
     PrevWeeklyTargetModal
   },
   data () {
@@ -145,9 +87,10 @@ export default {
       prevWeeklyTarget: {},
       prevWeeklyTargetModal: false,
       userNotFound: false,
-      page: 1,
-      length: 0,
-      pageSize: 10
+      ids: [],
+      tagSearch: false,
+      restore: false,
+      newTimeReport: {}
     }
   },
   computed: {
@@ -173,8 +116,7 @@ export default {
     }
   },
   methods: {
-    updateExperience (data, timeReport) {
-      this.updateTimeReport(timeReport)
+    updateExperience (data) {
       Object.assign(this.user, data.experience)
       this.requiredExp = data.required_exp
       if (data.weekly_target) {
@@ -184,60 +126,22 @@ export default {
       this.$store.commit('experience/setExperience', data.experience)
       this.$store.commit('setLevel', data.experience.level)
     },
-    updateTimeReport (timeReport) {
-      if (timeReport) {
-        this.timeReports = this.timeReports.map((t) => {
-          if (t.id === timeReport.id) {
-            t = timeReport
-          }
-          return t
-        })
-      }
-    },
-    deleteTimeReport (timeReportId, weeklyTarget) {
-      this.timeReports = this.timeReports.filter((t) => {
-        return t.id !== timeReportId
-      })
-      this.displayTimeReports = this.displayTimeReports.filter((t) => {
-        return t.id !== timeReportId
-      })
-      if (weeklyTarget) {
-        this.user.target_of_the_week = []
-        this.user.target_of_the_week.unshift(weeklyTarget)
-      }
-    },
-    pageChange (pageNumber) {
-      this.displayTimeReports = this.timeReports
-        .slice(this.pageSize * (pageNumber - 1), this.pageSize * (pageNumber))
-    },
-    addLikesCount (id) {
-      this.timeReports = this.timeReports.map((t) => {
-        if (t.id === id) {
-          t.likes_count += 1
-        }
-        return t
-      })
-    },
-    subLikesCount (id) {
-      this.timeReports = this.timeReports.map((t) => {
-        if (t.id === id) {
-          t.likes_count -= 1
-        }
-        return t
-      })
-    },
     searchTimeReportInTags (ids) {
-      this.displayTimeReports = this.timeReports.filter((t) => {
-        return ids.includes(t.id)
-      })
-    },
-    restoration () {
-      this.displayTimeReports = this.timeReports
-        .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
+      this.ids = ids
+      this.tagSearch = true
     },
     addTarget (weeklyTarget) {
       this.user.target_of_the_week = []
       this.user.target_of_the_week.unshift(weeklyTarget)
+    },
+    restoration () {
+      this.restore = true
+    },
+    additionTimeReportCondition (newTimeReport) {
+      const currentUserId = this.currentUser.id.toString()
+      if (currentUserId === this.$route.params.id) {
+        this.newTimeReport = newTimeReport
+      }
     }
   },
   mounted () {
@@ -254,9 +158,6 @@ export default {
         const prevWeeklyTarget = JSON.parse(response.data.prev_weekly_target)
         this.prevWeeklyTarget = prevWeeklyTarget
         if (this.prevWeeklyTarget) { this.prevWeeklyTargetModal = true }
-        this.displayTimeReports = this.timeReports
-          .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
-        this.length = Math.ceil(this.timeReports.length / this.pageSize)
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -269,10 +170,7 @@ export default {
       if (this.currentUser) {
         const currentUserId = this.currentUser.id.toString()
         if (currentUserId === this.$route.params.id) {
-          if (mutation.type === 'timeReport/setTimeReport') {
-            this.timeReports.unshift(mutation.payload)
-            this.displayTimeReports.unshift(mutation.payload)
-          } else if (mutation.type === 'experience/setExperience') {
+          if (mutation.type === 'experience/setExperience') {
             Object.assign(this.user, mutation.payload)
           } else if (mutation.type === 'experience/setRequiredExp') {
             this.requiredExp = mutation.payload

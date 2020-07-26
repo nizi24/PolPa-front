@@ -1,7 +1,8 @@
 <template>
   <SideMenu
-  :item="item"
   :items="items"
+  @timeline="$emit('timeline')"
+  @tagFeed="$emit('tagFeed')"
   >
   </SideMenu>
 </template>
@@ -14,17 +15,17 @@ export default {
   },
   data () {
     return {
-      item: 1,
       items: [
         {
           text: 'タイムライン',
           icon: 'fas fa-history',
-          to: '/users/setting/profile'
+          name: 'timeline'
         },
         {
           text: 'タグフィード',
           icon: 'fas fa-tags',
-          to: '/users/setting/profile'
+          name: 'tagFeed',
+          id: 'tag-feed-selecter'
         }
       ]
     }

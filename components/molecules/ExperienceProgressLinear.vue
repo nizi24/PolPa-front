@@ -33,7 +33,7 @@ export default {
     },
     progressLinear: {
       type: Number,
-      default: 7
+      default: 8
     },
     progressFraction: {
       type: Number,

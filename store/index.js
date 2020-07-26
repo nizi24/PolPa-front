@@ -17,6 +17,7 @@ export const state = () => ({
     liked: [],
     weeklyTarget: {},
     following: [],
+    tagFollowing: [],
     required_exp: {}
   }
 })
@@ -71,6 +72,19 @@ export const mutations = {
   },
   removeFollowing (state, payload) {
     state.currentUser.following = state.currentUser.following.filter((l) => {
+      return l.id !== payload
+    })
+  },
+  setTagFollowing (state, payload) {
+    state.currentUser.tagFollowing = payload.map((p) => {
+      return p.tag_id
+    })
+  },
+  addTagFollowing (state, payload) {
+    state.currentUser.tagFollowing.unshift(payload)
+  },
+  removeTagFollowing (state, payload) {
+    state.currentUser.tagFollowing = state.currentUser.tagFollowing.filter((l) => {
       return l.id !== payload
     })
   },

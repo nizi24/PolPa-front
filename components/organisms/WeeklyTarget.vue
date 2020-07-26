@@ -1,10 +1,9 @@
 <template>
 <v-container>
   <v-row justify="center">
-    <v-spacer />
     <v-col
     cols="2"
-    style="padding-bottom: 0 !important; padding-right: 0 !important"
+    id="dumbbell"
     >
       <v-icon style="color: #FFB300; margin-right: 5px" small>
         fas fa-dumbbell
@@ -47,20 +46,22 @@
   <v-row
   justify="center"
   >
-    <v-spacer />
     <v-col
     cols="10"
-    style="padding-top: 0 !important"
+    style="padding-top: 0 !important; margin-left: 38px;"
     v-if="!weeklyTarget"
     >
       まだ設定していません。
     </v-col>
     <template v-else>
-      <v-col cols="7">
+      <v-col cols="8" style="margin-left: 38px;">
         <v-progress-linear height="10px" :value="weeklyTargetProgress">
         </v-progress-linear>
       </v-col>
-      <v-col cols="3" style="padding-top: 6px; color: #B0BEC5;">
+      <v-col
+      cols="2"
+      id="weekly-target-fraction"
+      >
         {{ progressTime }}/{{ targetTime }}
       </v-col>
     </template>
@@ -109,23 +110,24 @@ export default {
     },
     weeklyTargetProgress () {
       const progressDate = new Date(this.weeklyTarget.progress)
-      const progress = progressDate.getHours() * 60 +
-        progressDate.getMinutes()
+      const progress = ((progressDate.getDate() - 1) * 24 + progressDate.getHours()) * 60 + progressDate.getMinutes()
       const targetDate = new Date(this.weeklyTarget.target_time)
-      const target = targetDate.getHours() * 60 +
-        targetDate.getMinutes()
+      const target = ((targetDate.getDate() - 1) * 24 + targetDate.getHours()) *
+      60 + targetDate.getMinutes()
       const proportion = progress / target * 100
       return proportion
     },
     progressTime () {
       const progress = new Date(this.weeklyTarget.progress)
+      const hour = (progress.getDate() - 1) * 24 + progress.getHours()
       const minute = progress.getMinutes().toString().replace(/^(\d)$/, '0$1')
-      return progress.getHours() + ':' + minute
+      return hour + ':' + minute
     },
     targetTime () {
       const targetTime = new Date(this.weeklyTarget.target_time)
+      const hour = (targetTime.getDate() - 1) * 24 + targetTime.getHours()
       const minute = targetTime.getMinutes().toString().replace(/^(\d)$/, '0$1')
-      return targetTime.getHours() + ':' + minute
+      return hour + ':' + minute
     }
   },
   methods: {
@@ -135,3 +137,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#weekly-target-fraction {
+  padding-top: 6px;
+  color: #B0BEC5;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+#dumbbell {
+  padding-bottom: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 36px;
+}
+</style>

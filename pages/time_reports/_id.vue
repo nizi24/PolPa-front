@@ -11,10 +11,6 @@
     :user="user"
     @updateTimeReport="updateTimeReport"
     @deleteTimeReport="deleteTimeReport"
-    @addLikesCount="addLikesCount"
-    @subLikesCount="subLikesCount"
-    @addCommentLikesCount="addCommentLikesCount"
-    @subCommentLikesCount="subCommentLikesCount"
     >
     </TimeReport>
   </v-container>
@@ -43,28 +39,6 @@ export default {
     },
     deleteTimeReport () {
       this.$router.push(`/users/${this.user.id}`)
-    },
-    addLikesCount () {
-      this.timeReport.likes_count += 1
-    },
-    subLikesCount () {
-      this.timeReport.likes_count -= 1
-    },
-    addCommentLikesCount (commentId) {
-      this.timeReport.comments = this.timeReport.comments.map((c) => {
-        if (c.id === commentId) {
-          c.likes_count += 1
-        }
-        return c
-      })
-    },
-    subCommentLikesCount (commentId) {
-      this.timeReport.comments = this.timeReport.comments.map((c) => {
-        if (c.id === commentId) {
-          c.likes_count -= 1
-        }
-        return c
-      })
     }
   },
   mounted () {
