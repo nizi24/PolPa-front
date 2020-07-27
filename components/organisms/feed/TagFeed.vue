@@ -13,6 +13,7 @@
       :key="time_report.id"
       :user="time_report.user"
       :time_report="time_report"
+      @deleteTimeReport="deleteTimeReport"
       />
       <template v-if="loading">
         <v-skeleton-loader
@@ -82,6 +83,11 @@ export default {
         }
         this.moreLoading = false
       })
+    },
+    deleteTimeReport (timeReportId) {
+      this.timeReports = this.timeReports.filter((t) => {
+        return t.id !== timeReportId
+      })
     }
   },
   mounted () {
@@ -114,6 +120,16 @@ export default {
     } else {
       setTimeout(getter, 2000)
     }
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'timeReport/setTimeReport') {
+        const tag = mutation.payload.tags.some((tag) => {
+          return this.currentUser.tagFollowing.includes(tag.id)
+        })
+        if (tag) {
+          this.timeReports.unshift(mutation.payload)
+        }
+      }
+    })
   }
 }
 </script>

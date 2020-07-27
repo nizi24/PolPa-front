@@ -9,13 +9,14 @@
     @deleteTimeReport="deleteTimeReport"
     @addLikesCount="addLikesCount"
     @subLikesCount="subLikesCount"
+    @addComment="addCommentsCount"
+    @subComment="subCommentsCount"
     />
     <v-pagination
     v-if="length"
     v-model="page"
     :length="length"
     total-visible="10"
-    @input="pageChange"
     />
   </div>
 </template>
@@ -116,10 +117,6 @@ export default {
       }
       this.$emit('deleteTimeReport')
     },
-    pageChange (pageNumber) {
-      this.displayTimeReports = this.timeReports
-        .slice(this.pageSize * (pageNumber - 1), this.pageSize * (pageNumber))
-    },
     addLikesCount (id) {
       this.timeReports = this.timeReports.map((t) => {
         if (t.id === id) {
@@ -137,21 +134,34 @@ export default {
       })
     },
     searchTimeReportInTags (ids) {
-      this.displayTimeReports = this.timeReports.filter((t) => {
+      this.timeReports = this.time_reports.filter((t) => {
         return ids.includes(t.id)
       })
-      this.length = 1
       this.page = 1
       this.$emit('tagSearchComplete')
     },
     restoration () {
-      this.displayTimeReports = this.timeReports
-        .slice(this.pageSize * (this.page - 1), this.pageSize * (this.page))
-      this.length = Math.ceil(this.time_reports.length / this.pageSize)
+      this.timeReports = this.time_reports
       this.$emit('restorationComplete')
     },
     addTimeReport (newTimeReport) {
       this.timeReports.unshift(newTimeReport)
+    },
+    addCommentsCount (id) {
+      this.timeReports = this.timeReports.map((t) => {
+        if (t.id === id) {
+          t.comments_count += 1
+        }
+        return t
+      })
+    },
+    subCommentsCount (id) {
+      this.timeReports = this.timeReports.map((t) => {
+        if (t.id === id) {
+          t.comments_count -= 1
+        }
+        return t
+      })
     }
   },
   mounted () {

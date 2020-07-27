@@ -1,49 +1,51 @@
 <template>
-  <v-row class="ranking-user-item" justify="center">
-    <v-col cols="1" style="margin-right: 4px;">
-      <div v-if="[0, 1, 2].includes(index)">
-        <v-icon v-if="index === 0" class="gold-medal">
-          fas fa-medal
-        </v-icon>
-        <v-icon v-if="index === 1" class="silver-medal">
-          fas fa-medal
-        </v-icon>
-        <v-icon v-if="index === 2" class="bronze-medal">
-          fas fa-medal
-        </v-icon>
-      </div>
-      <span v-else class="index">{{ index + 1 }}</span>
-    </v-col>
-    <v-col cols="2">
-      <v-avatar
-      size="30"
-      class="user-avatar"
-      >
-        <img
-        v-if="user.avatar_url"
-        :src="user.avatar_url"
+  <nuxt-link :to="toLink" style="color: inherit; text-decoration: none;">
+    <v-row class="ranking-user-item" justify="center">
+      <v-col cols="1" style="margin-right: 4px;">
+        <div v-if="[0, 1, 2].includes(index)">
+          <v-icon v-if="index === 0" class="gold-medal">
+            fas fa-medal
+          </v-icon>
+          <v-icon v-if="index === 1" class="silver-medal">
+            fas fa-medal
+          </v-icon>
+          <v-icon v-if="index === 2" class="bronze-medal">
+            fas fa-medal
+          </v-icon>
+        </div>
+        <span v-else class="index">{{ index + 1 }}</span>
+      </v-col>
+      <v-col cols="2">
+        <v-avatar
+        size="30"
+        class="user-avatar"
         >
-        <img
-        v-else
-        src="~/assets/default_icon.jpeg"
-        />
-      </v-avatar>
-    </v-col>
-    <v-col
-    cols="5"
-    style="padding-left: 2px !important; padding-right: 2px !important"
-    >
-      <div class="user-name">{{ user.name }}</div>
-      <div class="user-screen-name">@{{ user.screen_name }}</div>
-    </v-col>
-    <v-col
-    cols="3"
-    style="padding-left: 2px !important; padding-right: 2px !important"
-    >
-      <div class="user-exp amber--text text--darken-4">{{ user.exp }}</div>
-      <div class="exp">exp</div>
-    </v-col>
-  </v-row>
+          <img
+          v-if="user.avatar_url"
+          :src="user.avatar_url"
+          >
+          <img
+          v-else
+          src="~/assets/default_icon.jpeg"
+          />
+        </v-avatar>
+      </v-col>
+      <v-col
+      cols="5"
+      style="padding-left: 2px !important; padding-right: 2px !important"
+      >
+        <div class="user-name">{{ user.name }}</div>
+        <div class="user-screen-name">@{{ user.screen_name }}</div>
+      </v-col>
+      <v-col
+      cols="3"
+      style="padding-left: 2px !important; padding-right: 2px !important"
+      >
+        <div class="user-exp amber--text text--darken-4">{{ user.exp }}</div>
+        <div class="exp">exp</div>
+      </v-col>
+    </v-row>
+  </nuxt-link>
 </template>
 
 <script>
@@ -56,6 +58,11 @@ export default {
     index: {
       type: Number,
       required: true
+    }
+  },
+  computed: {
+    toLink () {
+      return `/users/${this.user.id}`
     }
   }
 }

@@ -86,6 +86,9 @@
           type="far fa-comment-dots"
           @on="commentField = !commentField"
           />
+          <span v-if="timeReport.comments_count" class="comment-count">
+            {{ timeReport.comments_count }}
+          </span>
           <v-spacer />
           <LikeButton
           v-if="timeReport.id"
@@ -99,6 +102,8 @@
         <CommentField
         :timeReportId="time_report.id"
         @closeField="commentField = false"
+        @addComment="addComment"
+        @subComment="subComment"
         v-if="commentField"
         />
       </v-card-text>
@@ -232,6 +237,10 @@ export default {
         })
         .then((res) => {
           this.$emit('updateTimeReport', res.data)
+          this.$store.commit('setTotalExperience', res.data.experience.total_experience)
+          this.$store.commit('setExperienceToNext', res.data.experience.experience_to_next)
+          this.$store.commit('setLevel', res.data.experience.level)
+          this.$store.commit('setRequiredExp', res.data.required_exp)
           this.$emit('deleteTimeReport', timeReportId, res.data.weekly_target)
           this.$store.commit('drawing/setFlash', {
             status: true,
@@ -257,6 +266,14 @@ export default {
     addCount () {
       this.$emit('addLikesCount', this.timeReport.id)
       this.timeReport.likes_count += 1
+    },
+    addComment () {
+      this.$emit('addComment', this.timeReport.id)
+      this.timeReport.comments_count += 1
+    },
+    subComment () {
+      this.$emit('subComment', this.timeReport.id)
+      this.timeReport.comments_count -= 1
     }
   }
 }
@@ -267,5 +284,10 @@ h1 {
   display: inline-block;
   font-size: 3.0em;
   margin-right: 5px;
+}
+
+.comment-count {
+  font-size: 1.2em;
+  margin-top: 10px;
 }
 </style>

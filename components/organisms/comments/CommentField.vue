@@ -38,12 +38,14 @@ export default {
   methods: {
     addComment (comment) {
       this.$emit('closeField')
+      this.$emit('addComment')
       this.comments.unshift(comment)
     },
     deleteComment (commentId) {
       this.comments = this.comments.filter((t) => {
         return t.id !== commentId
       })
+      this.$emit('subComment')
     },
     subCommentLikesCount (commentId) {
       this.comments = this.comments.map((c) => {
