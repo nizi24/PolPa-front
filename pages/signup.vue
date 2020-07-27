@@ -17,12 +17,6 @@
           rules="max:255|required|email"
           label="メールアドレス"
           />
-          <span>必須項目ではありません。（仮）</span>
-          <VTextFieldWithValidation
-          v-model="screen_name"
-          :rules="{ min: 5, max: 15, regex: /^[a-z0-9_]+$/i }"
-          label="ユーザーID"
-          />
           <VTextFieldWithValidation
           v-model="password"
           rules="required|min:6"
@@ -49,6 +43,7 @@
 </template>
 
 <script>
+import { setUser } from '../plugins/auth-check.js'
 import VTextFieldWithValidation from '~/components/molecules/inputs/VTextFieldWithValidation.vue'
 import axios from '@/plugins/axios'
 import firebase from '@/plugins/firebase'
@@ -82,6 +77,7 @@ export default {
             uid: res.user.uid
           }
           axios.post('/v1/users', { user }).then((responce) => {
+            setUser(responce.data, this.$store)
             this.$store.commit('drawing/setLoading', false)
             this.$store.commit('drawing/setFlash', {
               status: true,
@@ -93,7 +89,9 @@ export default {
             }, 2000)
             this.$store.commit('setUser', responce.data)
             this.$store.commit('setLiked', [])
-            this.$router.push('/')
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 200)
           })
             .catch(() => {
               this.$store.commit('drawing/setLoading', false)

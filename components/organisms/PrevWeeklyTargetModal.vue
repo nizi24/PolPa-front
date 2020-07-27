@@ -131,7 +131,7 @@ export default {
     },
     progressHour () {
       const time = new Date(this.prevWeeklyTarget.progress)
-      return time.getHours()
+      return time.getHours() + (time.getDate() - 1) * 24
     },
     progressMinute () {
       const time = new Date(this.prevWeeklyTarget.progress)
@@ -139,7 +139,7 @@ export default {
     },
     targetHour () {
       const time = new Date(this.prevWeeklyTarget.target_time)
-      return time.getHours()
+      return time.getHours() + (time.getDate() - 1) * 24
     },
     targetMinute () {
       const time = new Date(this.prevWeeklyTarget.target_time)

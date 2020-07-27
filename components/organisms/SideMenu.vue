@@ -2,9 +2,9 @@
 <v-card>
   <v-list dense style="padding: 10px;">
     <v-subheader>MENU</v-subheader>
-    <v-list-item-group v-model="item" color="primary">
+    <v-list-item-group color="primary">
       <v-list-item
-        v-for="(item, i) in items"
+        v-for="(item, i) in displayItems"
         :key="i"
         :to="item.to"
         :id="item.id"
@@ -28,6 +28,24 @@ export default {
     items: {
       type: Array,
       required: true
+    }
+  },
+  computed: {
+    currentUser () {
+      return this.$store.state.currentUser
+    },
+    displayItems () {
+      return this.items.filter((item) => {
+        if (typeof item.guest !== 'undefined') {
+          if (!item.guest) {
+            if (this.currentUser) { return item }
+          } else {
+            return item
+          }
+        } else {
+          return item
+        }
+      })
     }
   },
   methods: {

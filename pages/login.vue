@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { setUser } from '../plugins/auth-check.js'
 import VTextFieldWithValidation from '~/components/molecules/inputs/VTextFieldWithValidation.vue'
 import firebase from '@/plugins/firebase'
 export default {
@@ -50,7 +51,8 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
+        .then((res) => {
+          setUser(res.user, this.$store)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
@@ -59,7 +61,9 @@ export default {
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
-          this.$router.push('/')
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 200)
         })
         .catch((error) => {
           this.error = ((code) => {

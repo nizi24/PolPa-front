@@ -221,6 +221,16 @@ export default {
     } else {
       setTimeout(getter, 1000)
     }
+  },
+  fetch ({ store, redirect }) {
+    store.watch(
+      state => state.currentUser,
+      (newUser, oldUser) => {
+        if (!newUser) {
+          return redirect('/login')
+        }
+      }
+    )
   }
 }
 </script>

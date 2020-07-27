@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
     <ExperienceProgressLinear
-    v-if="Object.keys(user).length"
+    v-if="Object.keys(user).length && requiredExp.required_exp"
     :requiredExp="requiredExp.required_exp"
     :experienceToNext="user.experience_to_next"
     style="padding-bottom: 10px;"

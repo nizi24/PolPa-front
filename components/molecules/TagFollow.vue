@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="currentUser">
     <v-skeleton-loader
     v-if="loading"
     type="button"

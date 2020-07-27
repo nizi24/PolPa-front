@@ -20,7 +20,6 @@
 export default {
   props: {
     requiredExp: {
-      type: Number,
       required: true
     },
     experienceToNext: {

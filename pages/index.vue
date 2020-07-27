@@ -5,14 +5,17 @@
       <FeedSideMenu
       @timeline="displayTimeline"
       @tagFeed="displayTagFeed"
+      @newest="displayNewest"
       />
     </v-col>
     <v-col cols="6">
-      <Timeline v-if="timeline" />
-      <TagFeed v-if="tagFeed" />
+      <Timeline v-if="timeline && currentUser" />
+      <TagFeed v-if="tagFeed && currentUser" />
+      <Newest v-if="newest || !currentUser" />
     </v-col>
-    <v-col cols="3" id="right-side" v-if="currentUser">
+    <v-col cols="3" id="right-side">
       <MiniUserExperienceCard
+      v-if="currentUser"
       :user="currentUser"
       />
       <ExperienceRanking
@@ -26,6 +29,7 @@
 <script>
 import Timeline from '../components/organisms/feed/Timeline.vue'
 import TagFeed from '../components/organisms/feed/TagFeed.vue'
+import Newest from '../components/organisms/feed/Newest.vue'
 import FeedSideMenu from '../components/organisms/feed/FeedSideMenu.vue'
 import MiniUserExperienceCard from '../components/organisms/feed/MiniUserExperienceCard.vue'
 import ExperienceRanking from '../components/organisms/feed/ExperienceRanking.vue'
@@ -34,13 +38,15 @@ export default {
     FeedSideMenu,
     Timeline,
     TagFeed,
+    Newest,
     MiniUserExperienceCard,
     ExperienceRanking
   },
   data () {
     return {
       timeline: true,
-      tagFeed: false
+      tagFeed: false,
+      newest: false
     }
   },
   computed: {
@@ -52,9 +58,16 @@ export default {
     displayTimeline () {
       this.timeline = true
       this.tagFeed = false
+      this.newest = false
     },
     displayTagFeed () {
       this.tagFeed = true
+      this.timeline = false
+      this.newest = false
+    },
+    displayNewest () {
+      this.newest = true
+      this.tagFeed = false
       this.timeline = false
     }
   }

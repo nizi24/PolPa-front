@@ -25,6 +25,7 @@
         :notice="notice"
         @closeField="closeField"
         />
+        <span v-if="!notices.length">通知はありません。</span>
       </v-card-text>
     </v-card>
   </div>
