@@ -56,7 +56,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .no-link-style {
   color: inherit !important;
   text-decoration: none;

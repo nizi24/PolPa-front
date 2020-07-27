@@ -17,6 +17,13 @@
     <v-card v-if="noticeField" id="notice-field">
       <v-card-title id="notice-field-title">
         <span>通知</span>
+        <v-spacer />
+        <span @click="closeField">
+          <nuxt-link
+          to="/notices"
+          id="to-notices"
+          >通知一覧</nuxt-link>
+        </span>
       </v-card-title>
       <v-card-text>
         <Notice
@@ -118,5 +125,11 @@ export default {
   border-radius: 3px;
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.15);
   overflow-y: scroll;
+}
+
+#to-notices {
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.8em;
 }
 </style>

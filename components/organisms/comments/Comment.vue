@@ -6,20 +6,22 @@
           <img v-if="comment.user.avatar_url" :src="comment.user.avatar_url" />
           <img v-else src="~/assets/default_icon.jpeg" />
         </v-avatar>
-        <span style="margin-left: 15px;">
-          {{ comment.user.name }}
-        </span>
-      <small style="color: #BDBDBD; margin-left: 10px">
-        @{{ comment.user.screen_name }}
-      </small>
-      <v-spacer />
-      <IconButtonWithAuth
-      type="far fa-trash-alt"
-      :comparison="comment.user_id"
-      style="margin-right: 10px;"
-      @click="deleteComment"
-      small
-      />
+        <nuxt-link :to="toUserLink" class="no-link-style">
+          <span style="margin-left: 15px;">
+            {{ comment.user.name }}
+          </span>
+          <small style="color: #BDBDBD; margin-left: 10px">
+            @{{ comment.user.screen_name }}
+          </small>
+        </nuxt-link>
+        <v-spacer />
+        <IconButtonWithAuth
+        type="far fa-trash-alt"
+        :comparison="comment.user_id"
+        style="margin-right: 10px;"
+        @click="deleteComment"
+        small
+        />
       </v-card-title>
       <v-card-text>
         <v-row>
@@ -56,6 +58,9 @@ export default {
   computed: {
     currentUser () {
       return this.$store.state.currentUser
+    },
+    toUserLink () {
+      return `/users/${this.comment.user.id}`
     }
   },
   methods: {
@@ -87,3 +92,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.no-link-style {
+  color: inherit;
+  text-decoration: none;
+}
+</style>

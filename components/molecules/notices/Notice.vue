@@ -1,12 +1,12 @@
 <template>
-  <div v-if="notice">
+  <div v-if="notice && notice.action_user" @click="closeField">
     <v-row class="notice-item">
       <v-col cols="2">
         <nuxt-link
         :to="noticeUserLink"
         class="no-link-style"
         >
-          <v-avatar size="30" @click="closeField">
+          <v-avatar size="30">
             <img
             v-if="notice.action_user.avatar_url"
             :src="notice.action_user.avatar_url"
@@ -23,30 +23,29 @@
         :to="noticeLink"
         class="no-link-style"
         >
-          <div
-          v-if="notice.noticeable_type === 'Comment'"
-          @click="closeField"
-          >
-            あなたの記録に@{{ notice.action_user.screen_name }}さんがコメントしました。
-          </div>
-          <div
-          v-if="notice.like_type === 'TimeReport'"
-          @click="closeField"
-          >
-            あなたの記録に@{{ notice.action_user.screen_name }}さんがいいねしました。
-          </div>
-          <div
-          v-if="notice.like_type === 'Comment'"
-          @click="closeField"
-          >
-            あなたのコメントに@{{ notice.action_user.screen_name }}さんがいいねしました。
-          </div>
-          <div
-          v-if="notice.noticeable_type === 'Relationship'"
-          @click="closeField"
-          >
-            @{{ notice.action_user.screen_name }}さんにフォローされました。
-          </div>
+          <v-row>
+            <template
+            v-if="notice.noticeable_type === 'Comment'"
+            >
+              あなたの記録に@{{ notice.action_user.screen_name }}さんがコメントしました。
+            </template>
+            <template
+            v-if="notice.like_type === 'TimeReport'"
+            >
+              あなたの記録に@{{ notice.action_user.screen_name }}さんがいいねしました。
+            </template>
+            <template
+            v-if="notice.like_type === 'Comment'"
+            >
+              あなたのコメントに@{{ notice.action_user.screen_name }}さんがいいねしました。
+            </template>
+            <template
+            v-if="notice.noticeable_type === 'Relationship'"
+            >
+              @{{ notice.action_user.screen_name }}さんにフォローされました。
+            </template>
+          </v-row>
+          <v-row class="notice-time">{{ createdAt }}</v-row>
         </nuxt-link>
       </v-col>
     </v-row>
@@ -72,6 +71,13 @@ export default {
     },
     noticeUserLink () {
       return `/users/${this.notice.action_user_id}`
+    },
+    createdAt () {
+      const noticeCreateAt = this.notice.created_at
+      const date = noticeCreateAt.substr(0, 16).split('T')[0]
+        .replace(/(\d{4})-(\d{2})-(\d{2})/, '$1年$2月$3日')
+      const time = noticeCreateAt.substr(0, 16).split('T')[1]
+      return date + ' ' + time
     }
   },
   methods: {
@@ -93,5 +99,9 @@ export default {
 .no-link-style {
   color: inherit;
   text-decoration: none;
+}
+
+.notice-time {
+  color: #888888;
 }
 </style>
