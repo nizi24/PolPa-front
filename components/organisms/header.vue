@@ -113,6 +113,10 @@ export default {
         {
           title: '設定',
           to: '/users/setting/profile'
+        },
+        {
+          title: '目標の履歴',
+          to: '/weekly_targets'
         }
       ]
       return items

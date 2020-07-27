@@ -114,6 +114,11 @@ export default {
         })
     }
   }
+  // fetch ({ redirect, store }) {
+  //   if (store.state.currentUser) {
+  //     return redirect('/')
+  //   }
+  // }
 }
 </script>
 
