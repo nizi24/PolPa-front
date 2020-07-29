@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #F1F8E9;" id="app">
+  <v-app style="background-color: #F1F8E9;" data-app>
     <Flash />
     <Loading />
     <LevelUpModal />
@@ -44,12 +44,4 @@ export default {
 </script>
 
 <style>
-html {
-  height: 100%;
-}
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
 </style>

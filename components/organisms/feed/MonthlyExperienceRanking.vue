@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="users.length === 0">
+    <template v-if="users.length === 0 && loading">
       <v-skeleton-loader
       v-for="n in 10"
       :key="n"
@@ -32,14 +32,17 @@ export default {
   },
   data () {
     return {
-      users: []
+      users: [],
+      loading: false
     }
   },
   mounted () {
+    this.loading = true
     axios.get('/v1/users/experience_rank', { params: { monthly: true } })
       .then((res) => {
         const users = JSON.parse(res.data.users)
         this.users = users
+        this.loading = false
       })
   }
 }
