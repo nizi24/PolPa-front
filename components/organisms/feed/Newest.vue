@@ -1,7 +1,7 @@
 <template>
   <div>
     <TimeReport
-    style="padding: 0 !important;"
+    class="newest-time-report"
     v-for="time_report in timeReports"
     :key="time_report.id"
     :user="time_report.user"
@@ -98,3 +98,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.newest-time-report {
+  padding: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .newest-time-report {
+    padding: 6px 0px !important;
+  }
+}
+</style>

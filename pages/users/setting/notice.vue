@@ -1,11 +1,11 @@
 <template>
 <v-container>
-  <v-row>
-    <v-col cols="3">
+  <v-row justify="center">
+    <v-col lg="3" sm="8" cols="12">
       <UserSettingSideMenu />
     </v-col>
-    <v-col cols="7">
-      <v-card style="padding: 20px;">
+    <v-col lg="7" sm="8" cols="12">
+      <v-card id="notice-card">
         <v-card-title id="setting-title">
           <h4>通知</h4>
         </v-card-title>
@@ -156,6 +156,10 @@ export default {
 </script>
 
 <style scoped>
+#notice-card {
+  padding: 20px;
+}
+
 #setting-title {
   border-bottom: 1px solid #e8e8e8;
 }
@@ -176,5 +180,17 @@ export default {
   color: #555555;
   margin-left: 4px;
   vertical-align: -5%;
+}
+
+@media (max-width: 480px) {
+  #notice-card {
+    padding: 10px;
+  }
+
+  .input-block {
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
 }
 </style>

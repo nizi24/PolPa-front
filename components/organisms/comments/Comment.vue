@@ -1,16 +1,20 @@
 <template>
-  <v-container>
-    <v-card class="mx-auto mt-5 pa-5" width="600px">
+  <v-container class="comment-container">
+    <v-card class="comment-card mx-auto" width="600px">
       <v-card-title>
-        <v-avatar size="40">
+        <v-avatar size="40" class="comment-avatar">
+          <img v-if="comment.user.avatar_url" :src="comment.user.avatar_url" />
+          <img v-else src="~/assets/default_icon.jpeg" />
+        </v-avatar>
+        <v-avatar size="30" class="comment-avatar-mobile">
           <img v-if="comment.user.avatar_url" :src="comment.user.avatar_url" />
           <img v-else src="~/assets/default_icon.jpeg" />
         </v-avatar>
         <nuxt-link :to="toUserLink" class="no-link-style">
-          <span style="margin-left: 15px;">
+          <span class="comment-user-name">
             {{ comment.user.name }}
           </span>
-          <small style="color: #BDBDBD; margin-left: 10px">
+          <small class="comment-screen-name">
             @{{ comment.user.screen_name }}
           </small>
         </nuxt-link>
@@ -97,5 +101,56 @@ export default {
 .no-link-style {
   color: inherit;
   text-decoration: none;
+}
+
+.comment-card {
+  padding: 20px;
+  margin: 20px;
+}
+
+.comment-avatar {
+  display: inline-block;
+}
+
+.comment-avatar-mobile {
+  display: none;
+}
+
+.comment-user-name {
+  margin-left: 15px;
+}
+
+.comment-screen-name {
+  color: #BDBDBD;
+  margin-left: 10px;
+}
+
+@media (max-width: 480px) {
+  .comment-card {
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .comment-container {
+    padding: 0px 0px 5px 0px !important;
+  }
+
+  .comment-avatar {
+    display: none;
+  }
+
+  .comment-avatar-mobile {
+    display: inline-block;
+  }
+
+  .comment-user-name {
+    font-size: 1.0em;
+    margin-left: 10px;
+  }
+
+  .comment-screen-name {
+    font-size: 0.8em;
+    margin-left: 5px;
+  }
 }
 </style>

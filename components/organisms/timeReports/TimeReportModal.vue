@@ -5,6 +5,17 @@
       dark
       @click.stop="dialog = true"
       v-if="btnDisplay"
+      id="time-report-button"
+    >
+      時間を記録する
+    </v-btn>
+    <v-btn
+      color="primary"
+      dark
+      @click.stop="dialog = true"
+      v-if="btnDisplay"
+      id="time-report-button-mobile"
+      small
     >
       時間を記録する
     </v-btn>
@@ -78,3 +89,24 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#time-report-button {
+  display: inline-block;
+}
+
+#time-report-button-mobile {
+  display: none;
+}
+
+@media (max-width: 480px) {
+
+  #time-report-button {
+    display: none;
+  }
+
+  #time-report-button-mobile {
+    display: inline-block;
+  }
+}
+</style>

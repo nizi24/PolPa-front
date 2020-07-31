@@ -1,17 +1,17 @@
 <template>
   <v-card>
-    <v-card-title style="color: #FFD54F;">
-      <h3 v-if="!nonTitle">
+    <v-card-title class="weekly-target-card-title">
+      <h3 v-if="!nonTitle" id="prev-weekly-result">
         先週の結果
       </h3>
-      <span style="font-size: 0.8em; margin-left: 30px;">{{ weekly }}</span>
+      <span class="weekly">{{ weekly }}</span>
     </v-card-title>
 
-    <v-card-text style="margin-top: 40px;">
-      <h1 v-if="weeklyTarget.achieve" id="achieve">
+    <v-card-text class="weekly-target-card-text">
+      <h1 v-if="weeklyTarget.achieve" class="achieve">
         目標達成！！
       </h1>
-      <v-row style="margin-top: 30px;" justify="center">
+      <v-row class="weekly-target-result" justify="center">
         <v-col cols="6">
           <h3 style="text-align: center">目標</h3>
         </v-col>
@@ -20,8 +20,8 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="6">
-          <v-icon small style="margin-left: 30px; margin-right: 10px">
+        <v-col cols="6" class="target-time-col">
+          <v-icon small class="dumbbell-icon">
             fas fa-dumbbell
           </v-icon>
           <h1 :class="changeColor(targetHour, targetMinute)" class="time">
@@ -33,8 +33,8 @@
           </h1>
           <span>分</span>
         </v-col>
-        <v-col cols="6">
-          <v-icon small style="margin-left: 30px; margin-right: 10px">
+        <v-col cols="6" class="progress-time-col">
+          <v-icon small class="clock-icon">
             far fa-clock
           </v-icon>
           <h1
@@ -55,10 +55,10 @@
       </v-row>
       <v-row
       justify="center"
-      style="margin-top: 30px;"
+      class="weekly-target-exp"
       v-if="weeklyTarget.weekly_target_experience_record"
       >
-        <v-col cols="8">
+        <v-col lg="8" cols="10">
           <v-icon small style="margin-right: 10px">fas fa-pencil-alt</v-icon>
           <span>ボーナスEXP</span>
           <h1 :class="changeColor(progressHour, progressMinute)" class="time">
@@ -144,10 +144,27 @@ export default {
 </script>
 
 <style scoped>
-h1#achieve {
+.weekly-target-card-title {
+  color: #FFD54F;
+}
+
+.weekly-target-card-text {
+  margin-top: 40px;
+}
+
+.weekly {
+  font-size: 0.8em;
+  margin-left: 30px;
+}
+
+h1.achieve {
   text-align: center;
   color: #FF8F00;
   font-size: 2.4em;
+}
+
+.weekly-target-result {
+  margin-top: 30px;
 }
 
 h1.time {
@@ -155,5 +172,80 @@ h1.time {
   font-size: 2.8em;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.dumbbell-icon {
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+.clock-icon {
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+.weekly-target-exp {
+  margin-top: 30px;
+}
+
+@media (max-width: 480px) {
+
+  #prev-weekly-result {
+    padding-right: 20px;
+  }
+
+  .weekly-target-card-title {
+    padding-bottom: 0 !important;
+  }
+
+  .weekly-target-card-text {
+    margin-top: 0px;
+  }
+
+  .weekly {
+    margin-left: 0px;
+  }
+
+  h1.achieve {
+    padding-top: 6px;
+    text-align: center;
+    color: #FF8F00;
+    font-size: 1.8em;
+  }
+
+  .weekly-target-result {
+    margin-top: 20px;
+  }
+
+  .dumbbell-icon {
+    margin-left: 0px;
+    margin-right: 3px;
+  }
+
+  .clock-icon {
+    margin-left: 10px;
+    margin-right: 3px;
+  }
+
+  h1.time {
+    display: inline-block;
+    font-size: 2.2em;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .target-time-col {
+    padding-left: 0 !important;
+    padding-right: 6px !important;
+  }
+
+  .progress-time-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .weekly-target-exp {
+    margin-top: 0px;
+  }
 }
 </style>

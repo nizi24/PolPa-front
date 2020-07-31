@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="4">
+    <v-row justify="center">
+      <v-col lg="4" sm="8" cols="12">
         <TagDetail
         :tag="tag"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col lg="6" sm="8" cols="12">
         <v-sheet class="pa-5">
           <v-icon color="#FFA000">far fa-clock</v-icon>
           <span class="tag-post">最近の投稿</span>

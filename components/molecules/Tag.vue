@@ -10,10 +10,10 @@
       label
       text-color="white"
     >
-      <v-icon small style="margin-right: 10px;">
+      <v-icon x-small style="margin-right: 10px;">
         fas fa-tag
       </v-icon>
-      <span>{{ tag.name }}</span>
+      <span style="padding-bottom: 4px;">{{ tag.name }}</span>
     </v-chip>
   </nuxt-link>
 </template>

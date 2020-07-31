@@ -18,7 +18,7 @@
     <v-row justify="center" id="user-screen-name">
       <span>@{{ user.screen_name }}</span>
     </v-row>
-    <div id="user-profile">
+    <div id="user-profile" v-if="user.profile">
       <span>{{ user.profile }}</span>
     </div>
     <Relationship
@@ -65,5 +65,11 @@ export default {
   padding: 10px;
   font-size: 0.8em;
   text-align: center;
+}
+
+@media (max-width: 480px) {
+  #user-side-bar {
+    padding: 20px;
+  }
 }
 </style>

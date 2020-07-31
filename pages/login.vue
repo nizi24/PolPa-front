@@ -78,6 +78,11 @@ export default {
           })(error.code)
         })
     }
+  },
+  fetch ({ redirect, store }) {
+    if (store.state.currentUser) {
+      return redirect('/')
+    }
   }
 }
 

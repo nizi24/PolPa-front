@@ -11,25 +11,34 @@
   :prevWeeklyTarget="prevWeeklyTarget"
   @addTarget="addTarget"
   />
-  <v-container v-if="!userNotFound">
+  <v-container v-if="!userNotFound" class="container">
     <v-row>
-      <v-col cols="4">
+      <v-col lg="4" cols="12" id="user-side-col">
         <UserSideBar :user="user" />
+        <UserTagField
+        id="user-tag-field"
+        :mainTags="mainTags"
+        />
+      </v-col>
+      <v-col sm="6" id="user-side-bar-col">
+        <UserSideBar :user="user" />
+      </v-col>
+      <v-col sm="6" id="user-tag-field-col">
         <UserTagField
         style="margin-top: 20px;"
         :mainTags="mainTags"
         />
       </v-col>
-      <v-col cols="8">
+      <v-col lg="8" cols="12">
         <UserExperienceCard
         :user="user"
         :requiredExp="requiredExp"
         :timeReports="timeReports"
         />
         <v-row justify="center">
-          <v-col cols="8">
+          <v-col lg="8" sm="8" cols="12">
             <v-card
-            style="margin-top: 20px; padding: 20px"
+            id="tag-search-card"
             v-if="timeReports.length"
             >
               <TagSearch
@@ -197,5 +206,68 @@ div.user-level {
 
 div.user-level h2 {
   margin: 0;
+}
+
+#user-tag-field {
+  margin-top: 20px;
+}
+
+#tag-search-card {
+  margin-top: 20px;
+  padding: 20px;
+}
+
+#user-side-bar-col {
+  display: none;
+}
+
+#user-tag-field-col {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+
+  #user-side-col {
+    display: none;
+  }
+
+  #user-side-bar-col {
+    display: inline-block;
+  }
+
+  #user-tag-field-col {
+    display: inline-block;
+  }
+
+  #user-tag-field {
+    margin-top: 0px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 !important;
+  }
+
+  #user-tag-field {
+    margin-top: 20px;
+  }
+
+  #tag-search-card {
+    margin-top: 10px;
+    padding: 10px 20px;
+  }
+
+  #user-side-col {
+    display: inline-block;
+  }
+
+  #user-side-bar-col {
+    display: none;
+  }
+
+  #user-tag-field-col {
+    display: none;
+  }
 }
 </style>

@@ -1,8 +1,12 @@
 <template>
   <v-container>
-    <v-card class="mx-auto mt-3 pa-5" width="600px">
+    <v-card class="mx-auto time-report-card">
       <v-card-title>
-        <v-avatar size="40">
+        <v-avatar size="40" class="time-report-avatar">
+          <img v-if="user.avatar_url" :src="user.avatar_url" />
+          <img v-else src="~/assets/default_icon.jpeg" />
+        </v-avatar>
+        <v-avatar size="30" class="time-report-avatar-mobile">
           <img v-if="user.avatar_url" :src="user.avatar_url" />
           <img v-else src="~/assets/default_icon.jpeg" />
         </v-avatar>
@@ -10,10 +14,18 @@
         :to="toUserLink"
         style="color: inherit; text-decoration: none;"
         >
-          <span style="margin-left: 15px;">{{ user.name }}</span>
-          <small style="color: #BDBDBD; margin-left: 10px">
-            @{{ user.screen_name }}
-          </small>
+          <div class="time-report-user-name-row">
+            <span class="time-report-user-name">{{ user.name }}</span>
+            <small class="time-report-screen-name">
+              @{{ user.screen_name }}
+            </small>
+          </div>
+          <div class="time-report-user-name-row-mobile">
+            <div class="time-report-user-name">{{ user.name }}</div>
+            <small class="time-report-screen-name">
+              @{{ user.screen_name }}
+            </small>
+          </div>
         </nuxt-link>
         <v-spacer />
         <IconButtonWithAuth
@@ -22,6 +34,7 @@
         :comparison="timeReport.user_id"
         @click.stop="modalDisplay = true"
         small
+        class="time-report-edit-btn"
         />
         <TimeReportModal
         :btnDisplay="false"
@@ -40,6 +53,7 @@
         style="margin-right: 10px;"
         @click="displayAlert = true"
         small
+        class="time-report-destroy-btn"
         />
         <ExpReductionAlert
         :displayModal="displayAlert"
@@ -50,28 +64,52 @@
       </v-card-title>
       <v-card-text style="margin-top: 10px">
         <nuxt-link :to="toLink" style="color: inherit; text-decoration: none;">
-          <v-row style="margin-left: 20px; margin-bottom: 10px;">
-            <v-icon small style="margin-right: 10px">
+          <v-row class="study-date-row">
+            <v-icon small class="calendar-icon">
               far fa-calendar-alt
             </v-icon>
             <span v-if="timeReport.study_date">{{ studyDate }}</span>
+            <v-spacer />
+            <IconButtonWithAuth
+            type="far fa-edit"
+            v-if="authDisplay"
+            :comparison="timeReport.user_id"
+            @click.stop="modalDisplay = true"
+            small
+            class="time-report-edit-btn-mobile"
+            />
+            <IconButtonWithAuth
+            type="far fa-trash-alt"
+            v-if="authDisplay"
+            :comparison="timeReport.user_id"
+            style="margin-right: 10px;"
+            @click="displayAlert = true"
+            small
+            class="time-report-destroy-btn-mobile"
+            />
           </v-row>
-          <v-row style="margin-left: 20px; margin-bottom: 10px;">
+          <v-row class="time-report-tag-row">
             <Tag v-for="tag in timeReport.tags" :tag="tag" :key="tag.id" />
           </v-row>
           <v-row>
-            <v-col>
-              <v-icon small style="margin-left: 20px; margin-right: 10px">
+            <v-col class="study-time-col">
+              <v-icon small class="clock-icon">
                 far fa-clock
               </v-icon>
-              <h1 :class="changeColor">{{ studyHour }}</h1>
+              <h1 :class="changeColor" class="study-hour">{{ studyHour }}</h1>
               <span>時間</span>
-              <h1 :class="changeColor">{{ studyMinute }}</h1>
+              <h1 :class="changeColor" class="study-minute">
+                {{ studyMinute }}
+              </h1>
               <span>分</span>
             </v-col>
-            <v-col>
-              <v-icon small style="margin-right: 10px">fas fa-pencil-alt</v-icon>
-              <h1 :class="changeColor" v-if="timeReport.experience_record">
+            <v-col class="experience-point-col">
+              <v-icon small class="pencil-icon">fas fa-pencil-alt</v-icon>
+              <h1
+              :class="changeColor"
+              v-if="timeReport.experience_record"
+              class="experience-point"
+              >
                 {{ timeReport.experience_record.experience_point }}
               </h1>
               <h3 style="display: inline-block">EXP</h3>
@@ -81,10 +119,17 @@
             {{ timeReport.memo }}
           </p>
         </nuxt-link>
-        <v-row style="margin-top: 10px; margin-left: 5px;">
+        <v-row class="time-report-footer">
           <IconButton
           type="far fa-comment-dots"
           @on="commentField = !commentField"
+          class="comment-icon"
+          />
+          <IconButton
+          type="far fa-comment-dots"
+          @on="commentField = !commentField"
+          class="comment-icon-mobile"
+          small
           />
           <span v-if="timeReport.comments_count" class="comment-count">
             {{ timeReport.comments_count }}
@@ -286,8 +331,204 @@ h1 {
   margin-right: 5px;
 }
 
+.time-report-avatar {
+  display: inline-block;
+}
+
+.time-report-avatar-mobile {
+  display: none;
+}
+
+.time-report-user-name-row {
+  display: inline-block;
+}
+
+.time-report-user-name-row-mobile {
+  display: none;
+}
+
+.time-report-user-name {
+  margin-left: 15px;
+}
+
+.time-report-screen-name {
+  color: #BDBDBD;
+  margin-left: 10px;
+}
+
+.time-report-edit-btn {
+  display: inline-block;
+}
+
+.time-report-destroy-btn {
+  display: inline-block;
+}
+
+.time-report-edit-btn-mobile {
+  display: none;
+}
+
+.time-report-destroy-btn-mobile {
+  display: none;
+}
+
+.calendar-icon {
+  margin-right: 10px;
+}
+
 .comment-count {
   font-size: 1.2em;
   margin-top: 10px;
+}
+
+.time-report-card {
+  padding: 20px;
+  margin: 12px;
+  width: 600px;
+}
+
+.study-date-row {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.clock-icon {
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.pencil-icon {
+  margin-right: 10px;
+}
+
+.time-report-tag-row {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.time-report-footer {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+.comment-icon {
+  display: inline-block;
+}
+
+.comment-icon-mobile {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .time-report-card {
+    padding: 8px;
+    margin: 4px;
+  }
+
+  .time-report-avatar {
+    display: none;
+  }
+
+  .time-report-avatar-mobile {
+    display: inline-block;
+  }
+
+  .time-report-user-name-row {
+    display: none;
+  }
+
+  .time-report-user-name-row-mobile {
+    display: inline-block;
+  }
+
+  .time-report-edit-btn {
+    display: none;
+  }
+
+  .time-report-destroy-btn {
+    display: none;
+  }
+
+  .calendar-icon {
+    margin-bottom: 5px;
+  }
+
+  .time-report-edit-btn-mobile {
+    display: inline-block;
+  }
+
+  .time-report-destroy-btn-mobile {
+    display: inline-block;
+  }
+
+  .study-time-col {
+    padding-right: 0px !important;
+  }
+
+  .study-time-col, .experience-point-col {
+    padding-bottom: 0px !important;
+  }
+
+  .time-report-user-name {
+    margin-left: 10px;
+    font-size: 1.0em;
+  }
+
+  .time-report-screen-name {
+    font-size: 0.8em;
+    margin-left: 5px;
+  }
+
+  .study-date-row {
+    margin-left: 0px;
+    margin-bottom: 4px;
+  }
+
+  .clock-icon {
+    margin-left: 0px;
+    margin-right: 5px;
+  }
+
+  .pencil-icon {
+    margin-right: 5px;
+  }
+
+  .time-report-tag-row {
+    margin-left: 0px;
+    margin-bottom: 0px;
+  }
+
+  .study-hour, .study-minute, .experience-point {
+    font-size: 2.2em;
+    margin-right: 0;
+  }
+
+  .time-report-footer {
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .comment-icon {
+    display: none;
+  }
+
+  .comment-icon-mobile {
+    display: inline-block;
+  }
+
+  .comment-count {
+    font-size: 1.0em;
+    margin-top: 5px;
+  }
+}
+</style>
+
+<style>
+.fa-edit {
+  margin-bottom: 5px;
+}
+
+.fa-trash-alt {
+  margin-bottom: 5px;
 }
 </style>

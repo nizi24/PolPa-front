@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="8">
+      <v-col sm="8" cols="12">
         <v-card id="notices-card">
           <v-card-title>
             <v-icon>far fa-bell</v-icon>
@@ -18,6 +18,12 @@
             <NoticesWithPagination
             :notices="notices"
             />
+            <div
+            v-if="!notices.length"
+            id="non-weekly-targets"
+            >
+              履歴がありません。
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -78,5 +84,11 @@ export default {
 
 #notices-card-title {
   padding-left: 10px;
+}
+
+@media (max-width: 480px) {
+  #notices-card {
+    padding: 10px;
+  }
 }
 </style>

@@ -1,14 +1,20 @@
 <template>
   <div>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col lg="6" sm="8" cols="12">
         <v-card style="padding: 20px;">
           <v-icon style="color: #FFB300; margin-right: 5px" small>
             fas fa-dumbbell
           </v-icon>
-          <h3 style="display: inline-block; vertical-align: -6%">
+          <span id="weekly-targets-title">
             目標の履歴
-          </h3>
+          </span>
+          <div
+          v-if="!weeklyTargets.length"
+          id="non-weekly-targets"
+          >
+            履歴がありません。
+          </div>
         </v-card>
         <template v-if="loading">
           <v-skeleton-loader
@@ -93,9 +99,21 @@ export default {
 </script>
 
 <style scoped>
+#weekly-targets-title {
+  display: inline-block;
+  vertical-align: -6%;
+  font-size: 1.2em;
+}
+
 .weekly-target {
   padding: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+#non-weekly-targets {
+  padding: 10px;
+  font-size: 0.9em;
+  color: #888888;
 }
 </style>

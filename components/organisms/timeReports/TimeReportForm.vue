@@ -1,27 +1,26 @@
 <template>
   <ValidationObserver ef="obs" v-slot="{ passes }">
     <v-card>
-      <v-card-title>
+      <v-card-title class="headline">
         <span
-        class="headline"
         v-if="editInitialValue"
         >記録を編集する</span>
         <span
-        class="headline"
         v-else
         >時間を記録する</span>
       </v-card-title>
       <v-form>
         <v-card-text>
-          <v-container>
+          <v-container class="time-report-form-card-text">
             <v-row>
-              <span>学習日時</span>
+              <span class="study-date-title">学習日時</span>
             </v-row>
             <v-row
             style="position: relative"
             >
               <v-col
-              cols="3"
+              sm="3"
+              cols="5"
               @click="datePicker = !datePicker"
               >
                 <v-row justify="center" style="margin-top: 20px">
@@ -43,7 +42,7 @@
                 @input="datePicker = false"
                 ></v-date-picker>
               </ValidationProvider>
-              <v-col cols="2">
+              <v-col lg="2" sm="3" cols="4">
                 <VAutoCompleteWithValidation
                 rules="max_value:23|validDate:@分 ,@学習日時"
                 v-model="studyDateHour"
@@ -51,7 +50,7 @@
                 :items="hours"
                 />
               </v-col>
-              <v-col cols="2">
+              <v-col lg="2" cols="3">
                 <VAutoCompleteWithValidation
                 rules="max_value:59|validDateMinutes:@時 ,@学習日時"
                 v-model="studyDateMinute"
@@ -61,7 +60,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="4">
+              <v-col sm="4" cols="6">
                 <VAutoCompleteWithValidation
                 rules="validTime:@分"
                 v-model="hour"
@@ -69,7 +68,7 @@
                 :items="hours"
                 />
               </v-col>
-              <v-col cols="4">
+              <v-col sm="4" cols="6">
                 <VAutoCompleteWithValidation
                 rules="max_value:60|validTime:@学習時間"
                 v-model="minute"
@@ -289,5 +288,20 @@ export default {
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.15);
+}
+
+@media (max-width: 480px) {
+  .headline {
+    font-size: 1.2em !important;
+    padding-bottom: 0 !important;
+  }
+
+  .time-report-form-card-text {
+    padding: 0 !important;
+  }
+
+  .study-date-title {
+    margin-left: 10px;
+  }
 }
 </style>

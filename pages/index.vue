@@ -1,19 +1,19 @@
 <template>
 <v-container>
-  <v-row>
-    <v-col cols="3">
+  <v-row justify="center">
+    <v-col lg="3" sm="8" cols="12">
       <FeedSideMenu
       @timeline="displayTimeline"
       @tagFeed="displayTagFeed"
       @newest="displayNewest"
       />
     </v-col>
-    <v-col cols="6">
+    <v-col lg="6" cols="12">
       <Timeline v-if="timeline && currentUser" />
       <TagFeed v-if="tagFeed && currentUser" />
       <Newest v-if="newest || !currentUser" />
     </v-col>
-    <v-col cols="3" id="right-side">
+    <v-col lg="3" sm="8" cols="12" id="right-side">
       <MiniUserExperienceCard
       v-if="currentUser"
       :user="currentUser"

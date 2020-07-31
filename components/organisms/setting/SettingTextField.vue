@@ -2,7 +2,7 @@
   <ValidationObserver ef="obs" v-slot="{ passes }">
     <div class="input-block">
       <v-row>
-        <v-col cols="4" class="input-label-block">
+        <v-col lg="4" cols="12" class="input-label-block">
           <v-icon small v-if="icon">{{ icon }}</v-icon>
           <span class="input-label">{{ label }}</span>
           <span style="margin-left: 10px;">
@@ -14,25 +14,40 @@
           </span>
         </v-col>
       </v-row>
-      <v-row justify="center">
-        <v-col cols="6">
+      <v-row>
+        <v-col lg="6" cols="12">
           <VTextFieldWithValidation
           v-model="innerValue"
           :rules="rules"
           :label="label"
           />
         </v-col>
-        <v-col cols="6" class="input-btn-block">
+        <v-spacer class="setting-text-field-spacer" />
+        <div class="setting-text-field-btn">
+          <v-col lg="6" cols="4" class="input-btn-block">
+            <v-btn
+            @click="passes(update)"
+            color="primary"
+            depressed
+            style="margin-top: 30px;"
+            :disabled="disabled"
+            v-if="!btnHidden"
+            >変更</v-btn>
+          </v-col>
+          <v-spacer />
+        </div>
+      </v-row>
+      <v-row class="setting-text-field-btn-mobile">
+        <v-col cols="8" sm="9" class="text-field-mobile-col" />
+        <v-col cols="4" sm="3" class="text-field-mobile-col">
           <v-btn
           @click="passes(update)"
           color="primary"
           depressed
-          style="margin-top: 30px;"
           :disabled="disabled"
           v-if="!btnHidden"
           >変更</v-btn>
         </v-col>
-        <v-spacer />
       </v-row>
     </div>
   </ValidationObserver>
@@ -116,5 +131,42 @@ export default {
 
 .input-btn-block {
   padding-top: 0 !important;
+}
+
+.setting-text-field-spacer {
+  display: none;
+}
+
+.setting-text-field-btn {
+  display: inline-block;
+}
+
+.setting-text-field-btn-mobile {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+
+  .input-block {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .setting-text-field-spacer {
+    display: inline-block;
+  }
+
+  .setting-text-field-btn-mobile {
+    display: flex;
+  }
+
+  .setting-text-field-btn {
+    display: none !important;
+  }
+
+  .text-field-mobile-col {
+    padding: 0px 12px !important;
+  }
 }
 </style>

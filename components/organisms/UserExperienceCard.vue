@@ -1,20 +1,20 @@
 <template>
   <v-card>
-    <v-row style="padding: 20px;">
+    <v-row id="experience-row">
       <v-col cols="6" :class="changeColor">
         <v-row justify="center">
-          <h1>Lv.{{ user.level }}</h1>
+          <h1 id="level">Lv.{{ user.level }}</h1>
         </v-row>
         <v-row justify="center">
-          <span>current Level</span>
+          <span id="current-level">current Level</span>
         </v-row>
       </v-col>
       <v-col cols="6" :class="changeColor">
         <v-row justify="center">
-          <h1>{{ user.total_experience }}</h1>
+          <h1 id="exp">{{ user.total_experience }}</h1>
         </v-row>
         <v-row justify="center">
-          <span>Total EXP</span>
+          <span id="total-exp">Total EXP</span>
         </v-row>
       </v-col>
     </v-row>
@@ -22,13 +22,16 @@
     v-if="Object.keys(user).length && requiredExp.required_exp"
     :requiredExp="requiredExp.required_exp"
     :experienceToNext="user.experience_to_next"
-    style="padding-bottom: 10px;"
+    id="experience-progress-linear"
     />
     <WeeklyTarget
     v-if="user.target_of_the_week"
     :target="user.target_of_the_week[0]"
     />
-    <Heatmap :timeReports="timeReports" />
+    <Heatmap
+    id="heatmap"
+    :timeReports="timeReports"
+    />
   </v-card>
 </template>
 
@@ -74,3 +77,36 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#experience-row {
+  padding: 20px;
+}
+
+#experience-progress-linear {
+  padding-bottom: 10px;
+}
+
+@media (max-width: 480px) {
+
+  #experience-row {
+    padding: 0px;
+  }
+
+  #heatmap {
+    display: none;
+  }
+
+  #level, #exp {
+    font-size: 1.6em;
+  }
+
+  #current-level, #total-exp {
+    font-size: 0.8em;
+  }
+
+  #experience-progress-linear {
+    padding-bottom: 0px;
+  }
+}
+</style>

@@ -12,14 +12,14 @@
           </v-icon>
         </v-card-title>
 
-        <v-card-text style="margin-top: 40px;">
+        <v-card-text id="level-up-card-text">
           <h1 id="current-level">
             Lv.{{ level }}
           </h1>
           <p id="level-up-message">レベルがあがりました！この調子で頑張ろう！</p>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions id="level-up-card-actions">
           <v-spacer></v-spacer>
           <v-btn
             color="green darken-1"
@@ -61,6 +61,10 @@ h1#level-up {
   margin-right: 20px;
 }
 
+#level-up-card-text {
+  margin-top: 40px;
+}
+
 h1#current-level {
   text-align: center;
   color: #FF8F00;
@@ -73,4 +77,27 @@ p#level-up-message {
   font-size: 1.2em;
 }
 
+@media (max-width: 480px) {
+  h1#level-up {
+    font-size: 1.4em;
+    margin-left: 70px;
+  }
+
+  #level-up-card-text {
+    margin-top: 20px;
+  }
+
+  h1#current-level {
+    font-size: 2.6em;
+  }
+
+  p#level-up-message {
+    margin-top: 20px;
+    font-size: 0.9em;
+  }
+
+  #level-up-card-actions {
+    padding-top: 0 !important;
+  }
+}
 </style>

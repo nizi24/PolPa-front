@@ -1,15 +1,16 @@
 <template>
   <v-row justify="center" align-content="center">
-    <v-col :cols="leftBlank" v-if="leftBlank">
+    <v-col id="left-blank" :lg="1" v-if="leftBlank">
     </v-col>
-    <v-col :cols="progressLinear">
+    <v-col :lg="progressLinear" cols="9" id="progress-linear">
       <v-progress-linear height="10px" :value="progressProportion">
       </v-progress-linear>
     </v-col>
     <v-col
-    :cols="progressFraction"
-    style="padding-top: 6px; color: #B0BEC5;"
+    cols="2"
+    :lg="progressFraction"
     :id="progressProportionStyle"
+    class="progress-proportion"
     >
       {{ progressNumeretor }}/{{ requiredExp }}
     </v-col>
@@ -70,5 +71,32 @@ export default {
 #progress-proportion {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+.progress-proportion {
+  padding-top: 6px;
+  color: #B0BEC5;
+}
+
+@media (max-width: 480px) {
+
+  #left-blank {
+    display: none;
+  }
+
+  .progress-proportion {
+    font-size: 0.8em;
+    padding-left: 0 !important;
+    padding-right: 4px !important;
+  }
+
+  #progress-linear {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .progress-proportion {
+    padding-top: 8px;
+  }
 }
 </style>

@@ -1,19 +1,18 @@
 <template>
-  <v-container v-if="tags" style="padding: 20px;">
+  <v-container v-if="tags" class="tag-container">
     <v-row justify="center">
       <v-col style="padding-bottom: 0 !important">
         <v-icon style="color: #FFB300; margin-right: 5px;" small>
           fas fa-tags
         </v-icon>
         <span
-        style="font-size: 1.0em; color: #FFB300; font-weight: bold;
-        vertical-align: -10%"
+        class="tag-list-title"
         >{{ title }}</span>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col
-      style="padding-top: 0 !important;"
+      class="tag-col"
       v-if="tags.length && tags[0].name"
       >
         <Tag
@@ -50,3 +49,30 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.tag-container {
+  padding: 20px;
+}
+
+.tag-col {
+  padding-top: 0 !important;
+}
+
+.tag-list-title {
+  font-size: 1.0em;
+  color: #FFB300;
+  font-weight: bold;
+  vertical-align: -10%;
+}
+
+@media (max-width: 480px) {
+  .tag-container {
+    padding: 5px 15px;
+  }
+
+  .tag-col {
+    padding-bottom: 4px !important;
+  }
+}
+</style>

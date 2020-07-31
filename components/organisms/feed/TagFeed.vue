@@ -2,13 +2,16 @@
   <div>
     <v-card v-if="nonFollowing" id="non-posting-card">
       まだタグをフォローしていません。
+      <div style="font-size: 0.8em; color: #888888;">
+        タグフィードにはフォローしているタグがついている全てのユーザーの投稿が表示されます。
+      </div>
     </v-card>
     <v-card v-else-if="nonTimeReports" id="non-posting-card">
       投稿がありません。
     </v-card>
     <template v-else>
       <TimeReport
-      style="padding: 0 !important;"
+      class="tag-feed-time-report"
       v-for="time_report in timeReports"
       :key="time_report.id"
       :user="time_report.user"
@@ -136,9 +139,18 @@ export default {
 
 <style scoped>
 #non-posting-card {
-  color: #888888;
   font-size: 1.0em;
   padding: 20px;
   text-align: center;
+}
+
+.tag-feed-time-report {
+  padding: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .tag-feed-time-report {
+    padding: 6px 0px !important;
+  }
 }
 </style>

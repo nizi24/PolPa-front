@@ -6,12 +6,12 @@
   @closeModal="auth = false"
   @authSuccess="authSuccess"
   />
-  <v-row>
-    <v-col cols="3">
+  <v-row id="account-row" justify="center">
+    <v-col lg="3" sm="8" cols="12">
       <UserSettingSideMenu />
     </v-col>
-    <v-col cols="7">
-      <v-card style="padding: 20px;">
+    <v-col lg="7" sm="8" cols="12">
+      <v-card id="accout-card">
         <v-card-title id="setting-title">
           <h4>アカウント</h4>
         </v-card-title>
@@ -36,7 +36,7 @@
           <ValidationObserver ef="obs" v-slot="{ passes }">
             <div class="input-block">
               <v-row>
-                <v-col cols="4" class="input-label-block">
+                <v-col lg="4" cols="12" class="input-label-block">
                   <v-icon small>fas fa-key</v-icon>
                   <span class="input-label">パスワード</span>
                   <span style="margin-left: 10px;">
@@ -47,8 +47,8 @@
                   </span>
                 </v-col>
               </v-row>
-              <v-row justify="center">
-                <v-col cols="6">
+              <v-row>
+                <v-col lg="6" cols="12">
                   <VTextFieldWithValidation
                   v-model="password"
                   rules="required|min:6"
@@ -66,16 +66,30 @@
                   @click:append="show2 = !show2"
                   />
                 </v-col>
-                <v-col cols="6">
+                <div class="password-update-btn">
+                  <v-col cols="6">
+                    <v-btn
+                    @click="passes(authDisplayPassword)"
+                    color="primary"
+                    depressed
+                    id="password-btn"
+                    :disabled="disabled"
+                    >変更</v-btn>
+                  </v-col>
+                  <v-spacer />
+                </div>
+              </v-row>
+              <v-row class="password-update-btn-mobile">
+                <v-col cols="8" sm="9" class="password-update-mobile-col" />
+                <v-col cols="4" sm="3" class="password-update-mobile-col">
                   <v-btn
-                  @click="passes(authDisplayPassword)"
+                  @click="passes(update)"
                   color="primary"
                   depressed
-                  id="password-btn"
                   :disabled="disabled"
+                  v-if="!btnHidden"
                   >変更</v-btn>
                 </v-col>
-                <v-spacer />
               </v-row>
             </div>
           </ValidationObserver>
@@ -236,6 +250,10 @@ export default {
 </script>
 
 <style scoped>
+#accout-card {
+  padding: 20px;
+}
+
 #setting-title {
   border-bottom: 1px solid #e8e8e8;
 }
@@ -260,4 +278,37 @@ export default {
 #password-btn {
   vertical-align: -450%;
 }
+
+.password-update-btn {
+  display: inline-block;
+}
+
+.password-update-btn-mobile {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  #accout-card {
+    padding: 10px;
+  }
+
+  .password-update-btn {
+    display: none;
+  }
+
+  .password-update-btn-mobile {
+    display: flex;
+  }
+
+  .password-update-mobile-col {
+    padding: 0px 12px !important;
+  }
+
+  .input-block {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
 </style>

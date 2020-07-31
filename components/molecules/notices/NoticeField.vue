@@ -132,4 +132,20 @@ export default {
   text-decoration: none;
   font-size: 0.8em;
 }
+
+@media (max-width: 1024px) {
+  #notice-field {
+    top: 45px;
+    right: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  #notice-field {
+    top: 45px;
+    right: 30px;
+    width: 320px;
+    height: 480px;
+  }
+}
 </style>

@@ -3,7 +3,7 @@
     :absolute="!fixed"
     app
   >
-    <span>&copy; {{ new Date().getFullYear() }}</span>
+    <span>&copy; 2020 polpa</span>
   </v-footer>
 </template>
 
