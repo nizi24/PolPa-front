@@ -117,7 +117,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate' // テスト用にインポート
-import VAutoCompleteWithValidation from '../../molecules/inputs/VAutocompleteWithValidation.vue'
+import VAutoCompleteWithValidation from '../../molecules/inputs/VAutoCompleteWithValidation.vue'
 import VTextAreaWithValidation from '../../molecules/inputs/VTextAreaWithValidation.vue'
 import TagsInput from '../../molecules/inputs/TagsInput.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'

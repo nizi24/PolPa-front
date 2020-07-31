@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Header from '~/components/organisms/Header.vue'
-import Footer from '~/components/organisms/Footer.vue'
+import Header from '~/components/organisms/header.vue'
+import Footer from '~/components/organisms/footer.vue'
 import Loading from '~/components/molecules/Loading.vue'
 import Overlay from '~/components/molecules/Overlay.vue'
 import Flash from '~/components/molecules/Flash.vue'
