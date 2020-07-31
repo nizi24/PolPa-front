@@ -10,6 +10,11 @@ ENV HOME=/${WORKDIR} \
     API_URL=${API_URL} \
     NPM_CONFIG_PRODUCTION=false
 
+RUN apk update && apk add \
+    python\
+    make\
+    g++
+
 RUN echo ${HOME}
 RUN echo ${CONTAINER_PORT}
 RUN echo ${API_URL}
@@ -22,10 +27,5 @@ RUN yarn install
 COPY . .
 
 RUN yarn run build
-
-RUN apk update && apk add \
-    python\
-    make\
-    g++
 
 EXPOSE ${CONTAINER_PORT}
