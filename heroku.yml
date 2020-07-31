@@ -1,0 +1,8 @@
+build:
+  docker:
+    web: Dockerfile
+  config:
+    WORKDIR: app
+    API_URL: "https://polpa-v1-api.herokuapp.com"
+run:
+  web: yarn run start
