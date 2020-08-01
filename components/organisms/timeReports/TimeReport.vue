@@ -63,31 +63,31 @@
         />
       </v-card-title>
       <v-card-text style="margin-top: 10px">
+        <v-row class="study-date-row">
+          <v-icon small class="calendar-icon">
+            far fa-calendar-alt
+          </v-icon>
+          <span v-if="timeReport.study_date">{{ studyDate }}</span>
+          <v-spacer />
+          <IconButtonWithAuth
+          type="far fa-edit"
+          v-if="authDisplay"
+          :comparison="timeReport.user_id"
+          @click.stop="modalDisplay = true"
+          small
+          class="time-report-edit-btn-mobile"
+          />
+          <IconButtonWithAuth
+          type="far fa-trash-alt"
+          v-if="authDisplay"
+          :comparison="timeReport.user_id"
+          style="margin-right: 10px;"
+          @click="displayAlert = true"
+          small
+          class="time-report-destroy-btn-mobile"
+          />
+        </v-row>
         <nuxt-link :to="toLink" style="color: inherit; text-decoration: none;">
-          <v-row class="study-date-row">
-            <v-icon small class="calendar-icon">
-              far fa-calendar-alt
-            </v-icon>
-            <span v-if="timeReport.study_date">{{ studyDate }}</span>
-            <v-spacer />
-            <IconButtonWithAuth
-            type="far fa-edit"
-            v-if="authDisplay"
-            :comparison="timeReport.user_id"
-            @click.stop="modalDisplay = true"
-            small
-            class="time-report-edit-btn-mobile"
-            />
-            <IconButtonWithAuth
-            type="far fa-trash-alt"
-            v-if="authDisplay"
-            :comparison="timeReport.user_id"
-            style="margin-right: 10px;"
-            @click="displayAlert = true"
-            small
-            class="time-report-destroy-btn-mobile"
-            />
-          </v-row>
           <v-row class="time-report-tag-row">
             <Tag v-for="tag in timeReport.tags" :tag="tag" :key="tag.id" />
           </v-row>
