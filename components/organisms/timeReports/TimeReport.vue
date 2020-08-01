@@ -259,8 +259,8 @@ export default {
     'time_report.likes_count': function (newValue) { //eslint-disable-line
       this.timeReport.likes_count = newValue
     },
-    'time_report.comments': function (newValue) { //eslint-disable-line
-      this.timeReport.comments = newValue
+    'time_report.comments_count': function (newValue) { //eslint-disable-line
+      this.timeReport.comments_count = newValue
     }
   },
   methods: {
@@ -306,19 +306,15 @@ export default {
     },
     subCount () {
       this.$emit('subLikesCount', this.timeReport.id)
-      this.timeReport.likes_count -= 1
     },
     addCount () {
       this.$emit('addLikesCount', this.timeReport.id)
-      this.timeReport.likes_count += 1
     },
     addComment () {
       this.$emit('addComment', this.timeReport.id)
-      this.timeReport.comments_count += 1
     },
     subComment () {
       this.$emit('subComment', this.timeReport.id)
-      this.timeReport.comments_count -= 1
     }
   }
 }

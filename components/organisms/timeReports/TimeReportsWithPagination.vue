@@ -7,6 +7,8 @@
     :time_report="time_report"
     @updateTimeReport="updateExperience"
     @deleteTimeReport="deleteTimeReport"
+    @addLikesCount="addLikesCount"
+    @subLikesCount="subLikesCount"
     @addComment="addCommentsCount"
     @subComment="subCommentsCount"
     />
@@ -115,22 +117,22 @@ export default {
       }
       this.$emit('deleteTimeReport')
     },
-    // addLikesCount (id) {
-    //   this.timeReports = this.timeReports.map((t) => {
-    //     if (t.id === id) {
-    //       t.likes_count += 1
-    //     }
-    //     return t
-    //   })
-    // },
-    // subLikesCount (id) {
-    //   this.timeReports = this.timeReports.map((t) => {
-    //     if (t.id === id) {
-    //       t.likes_count -= 1
-    //     }
-    //     return t
-    //   })
-    // },
+    addLikesCount (id) {
+      this.timeReports = this.timeReports.map((t) => {
+        if (t.id === id) {
+          t.likes_count += 1
+        }
+        return t
+      })
+    },
+    subLikesCount (id) {
+      this.timeReports = this.timeReports.map((t) => {
+        if (t.id === id) {
+          t.likes_count -= 1
+        }
+        return t
+      })
+    },
     searchTimeReportInTags (ids) {
       this.timeReports = this.time_reports.filter((t) => {
         return ids.includes(t.id)

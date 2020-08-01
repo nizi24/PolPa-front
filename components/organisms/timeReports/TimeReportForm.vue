@@ -275,9 +275,6 @@ export default {
       this.hour = '0'
       this.minute = '1'
     }
-    console.log(this.studyDate)
-    console.log(this.studyDateMinute)
-    console.log(this.studyDateHour)
   }
 }
 </script>
