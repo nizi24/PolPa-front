@@ -3,7 +3,7 @@
     <v-row>
       <v-card class="mx-auto mt-5 pa-5" width="500px">
         <v-card-title>
-          <h1 class="display-1">ログイン</h1>
+          <h1 class="login-title">ログイン</h1>
         </v-card-title>
         <v-card-text>
           <v-form>
@@ -21,7 +21,13 @@
             @click:append="show1 = !show1"
             vid="password"
             />
-            <v-btn class="mr-4 light-green lighten-3 mx-auto" @click="passes(login)">ログイン</v-btn>
+            <v-row justify="center">
+              <v-btn
+              color="primary"
+              class="mx-auto login-btn"
+              @click="passes(login)"
+              >ログイン</v-btn>
+            </v-row>
             <p v-if="error" class="errors">{{error}}</p>
           </v-form>
         </v-card-text>
@@ -83,12 +89,26 @@ export default {
     if (store.state.currentUser) {
       return redirect('/')
     }
+  },
+  head () {
+    return {
+      title: 'ログイン - PolPa'
+    }
   }
 }
 
 </script>
 
 <style scoped>
+.login-title {
+  font-weight: normal;
+  font-size: 1.4em;
+}
+
+.login-btn {
+  margin-top: 10px;
+}
+
 .errors {
   color: red;
   margin-top: 20px;

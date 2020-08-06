@@ -141,10 +141,10 @@ export default {
           .then((res) => {
             that.name = res.data.user.name
             that.profile = res.data.user.profile
-            that.disabled = false
+            that.disabled = res.data.user.guest
           })
       } catch {
-        this.disabled = false
+        that.disabled = true
       }
     }
     mount()
@@ -158,6 +158,11 @@ export default {
         }
       }
     )
+  },
+  head () {
+    return {
+      title: 'プロフィール設定 - PolPa'
+    }
   }
 }
 </script>

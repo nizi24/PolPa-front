@@ -20,18 +20,28 @@
     </v-btn>
     <v-btn
     small
-    class="ma-2"
+    class="ma-2 mobile-none"
     outlined
     color="primary"
     @click="follow"
     v-if="!followed && !loading && iconOnly"
     :disabled="disabled"
     >
-      <v-icon small style="margin-right: 4px;">
-        fas fa-tag
+      <v-icon small>
+        fas fa-user-plus
       </v-icon>
-      <v-icon x-small>
-        fas fa-plus
+    </v-btn>
+    <v-btn
+    x-small
+    class="ma-2 mobile-only"
+    outlined
+    color="primary"
+    @click="follow"
+    v-if="!followed && !loading && iconOnly"
+    :disabled="disabled"
+    >
+      <v-icon small>
+        fas fa-user-plus
       </v-icon>
     </v-btn>
     <v-btn
@@ -49,17 +59,26 @@
     </v-btn>
     <v-btn
     small
-    class="ma-2"
+    class="ma-2 mobile-none"
     color="primary"
     @click="unfollow"
-    v-if="followed && !loading && iconOnly"
     :disabled="disabled"
+    v-if="followed && !loading && iconOnly"
     >
-      <v-icon small style="margin-right: 4px;">
-        fas fa-tag
+      <v-icon small>
+        fas fa-user-minus
       </v-icon>
-      <v-icon x-small>
-        fas fa-minus
+    </v-btn>
+    <v-btn
+    x-small
+    class="ma-2 mobile-only"
+    color="primary"
+    @click="unfollow"
+    :disabled="disabled"
+    v-if="followed && !loading && iconOnly"
+    >
+      <v-icon small>
+        fas fa-user-minus
       </v-icon>
     </v-btn>
   </div>
@@ -69,7 +88,7 @@
 import axios from '@/plugins/axios'
 export default {
   props: {
-    tagId: {
+    userId: {
       type: Number,
       required: true
     },
@@ -95,11 +114,13 @@ export default {
       if (this.disabled) { return }
       this.disabled = true
       axios
-        .post(`/v1/tags/${this.tagId}/follow`, { user_id: this.currentUser.id })
+        .post(`/v1/users/${this.userId}/follow`, {
+          current_user_id: this.currentUser.id
+        })
         .then((res) => {
+          this.$store.commit('addFollowing', res.data)
           this.followed = true
-          this.$store.commit('addTagFollowing', res.data)
-          this.$emit('addTagFollower')
+          this.$emit('addFollower')
         })
       setTimeout(() => {
         this.disabled = false
@@ -109,11 +130,14 @@ export default {
       if (this.disabled) { return }
       this.disabled = true
       axios
-        .delete(`/v1/tags/${this.tagId}/unfollow`, { params: { user_id: this.currentUser.id } })
+        .delete(`/v1/users/${this.userId}/unfollow`, {
+          params:
+            { current_user_id: this.currentUser.id }
+        })
         .then((res) => {
+          this.$store.commit('removeFollowing', res.data)
           this.followed = false
-          this.$store.commit('removeTagFollowing', res.data)
-          this.$emit('subTagFollower')
+          this.$emit('subFollower')
         })
       setTimeout(() => {
         this.disabled = false
@@ -122,15 +146,36 @@ export default {
   },
   mounted () {
     this.loading = true
-    const followCheck = () => {
-      const following = this.currentUser.tagFollowing
-      const followed = following.some((f) => {
-        return this.tagId === f
-      })
-      if (followed) { this.followed = true }
+    this.disabled = true
+    setTimeout(() => {
+      if (this.currentUser) {
+        const following = this.currentUser.following
+        // currentUserがフォローしているかどうか判定
+        const followed = following.some((f) => {
+          return this.userId === f
+        })
+        if (followed) { this.followed = true }
+      }
       this.loading = false
-    }
-    setTimeout(followCheck, 2000)
+      this.disabled = false
+    }, 2000)
   }
 }
 </script>
+
+<style scoped>
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .mobile-only {
+    display: inline-block;
+    margin-left: 2px !important;
+  }
+
+  .mobile-none {
+    display: none;
+  }
+}
+</style>

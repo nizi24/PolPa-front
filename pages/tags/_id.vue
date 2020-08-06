@@ -1,12 +1,17 @@
 <template>
   <v-container>
-    <v-row justify="center">
+    <ErrorCard
+    :display="notFound"
+    title="404 not find"
+    message="タグが存在しません。"
+    />
+    <v-row justify="center" v-if="!notFound">
       <v-col lg="4" sm="8" cols="12">
         <TagDetail
         :tag="tag"
         />
       </v-col>
-      <v-col lg="6" sm="8" cols="12">
+      <v-col lg="7" sm="10" cols="12">
         <v-sheet class="pa-5">
           <v-icon color="#FFA000">far fa-clock</v-icon>
           <span class="tag-post">最近の投稿</span>
@@ -25,17 +30,20 @@
 <script>
 import TimeReportsWithPagination from '~/components/organisms/timeReports/TimeReportsWithPagination.vue'
 import TagDetail from '~/components/organisms/tags/TagDetail.vue'
+import ErrorCard from '~/components/molecules/ErrorCard.vue'
 import axios from '@/plugins/axios'
 export default {
   components: {
     TagDetail,
-    TimeReportsWithPagination
+    TimeReportsWithPagination,
+    ErrorCard
   },
   data () {
     return {
       tag: {},
       timeReports: [],
-      newTimeReport: {}
+      newTimeReport: {},
+      notFound: false
     }
   },
   methods: {
@@ -60,6 +68,17 @@ export default {
         this.tag = tag
         this.timeReports = timeReports
       })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          this.notFound = true
+        }
+        console.error(error)
+      })
+  },
+  head () {
+    return {
+      title: `${this.tag.name} - PolPa`
+    }
   }
 }
 </script>

@@ -94,6 +94,11 @@ export default {
         }
       }
     )
+  },
+  head () {
+    return {
+      title: '週間目標一覧 - PolPa'
+    }
   }
 }
 </script>

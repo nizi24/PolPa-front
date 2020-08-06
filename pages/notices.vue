@@ -73,6 +73,11 @@ export default {
         }
       }
     )
+  },
+  head () {
+    return {
+      title: '通知一覧 - PolPa'
+    }
   }
 }
 </script>

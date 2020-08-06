@@ -21,6 +21,7 @@
       <ExperienceRanking
       style="margin-top: 20px;"
       />
+      <adsbygoogle ad-slot="2714915879" />
     </v-col>
   </v-row>
 </v-container>
@@ -69,6 +70,11 @@ export default {
       this.newest = true
       this.tagFeed = false
       this.timeline = false
+    }
+  },
+  head () {
+    return {
+      title: 'PolPa'
     }
   }
 }

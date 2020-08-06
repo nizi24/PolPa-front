@@ -13,6 +13,11 @@
       </n-link>
     </v-toolbar-title>
     <v-spacer />
+    <n-link to="/search" style="text-decoration: none;">
+      <v-icon style="color: white; margin-right: 20px;">
+        fas fa-search
+      </v-icon>
+    </n-link>
     <v-btn
     v-if="!currentUser"
     to="/login"
@@ -242,7 +247,7 @@ h2.app-title {
     margin-right: 10px;
   }
 
-  #login-btn-mobile span {
+  #login-btn-mobile h4 {
     padding: 4px;
   }
 

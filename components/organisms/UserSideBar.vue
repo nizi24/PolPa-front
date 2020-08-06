@@ -23,6 +23,7 @@
     </div>
     <Relationship
     v-if="Object.keys(user).length"
+    :guest="user.guest"
     :followerCount="user.follower_count"
     :followingCount="user.following_count"
     @addFollower="user.follower_count++"

@@ -87,7 +87,6 @@
                   color="primary"
                   depressed
                   :disabled="disabled"
-                  v-if="!btnHidden"
                   >変更</v-btn>
                 </v-col>
               </v-row>
@@ -226,9 +225,9 @@ export default {
             this.email = res.data.user.email
             this.prevEmail = res.data.user.email
             this.screenName = res.data.user.screen_name
+            this.disabled = res.data.user.guest
           })
       }
-      this.disabled = false
     }
     if (this.currentUser.id) {
       getter()
@@ -245,6 +244,11 @@ export default {
         }
       }
     )
+  },
+  head () {
+    return {
+      title: 'アカウント設定 - PolPa'
+    }
   }
 }
 </script>

@@ -145,6 +145,11 @@
 
 <script>
 export default {
+  head () {
+    return {
+      title: '利用規約 - PolPa'
+    }
+  }
 }
 </script>
 

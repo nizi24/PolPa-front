@@ -50,7 +50,6 @@
         type="far fa-trash-alt"
         v-if="authDisplay"
         :comparison="timeReport.user_id"
-        style="margin-right: 10px;"
         @click="displayAlert = true"
         small
         class="time-report-destroy-btn"
@@ -343,13 +342,17 @@ h1 {
   display: none;
 }
 
+.v-card__title {
+  padding-right: 0 !important;
+}
+
 .time-report-user-name {
-  margin-left: 15px;
+  margin-left: 8px;
 }
 
 .time-report-screen-name {
   color: #BDBDBD;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .time-report-edit-btn {
@@ -421,6 +424,10 @@ h1 {
     margin: 4px;
   }
 
+  .v-card__title {
+    padding-bottom: 0 !important;
+  }
+
   .time-report-avatar {
     display: none;
   }
@@ -467,12 +474,14 @@ h1 {
 
   .time-report-user-name {
     margin-left: 10px;
-    font-size: 1.0em;
+    font-size: 0.8em;
+    height: 24px;
   }
 
   .time-report-screen-name {
-    font-size: 0.8em;
-    margin-left: 5px;
+    font-size: 0.6em;
+    margin-left: 10px;
+    display: block;
   }
 
   .study-date-row {

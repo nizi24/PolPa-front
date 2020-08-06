@@ -82,7 +82,7 @@
           <h2 class="privacy-paragraph">第１０条（お問い合わせ窓口）</h2>
           <p>
             本ポリシーに関するお問い合わせは，下記の窓口までお願いいたします。<br />
-            メールアドレス：@gmail.com
+            メールアドレス：polpa.contact@gmail.com
           </p>
           <p style="padding-top: 30px;">以上</p>
         </v-card-text>
@@ -93,6 +93,11 @@
 
 <script>
 export default {
+  head () {
+    return {
+      title: 'プライバシーポリシー - PolPa'
+    }
+  }
 }
 </script>
 

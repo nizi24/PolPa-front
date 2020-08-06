@@ -72,6 +72,11 @@ export default {
         }
         console.error(error)
       })
+  },
+  head () {
+    return {
+      title: `${this.user.name}のレポート - PolPa`
+    }
   }
 }
 </script>

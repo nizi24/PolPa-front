@@ -14,6 +14,11 @@
 
 <script>
 export default {
+  head () {
+    return {
+      title: 'About - PolPa'
+    }
+  }
 }
 </script>
 

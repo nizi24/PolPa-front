@@ -190,6 +190,11 @@ export default {
         }
       }
     })
+  },
+  head () {
+    return {
+      title: `${this.user.name} - PolPa`
+    }
   }
 }
 </script>

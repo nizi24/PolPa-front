@@ -14,6 +14,12 @@
     :user="user"
     :index="i"
     />
+    <v-row
+    justify="center"
+    v-if="!users.length"
+    >
+      <span>該当するユーザーがいません</span>
+    </v-row>
   </div>
 </template>
 
