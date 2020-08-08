@@ -1,6 +1,7 @@
 <template>
 <v-container id="container">
   <v-row justify="center">
+    <v-col lg="1" id="spacer-col"></v-col>
     <v-col
     lg="2"
     sm="3"
@@ -38,7 +39,7 @@
     @addTarget="addTarget"
     />
     </v-col>
-    <v-col lg="8" cols="6" id="weekly-col" v-else>
+    <v-col lg="7" cols="6" id="weekly-col" v-else>
       <span
       id="weekly"
       >{{ weekly }}</span>
@@ -194,6 +195,12 @@ span#weekly-target-span {
 
 .spacer {
   display: none;
+}
+
+@media (max-width: 1024px) {
+  #spacer-col {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
