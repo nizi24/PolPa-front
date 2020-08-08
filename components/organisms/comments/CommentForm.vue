@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import VTextAreaWithValidation from './inputs/VTextAreaWithValidation.vue'
+import VTextAreaWithValidation from '../../molecules/inputs/VTextAreaWithValidation.vue'
 import axios from '@/plugins/axios'
 export default {
   components: {

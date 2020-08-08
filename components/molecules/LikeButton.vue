@@ -5,6 +5,7 @@
     @click="createLike"
     v-if="!liked"
     :disabled="!currentUser && !disabled"
+    class="like-button"
     />
     <IconButton
     style="color: #EC407A;"
@@ -12,8 +13,26 @@
     @click="destroyLike"
     v-if="liked"
     :disabled="disabled"
+    class="like-button"
     />
-    <span style="font-size: 1.2em; vertical-align: -20%">
+    <IconButton
+    type="far fa-heart"
+    @click="createLike"
+    v-if="!liked"
+    :disabled="!currentUser && !disabled"
+    class="like-button-mobile"
+    small
+    />
+    <IconButton
+    style="color: #EC407A;"
+    type="fas fa-heart"
+    @click="destroyLike"
+    v-if="liked"
+    :disabled="disabled"
+    class="like-button-mobile"
+    small
+    />
+    <span class="like-count">
       {{ count }}
     </span>
   </div>
@@ -127,3 +146,33 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.like-button {
+  display: inline-block;
+}
+
+.like-button-mobile {
+  display: none;
+}
+
+.like-count {
+  font-size: 1.2em;
+  vertical-align: -20%;
+}
+
+@media (max-width: 480px) {
+  .like-button {
+    display: none;
+  }
+
+  .like-button-mobile {
+    display: inline-block;
+  }
+
+  .like-count {
+    font-size: 1.0em;
+    vertical-align: none;
+  }
+}
+</style>

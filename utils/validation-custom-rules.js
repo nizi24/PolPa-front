@@ -14,7 +14,8 @@ const validDate = {
   params: ['minutes', 'date'],
 
   validate (hours, { minutes, date }) {
-    const dateTime = new Date(`${date} ${hours}:${minutes}`)
+    const day = date.replace(/-/g, '/')
+    const dateTime = new Date(`${day} ${hours}:${minutes}`)
     return dateTime <= new Date()
   },
 
@@ -28,7 +29,8 @@ const validDateMinutes = {
   params: ['hours', 'date'],
 
   validate (minutes, { hours, date }) {
-    const dateTime = new Date(`${date} ${hours}:${minutes}`)
+    const day = date.replace(/-/g, '/')
+    const dateTime = new Date(`${day} ${hours}:${minutes}`)
     return dateTime <= new Date()
   },
 

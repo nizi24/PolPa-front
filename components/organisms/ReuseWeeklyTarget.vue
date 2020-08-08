@@ -45,7 +45,7 @@ export default {
     reuse () {
       const target_time = this.prevWeeklyTarget.target_time //eslint-disable-line
       axios
-        .post(`/v1/users/${this.currentUser.id}/weekly_target`, {
+        .post(`/v1/users/${this.currentUser.id}/weekly_targets`, {
           target_time
         })
         .then((res) => {

@@ -18,6 +18,9 @@ export default {
         case 'success':
           type = 'success'
           break
+        case 'error':
+          type = 'error'
+          break
       }
       return type
     }

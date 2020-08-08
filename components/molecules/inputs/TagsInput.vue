@@ -1,11 +1,11 @@
 <template>
   <v-row>
-    <v-col cols="1" style="padding-right: 0 !important">
-      <v-icon small style="margin-top: 10px; color: #FFA000">
+    <v-col sm="1" cols="2" style="padding-right: 0 !important">
+      <v-icon small class="tag-icon" style="color: #FFA000;">
         fas fa-tag
       </v-icon>
     </v-col>
-    <v-col cols="11" style="padding-left: 0 !important">
+    <v-col lg="11" cols="10" style="padding-left: 0 !important">
       <vue-tags-input
       v-model="tag"
       :tags="initTags"
@@ -66,5 +66,16 @@ export default {
 
 .ti-tag {
   background-color: #FFA000 !important;
+}
+
+.tag-icon {
+  margin-top: 10px;
+  color: #FFA000;
+}
+
+@media (max-width: 480px) {
+  .tag-icon {
+    margin-left: 10px;
+  }
 }
 </style>

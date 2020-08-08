@@ -1,11 +1,11 @@
 <template>
 <v-container>
-  <v-row>
-    <v-col cols="3">
+  <v-row justify="center">
+    <v-col lg="3" sm="8" cols="12">
       <UserSettingSideMenu />
     </v-col>
-    <v-col cols="7">
-      <v-card style="padding: 20px;">
+    <v-col lg="7" sm="8" cols="12">
+      <v-card id="profile-card">
         <v-card-title id="setting-title">
           <h4>プロフィール</h4>
         </v-card-title>
@@ -18,7 +18,7 @@
             />
             <SettingTextField
             v-model="name"
-            rules="required|max:30"
+            rules="required|max:20"
             label="名前"
             icon="fas fa-user-tag"
             :disabled="disabled"
@@ -107,6 +107,8 @@ export default {
       }
       axios.patch(`/v1/users/${this.currentUser.id}`, { user })
         .then((res) => {
+          this.$store.commit('setProfile', res.data.user.profile)
+          this.$store.commit('setName', res.data.user.name)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
@@ -131,19 +133,36 @@ export default {
     }
     async function mount () {
       try {
-        await wait(1)
+        if (!that.currentUser.id) {
+          await wait(1)
+        }
         axios
           .get(`/v1/users/${that.currentUser.id}/edit`)
           .then((res) => {
             that.name = res.data.user.name
             that.profile = res.data.user.profile
-            that.disabled = false
+            that.disabled = res.data.user.guest
           })
       } catch {
-        this.disabled = false
+        that.disabled = true
       }
     }
     mount()
+  },
+  fetch ({ store, redirect }) {
+    store.watch(
+      state => state.currentUser,
+      (newUser, oldUser) => {
+        if (!newUser) {
+          return redirect('/login')
+        }
+      }
+    )
+  },
+  head () {
+    return {
+      title: 'プロフィール設定 - PolPa'
+    }
   }
 }
 </script>
@@ -151,5 +170,15 @@ export default {
 <style>
 #setting-title {
   border-bottom: 1px solid #e8e8e8;
+}
+
+#profile-card {
+  padding: 20px;
+}
+
+@media (max-width: 480px) {
+  #profile-card {
+    padding: 10px;
+  }
 }
 </style>

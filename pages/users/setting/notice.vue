@@ -1,11 +1,11 @@
 <template>
 <v-container>
-  <v-row>
-    <v-col cols="3">
+  <v-row justify="center">
+    <v-col lg="3" sm="8" cols="12">
       <UserSettingSideMenu />
     </v-col>
-    <v-col cols="7">
-      <v-card style="padding: 20px;">
+    <v-col lg="7" sm="8" cols="12">
+      <v-card id="notice-card">
         <v-card-title id="setting-title">
           <h4>通知</h4>
         </v-card-title>
@@ -107,8 +107,10 @@ export default {
             this.followNotice = res.data.follow_notice
             this.commentLikeNotice = res.data.comment_like_notice
             this.timeReportLikeNotice = res.data.time_report_like_notice
+            this.disabled = res.data.user.guest
           }).catch((err) => {
             console.error(err)
+            this.disabled = true
           })
       }
     }
@@ -123,7 +125,9 @@ export default {
     const that = this
     async function mount () {
       try {
-        await wait(1)
+        if (!that.currentUser.id) {
+          await wait(1)
+        }
         axios
           .get(`/v1/users/${that.currentUser.id}/setting/edit`)
           .then((res) => {
@@ -139,11 +143,30 @@ export default {
       }
     }
     mount()
+  },
+  fetch ({ store, redirect }) {
+    store.watch(
+      state => state.currentUser,
+      (newUser, oldUser) => {
+        if (!newUser) {
+          return redirect('/login')
+        }
+      }
+    )
+  },
+  head () {
+    return {
+      title: '通知設定 - PolPa'
+    }
   }
 }
 </script>
 
 <style scoped>
+#notice-card {
+  padding: 20px;
+}
+
 #setting-title {
   border-bottom: 1px solid #e8e8e8;
 }
@@ -164,5 +187,17 @@ export default {
   color: #555555;
   margin-left: 4px;
   vertical-align: -5%;
+}
+
+@media (max-width: 480px) {
+  #notice-card {
+    padding: 10px;
+  }
+
+  .input-block {
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
 }
 </style>

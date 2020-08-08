@@ -2,7 +2,7 @@
   <ValidationObserver ef="obs" v-slot="{ passes }">
     <v-card class="mx-auto mt-5 pa-5" width="500px">
       <v-card-title>
-        <h1 class="display-1">新規登録</h1>
+        <h1 class="signup-title">新規登録</h1>
       </v-card-title>
       <v-card-text>
         <v-form>
@@ -16,12 +16,6 @@
           v-model="email"
           rules="max:255|required|email"
           label="メールアドレス"
-          />
-          <span>必須項目ではありません。（仮）</span>
-          <VTextFieldWithValidation
-          v-model="screen_name"
-          :rules="{ min: 5, max: 15, regex: /^[a-z0-9_]+$/i }"
-          label="ユーザーID"
           />
           <VTextFieldWithValidation
           v-model="password"
@@ -40,7 +34,40 @@
           :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append="show2 = !show2"
           />
-          <v-btn class="mr-4 light-green lighten-3 mx-auto" @click="passes(signup)">登録</v-btn>
+          <div id="signup-note">
+            <n-link to="/rules">
+              利用規約
+            </n-link>
+            及び
+            <n-link to="/privacy">
+              プライバシーポリシー
+            </n-link>
+            に同意の上ご利用ください。
+          </div>
+          <v-row justify="center">
+            <v-btn
+            color="primary"
+            class="mx-auto signup-btn"
+            @click="passes(signup)"
+            >登録</v-btn>
+          </v-row>
+          <v-divider />
+          <div id="guest-login-title">ゲストログイン</div>
+          <div>
+            ゲストでログインしてPolPaの機能を試すことができます。
+          </div>
+          <div id="guest-login-note">
+            ※ゲストアカウントは他のユーザーと共有です。<br />
+            ※一部機能を制限しています。<br />
+            ※投稿が削除される恐れがあるため、お試しとしてご利用ください。
+          </div>
+          <v-row justify="center">
+            <v-btn
+            color="primary"
+            class="mx-auto"
+            @click="guestLogin"
+            >ゲストログイン</v-btn>
+          </v-row>
           <p v-if="error" class="errors">{{error}}</p>
         </v-form>
       </v-card-text>
@@ -49,6 +76,7 @@
 </template>
 
 <script>
+import { setUser } from '../plugins/auth-check.js'
 import VTextFieldWithValidation from '~/components/molecules/inputs/VTextFieldWithValidation.vue'
 import axios from '@/plugins/axios'
 import firebase from '@/plugins/firebase'
@@ -82,6 +110,7 @@ export default {
             uid: res.user.uid
           }
           axios.post('/v1/users', { user }).then((responce) => {
+            setUser(responce.data, this.$store)
             this.$store.commit('drawing/setLoading', false)
             this.$store.commit('drawing/setFlash', {
               status: true,
@@ -93,7 +122,9 @@ export default {
             }, 2000)
             this.$store.commit('setUser', responce.data)
             this.$store.commit('setLiked', [])
-            this.$router.push('/')
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 200)
           })
             .catch(() => {
               this.$store.commit('drawing/setLoading', false)
@@ -114,12 +145,63 @@ export default {
             }
           })(error.code)
         })
+    },
+    guestLogin () {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword('guest@example.com', 'password')
+        .then((res) => {
+          setUser(res.user, this.$store)
+          this.$store.commit('drawing/setFlash', {
+            status: true,
+            type: 'success',
+            message: 'ゲストでログインしました'
+          })
+          setTimeout(() => {
+            this.$store.commit('drawing/setFlash', {})
+          }, 2000)
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 200)
+        })
+    }
+  },
+  fetch ({ redirect, store }) {
+    if (store.state.currentUser) {
+      return redirect('/')
     }
   }
 }
 </script>
 
 <style scoped>
+.signup-title {
+  font-weight: normal;
+  font-size: 1.4em;
+}
+
+#signup-note {
+  padding: 10px 0px 15px 0px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.signup-btn {
+  margin-bottom: 20px;
+}
+
+#guest-login-title {
+  padding: 20px 0px;
+  font-size: 1.6em;
+}
+
+#guest-login-note {
+  padding: 10px 0px 30px 0px;
+  font-size: 0.8em;
+}
+
 .errors {
   color: red;
   margin-top: 20px;

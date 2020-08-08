@@ -6,7 +6,7 @@
   >
     <ValidationObserver ef="obs" v-slot="{ passes }">
       <v-card>
-        <v-card-title>
+        <v-card-title id="weekly-target-form-card-title">
           <span
           class="headline"
           >今週の目標を設定する</span>
@@ -17,17 +17,17 @@
           </v-col>
         </v-card-title>
         <v-form>
-          <v-card-text>
+          <v-card-text id="weekly-target-form-card-text">
             <v-container>
               <v-row>
-                <v-col cols="4">
+                <v-col lg="4" cols="6">
                   <VTextFieldWithValidation
                   rules="numeric|max_value:167|validTime:@分|required"
                   v-model="hour"
                   label="時"
                   />
                 </v-col>
-                <v-col cols="4">
+                <v-col lg="4" cols="6">
                   <VTextFieldWithValidation
                   rules="numeric|max_value:59|validTime:@時|required"
                   v-model="minute"
@@ -84,9 +84,13 @@ export default {
       this.$emit('closeTargetForm')
     },
     record () {
-      const target_time = this.hour + ':' + this.minute //eslint-disable-line
+      const hourNumber = Number(this.hour)
+      let target_time //eslint-disable-line
+      const day = Math.floor(hourNumber / 24)
+      const hour = hourNumber % 24
+      target_time = `2000-01-0${day + 1} ${hour}:${this.minute}` //eslint-disable-line
       axios
-        .post(`/v1/users/${this.currentUser.id}/weekly_target`, {
+        .post(`/v1/users/${this.currentUser.id}/weekly_targets`, {
           target_time
         })
         .then((res) => {
@@ -105,3 +109,20 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@media (max-width: 480px) {
+
+  span.headline {
+    font-size: 1.0em !important;
+  }
+
+  #weekly-target-form-card-title {
+    padding-bottom: 0 !important;
+  }
+
+  #weekly-target-form-card-text {
+    padding: 0 20px !important;
+  }
+}
+</style>

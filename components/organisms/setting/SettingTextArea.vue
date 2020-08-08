@@ -2,7 +2,7 @@
   <ValidationObserver ef="obs" v-slot="{ passes }">
     <div class="input-block">
       <v-row>
-        <v-col cols="4" class="input-label-block">
+        <v-col lg="4" cols="12" class="input-label-block">
           <v-icon small v-if="icon">{{ icon }}</v-icon>
           <span class="input-label">{{ label }}</span>
           <span style="margin-left: 10px;">
@@ -15,7 +15,7 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col cols="12">
+        <v-col cols="12" class="setting-text-area">
           <VTextAreaWithValidation
           v-model="innerValue"
           :rules="rules"
@@ -117,5 +117,17 @@ export default {
 
 .input-btn-block {
   padding-top: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .input-block {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .setting-text-area {
+    padding-top: 0 !important;
+  }
 }
 </style>

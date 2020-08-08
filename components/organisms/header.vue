@@ -13,24 +13,49 @@
       </n-link>
     </v-toolbar-title>
     <v-spacer />
+    <n-link to="/search" style="text-decoration: none;">
+      <v-icon style="color: white; margin-right: 20px;">
+        fas fa-search
+      </v-icon>
+    </n-link>
     <v-btn
     v-if="!currentUser"
     to="/login"
-    style="margin-right: 20px"
+    text
+    color="white"
+    id="login-btn"
+    :outlined="true"
+    >
+      <h4>ログイン</h4>
+    </v-btn>
+    <v-btn
+    v-if="!currentUser"
+    to="/login"
     text
     color="white"
     :outlined="true"
+    id="login-btn-mobile"
+    small
     >
-    <h4>ログイン</h4>
-  </v-btn>
-  <v-btn
-  v-if="!currentUser"
-  color="primary"
-  to="/signup"
-  style="margin-right: 200px"
-  >
-    新規登録
-  </v-btn>
+      <h4>ログイン</h4>
+    </v-btn>
+    <v-btn
+    v-if="!currentUser"
+    color="primary"
+    to="/signup"
+    id="signup-btn"
+    >
+      <span>新規登録</span>
+    </v-btn>
+    <v-btn
+    v-if="!currentUser"
+    color="primary"
+    to="/signup"
+    id="signup-btn-mobile"
+    small
+    >
+      <span>新規登録</span>
+    </v-btn>
     <NoticeField
     v-if="currentUser"
     />
@@ -79,7 +104,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <TimeReportModal v-if="currentUser" style="margin-right: 200px" />
+    <TimeReportModal v-if="currentUser" id="time-report-modal" />
   </v-app-bar>
 </template>
 
@@ -113,6 +138,10 @@ export default {
         {
           title: '設定',
           to: '/users/setting/profile'
+        },
+        {
+          title: '目標の履歴',
+          to: '/weekly_targets'
         }
       ]
       return items
@@ -153,5 +182,86 @@ h2.app-title {
 .v-avatar {
   margin-right: 20px;
   margin-left: 20px;
+}
+
+#login-btn {
+  margin-right: 20px;
+}
+
+#login-btn-mobile {
+  display: none;
+}
+
+#signup-btn {
+  margin-right: 200px;
+  display: inline-block;
+}
+
+#signup-btn span {
+  padding: 8px;
+}
+
+#signup-btn-mobile {
+  display: none;
+}
+
+#time-report-modal {
+  margin-right: 200px;
+}
+
+@media (max-width: 1024px) {
+  h2.app-title {
+    margin-left: 100px;
+  }
+
+  #time-report-modal {
+    margin-right: 100px;
+  }
+
+  #signup-btn {
+    margin-right: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2.app-title {
+    margin-left: 0px;
+    font-size: 1.3em;
+  }
+
+  .v-avatar {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  #time-report-modal {
+    margin-right: 10px;
+  }
+
+  #login-btn {
+    display: none;
+  }
+
+  #login-btn-mobile {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  #login-btn-mobile h4 {
+    padding: 4px;
+  }
+
+  #signup-btn {
+    display: none;
+  }
+
+  #signup-btn-mobile span {
+    padding: 4px;
+  }
+
+  #signup-btn-mobile {
+    margin-right: 10px;
+    display: inline-block;
+  }
 }
 </style>

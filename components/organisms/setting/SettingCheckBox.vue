@@ -1,7 +1,7 @@
 <template>
   <div class="input-block">
     <v-row>
-      <v-col cols="4" class="input-label-block">
+      <v-col lg="4" cols="12" class="input-label-block">
         <v-icon small if="icon">{{ icon }}</v-icon>
         <strong class="input-label">{{ label }}</strong>
         <span style="margin-left: 10px;">
@@ -90,5 +90,13 @@ export default {
 
 .input-btn-block {
   padding-top: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .input-block {
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
 }
 </style>

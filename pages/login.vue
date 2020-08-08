@@ -3,7 +3,7 @@
     <v-row>
       <v-card class="mx-auto mt-5 pa-5" width="500px">
         <v-card-title>
-          <h1 class="display-1">ログイン</h1>
+          <h1 class="login-title">ログイン</h1>
         </v-card-title>
         <v-card-text>
           <v-form>
@@ -21,7 +21,13 @@
             @click:append="show1 = !show1"
             vid="password"
             />
-            <v-btn class="mr-4 light-green lighten-3 mx-auto" @click="passes(login)">ログイン</v-btn>
+            <v-row justify="center">
+              <v-btn
+              color="primary"
+              class="mx-auto login-btn"
+              @click="passes(login)"
+              >ログイン</v-btn>
+            </v-row>
             <p v-if="error" class="errors">{{error}}</p>
           </v-form>
         </v-card-text>
@@ -31,6 +37,7 @@
 </template>
 
 <script>
+import { setUser } from '../plugins/auth-check.js'
 import VTextFieldWithValidation from '~/components/molecules/inputs/VTextFieldWithValidation.vue'
 import firebase from '@/plugins/firebase'
 export default {
@@ -50,7 +57,8 @@ export default {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
+        .then((res) => {
+          setUser(res.user, this.$store)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',
@@ -59,7 +67,9 @@ export default {
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
-          this.$router.push('/')
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 200)
         })
         .catch((error) => {
           this.error = ((code) => {
@@ -74,12 +84,31 @@ export default {
           })(error.code)
         })
     }
+  },
+  fetch ({ redirect, store }) {
+    if (store.state.currentUser) {
+      return redirect('/')
+    }
+  },
+  head () {
+    return {
+      title: 'ログイン - PolPa'
+    }
   }
 }
 
 </script>
 
 <style scoped>
+.login-title {
+  font-weight: normal;
+  font-size: 1.4em;
+}
+
+.login-btn {
+  margin-top: 10px;
+}
+
 .errors {
   color: red;
   margin-top: 20px;

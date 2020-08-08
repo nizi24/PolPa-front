@@ -45,6 +45,7 @@ export default {
         .then((res) => {
           this.$emit('closeModal')
           this.$emit('updateTimeReport', res.data)
+          this.$store.commit('experience/setExperience', res.data.experience)
           this.$store.commit('drawing/setFlash', {
             status: true,
             type: 'success',

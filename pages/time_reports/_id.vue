@@ -13,8 +13,8 @@
     @deleteTimeReport="deleteTimeReport"
     @addLikesCount="addLikesCount"
     @subLikesCount="subLikesCount"
-    @addCommentLikesCount="addCommentLikesCount"
-    @subCommentLikesCount="subCommentLikesCount"
+    @addComment="addCommentsCount"
+    @subComment="subCommentsCount"
     >
     </TimeReport>
   </v-container>
@@ -50,21 +50,11 @@ export default {
     subLikesCount () {
       this.timeReport.likes_count -= 1
     },
-    addCommentLikesCount (commentId) {
-      this.timeReport.comments = this.timeReport.comments.map((c) => {
-        if (c.id === commentId) {
-          c.likes_count += 1
-        }
-        return c
-      })
+    addCommentsCount () {
+      this.timeReport.comments_count += 1
     },
-    subCommentLikesCount (commentId) {
-      this.timeReport.comments = this.timeReport.comments.map((c) => {
-        if (c.id === commentId) {
-          c.likes_count -= 1
-        }
-        return c
-      })
+    subCommentsCount () {
+      this.timeReport.comments_count -= 1
     }
   },
   mounted () {
@@ -82,6 +72,11 @@ export default {
         }
         console.error(error)
       })
+  },
+  head () {
+    return {
+      title: `${this.user.name}のレポート - PolPa`
+    }
   }
 }
 </script>

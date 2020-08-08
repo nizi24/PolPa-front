@@ -1,71 +1,114 @@
 <template>
   <v-container>
-    <v-card class="mx-auto mt-5 pa-5" width="600px">
+    <v-card class="mx-auto time-report-card">
       <v-card-title>
-        <v-avatar size="40">
-          <img src="~/assets/default_icon.jpeg" />
+        <v-avatar size="40" class="time-report-avatar">
+          <img v-if="user.avatar_url" :src="user.avatar_url" />
+          <img v-else src="~/assets/default_icon.jpeg" />
         </v-avatar>
-        <span style="margin-left: 15px;">{{ user.name }}</span>
-      <small style="color: #BDBDBD; margin-left: 10px">
-        @{{ user.screen_name }}
-      </small>
-      <v-spacer />
-      <IconButtonWithAuth
-      type="far fa-edit"
-      v-if="authDisplay"
-      :comparison="timeReport.user_id"
-      @click.stop="modalDisplay = true"
-      small
-      />
-      <TimeReportModal
-      :btnDisplay="false"
-      :modalDisplay="modalDisplay"
-      :editInitialValue="timeReport"
-      :initStudyDateHours="initStudyDateHours"
-      :initStudyDateMinutes="initStudyDateMinutes"
-      @closeModal="closeModal"
-      @updateTimeReport="updateTimeReport"
-      v-if="authDisplay"
-      />
-      <IconButtonWithAuth
-      type="far fa-trash-alt"
-      v-if="authDisplay"
-      :comparison="timeReport.user_id"
-      style="margin-right: 10px;"
-      @click="displayAlert = true"
-      small
-      />
-      <ExpReductionAlert
-      :displayModal="displayAlert"
-      @cancel="cancel"
-      @understanding="understanding"
-      v-if="authDisplay"
-      />
+        <v-avatar size="30" class="time-report-avatar-mobile">
+          <img v-if="user.avatar_url" :src="user.avatar_url" />
+          <img v-else src="~/assets/default_icon.jpeg" />
+        </v-avatar>
+        <nuxt-link
+        :to="toUserLink"
+        style="color: inherit; text-decoration: none;"
+        >
+          <div class="time-report-user-name-row">
+            <span class="time-report-user-name">{{ user.name }}</span>
+            <small class="time-report-screen-name">
+              @{{ user.screen_name }}
+            </small>
+          </div>
+          <div class="time-report-user-name-row-mobile">
+            <div class="time-report-user-name">{{ user.name }}</div>
+            <small class="time-report-screen-name">
+              @{{ user.screen_name }}
+            </small>
+          </div>
+        </nuxt-link>
+        <v-spacer />
+        <IconButtonWithAuth
+        type="far fa-edit"
+        v-if="authDisplay"
+        :comparison="timeReport.user_id"
+        @click.stop="modalDisplay = true"
+        small
+        class="time-report-edit-btn"
+        />
+        <TimeReportModal
+        :btnDisplay="false"
+        :modalDisplay="modalDisplay"
+        :editInitialValue="timeReport"
+        :initStudyDateHours="initStudyDateHours"
+        :initStudyDateMinutes="initStudyDateMinutes"
+        @closeModal="closeModal"
+        @updateTimeReport="updateTimeReport"
+        v-if="authDisplay"
+        />
+        <IconButtonWithAuth
+        type="far fa-trash-alt"
+        v-if="authDisplay"
+        :comparison="timeReport.user_id"
+        @click="displayAlert = true"
+        small
+        class="time-report-destroy-btn"
+        />
+        <ExpReductionAlert
+        :displayModal="displayAlert"
+        @cancel="cancel"
+        @understanding="understanding"
+        v-if="authDisplay"
+        />
       </v-card-title>
       <v-card-text style="margin-top: 10px">
+        <v-row class="study-date-row">
+          <v-icon small class="calendar-icon">
+            far fa-calendar-alt
+          </v-icon>
+          <span v-if="timeReport.study_date">{{ studyDate }}</span>
+          <v-spacer />
+          <IconButtonWithAuth
+          type="far fa-edit"
+          v-if="authDisplay"
+          :comparison="timeReport.user_id"
+          @click.stop="modalDisplay = true"
+          small
+          class="time-report-edit-btn-mobile"
+          />
+          <IconButtonWithAuth
+          type="far fa-trash-alt"
+          v-if="authDisplay"
+          :comparison="timeReport.user_id"
+          style="margin-right: 10px;"
+          @click="displayAlert = true"
+          small
+          class="time-report-destroy-btn-mobile"
+          />
+        </v-row>
         <nuxt-link :to="toLink" style="color: inherit; text-decoration: none;">
-          <v-row style="margin-left: 20px; margin-bottom: 10px;">
-            <v-icon small style="margin-right: 10px">
-              far fa-calendar-alt
-            </v-icon>
-            <span v-if="timeReport.study_date">{{ studyDate }}</span>
-          </v-row>
-          <v-row style="margin-left: 20px; margin-bottom: 10px;">
-            <Tag v-for="tag in timeReport.tags" :tag="tag.name" :key="tag.id" />
+          <v-row class="time-report-tag-row">
+            <Tag v-for="tag in timeReport.tags" :tag="tag" :key="tag.id" />
           </v-row>
           <v-row>
-            <v-col>
-              <v-icon small style="margin-left: 20px; margin-right: 10px">
+            <v-col class="study-time-col">
+              <v-icon small class="clock-icon">
                 far fa-clock
               </v-icon>
-              <h1 :class="changeColor">{{ studyHour }}</h1>
+              <h1 :class="changeColor" class="study-hour">{{ studyHour }}</h1>
               <span>時間</span>
-              <h1 :class="changeColor">{{ studyMinute }}</h1>
+              <h1 :class="changeColor" class="study-minute">
+                {{ studyMinute }}
+              </h1>
               <span>分</span>
             </v-col>
-            <v-col>
-              <v-icon small style="margin-right: 10px">fas fa-pencil-alt</v-icon>
-              <h1 :class="changeColor" v-if="timeReport.experience_record">
+            <v-col class="experience-point-col">
+              <v-icon small class="pencil-icon">fas fa-pencil-alt</v-icon>
+              <h1
+              :class="changeColor"
+              v-if="timeReport.experience_record"
+              class="experience-point"
+              >
                 {{ timeReport.experience_record.experience_point }}
               </h1>
               <h3 style="display: inline-block">EXP</h3>
@@ -75,11 +118,21 @@
             {{ timeReport.memo }}
           </p>
         </nuxt-link>
-        <v-row style="margin-top: 10px; margin-left: 5px;">
+        <v-row class="time-report-footer">
           <IconButton
           type="far fa-comment-dots"
-          @on="commentForm = !commentForm"
+          @on="commentField = !commentField"
+          class="comment-icon"
           />
+          <IconButton
+          type="far fa-comment-dots"
+          @on="commentField = !commentField"
+          class="comment-icon-mobile"
+          small
+          />
+          <span v-if="timeReport.comments_count" class="comment-count">
+            {{ timeReport.comments_count }}
+          </span>
           <v-spacer />
           <LikeButton
           v-if="timeReport.id"
@@ -90,21 +143,13 @@
           @addLiked="addCount"
           />
         </v-row>
-        <CommentForm
-        v-if="commentForm"
-        :timeReportId="timeReport.id"
+        <CommentField
+        :timeReportId="time_report.id"
+        @closeField="commentField = false"
         @addComment="addComment"
+        @subComment="subComment"
+        v-if="commentField"
         />
-        <template v-if="commentForm">
-          <Comment
-          v-for="comment in timeReport.comments"
-          :key="comment.id"
-          :comment="comment"
-          @deleteComment="deleteComment"
-          @addCommentLikesCount="addCommentLikesCount"
-          @subCommentLikesCount="subCommentLikesCount"
-          />
-        </template>
       </v-card-text>
     </v-card>
   </v-container>
@@ -114,9 +159,8 @@
 import Tag from '../../molecules/Tag.vue'
 import IconButton from '../../atoms/icons/IconButton.vue'
 import IconButtonWithAuth from '../../atoms/icons/IconButtonWithAuth.vue'
-import CommentForm from '../../molecules/CommentForm.vue'
-import Comment from '../Comment.vue'
 import LikeButton from '../../molecules/LikeButton.vue'
+import CommentField from '../comments/CommentField.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'
 import TimeReportModal from './TimeReportModal.vue'
 import axios from '@/plugins/axios'
@@ -128,9 +172,8 @@ export default {
     IconButtonWithAuth,
     Tag,
     IconButton,
-    CommentForm,
-    Comment,
-    LikeButton
+    LikeButton,
+    CommentField
   },
   props: {
     time_report: {
@@ -149,7 +192,7 @@ export default {
         ...this.time_report
       },
       displayAlert: false,
-      commentForm: false
+      commentField: false
     }
   },
   computed: {
@@ -188,6 +231,9 @@ export default {
     toLink () {
       return `/time_reports/${this.timeReport.id}`
     },
+    toUserLink () {
+      return `/users/${this.user.id}`
+    },
     initStudyDateHours () {
       const timeReport = new Date(this.timeReport.study_date)
       return timeReport.getHours().toString()
@@ -212,8 +258,8 @@ export default {
     'time_report.likes_count': function (newValue) { //eslint-disable-line
       this.timeReport.likes_count = newValue
     },
-    'time_report.comments': function (newValue) { //eslint-disable-line
-      this.timeReport.comments = newValue
+    'time_report.comments_count': function (newValue) { //eslint-disable-line
+      this.timeReport.comments_count = newValue
     }
   },
   methods: {
@@ -235,6 +281,10 @@ export default {
         })
         .then((res) => {
           this.$emit('updateTimeReport', res.data)
+          this.$store.commit('setTotalExperience', res.data.experience.total_experience)
+          this.$store.commit('setExperienceToNext', res.data.experience.experience_to_next)
+          this.$store.commit('setLevel', res.data.experience.level)
+          this.$store.commit('setRequiredExp', res.data.required_exp)
           this.$emit('deleteTimeReport', timeReportId, res.data.weekly_target)
           this.$store.commit('drawing/setFlash', {
             status: true,
@@ -253,29 +303,17 @@ export default {
       this.displayAlert = false
       this.deleteTimeReport()
     },
-    addComment (comment) {
-      this.commentForm = false
-      if (!this.timeReport.comments) {
-        this.timeReport.comments = []
-      }
-      this.timeReport.comments.unshift(comment)
-    },
-    deleteComment (commentId) {
-      this.timeReport.comments = this.timeReport.comments.filter((t) => {
-        return t.id !== commentId
-      })
-    },
     subCount () {
       this.$emit('subLikesCount', this.timeReport.id)
     },
     addCount () {
       this.$emit('addLikesCount', this.timeReport.id)
     },
-    subCommentLikesCount (commentId) {
-      this.$emit('subCommentLikesCount', commentId, this.timeReport.id)
+    addComment () {
+      this.$emit('addComment', this.timeReport.id)
     },
-    addCommentLikesCount (commentId) {
-      this.$emit('addCommentLikesCount', commentId, this.timeReport.id)
+    subComment () {
+      this.$emit('subComment', this.timeReport.id)
     }
   }
 }
@@ -286,5 +324,216 @@ h1 {
   display: inline-block;
   font-size: 3.0em;
   margin-right: 5px;
+}
+
+.time-report-avatar {
+  display: inline-block;
+}
+
+.time-report-avatar-mobile {
+  display: none;
+}
+
+.time-report-user-name-row {
+  display: inline-block;
+}
+
+.time-report-user-name-row-mobile {
+  display: none;
+}
+
+.v-card__title {
+  padding-right: 0 !important;
+}
+
+.time-report-user-name {
+  margin-left: 8px;
+}
+
+.time-report-screen-name {
+  color: #BDBDBD;
+  margin-left: 5px;
+}
+
+.time-report-edit-btn {
+  display: inline-block;
+}
+
+.time-report-destroy-btn {
+  display: inline-block;
+}
+
+.time-report-edit-btn-mobile {
+  display: none;
+}
+
+.time-report-destroy-btn-mobile {
+  display: none;
+}
+
+.calendar-icon {
+  margin-right: 10px;
+}
+
+.comment-count {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.time-report-card {
+  padding: 20px;
+  margin: 12px;
+  width: 600px;
+}
+
+.study-date-row {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.clock-icon {
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.pencil-icon {
+  margin-right: 10px;
+}
+
+.time-report-tag-row {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.time-report-footer {
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+.comment-icon {
+  display: inline-block;
+}
+
+.comment-icon-mobile {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .time-report-card {
+    padding: 8px;
+    margin: 4px;
+  }
+
+  .v-card__title {
+    padding-bottom: 0 !important;
+  }
+
+  .time-report-avatar {
+    display: none;
+  }
+
+  .time-report-avatar-mobile {
+    display: inline-block;
+  }
+
+  .time-report-user-name-row {
+    display: none;
+  }
+
+  .time-report-user-name-row-mobile {
+    display: inline-block;
+  }
+
+  .time-report-edit-btn {
+    display: none;
+  }
+
+  .time-report-destroy-btn {
+    display: none;
+  }
+
+  .calendar-icon {
+    margin-bottom: 5px;
+  }
+
+  .time-report-edit-btn-mobile {
+    display: inline-block;
+  }
+
+  .time-report-destroy-btn-mobile {
+    display: inline-block;
+  }
+
+  .study-time-col {
+    padding-right: 0px !important;
+  }
+
+  .study-time-col, .experience-point-col {
+    padding-bottom: 0px !important;
+  }
+
+  .time-report-user-name {
+    margin-left: 10px;
+    font-size: 0.8em;
+    height: 24px;
+  }
+
+  .time-report-screen-name {
+    font-size: 0.6em;
+    margin-left: 10px;
+    display: block;
+  }
+
+  .study-date-row {
+    margin-left: 0px;
+    margin-bottom: 4px;
+  }
+
+  .clock-icon {
+    margin-left: 0px;
+    margin-right: 5px;
+  }
+
+  .pencil-icon {
+    margin-right: 5px;
+  }
+
+  .time-report-tag-row {
+    margin-left: 0px;
+    margin-bottom: 0px;
+  }
+
+  .study-hour, .study-minute, .experience-point {
+    font-size: 2.2em;
+    margin-right: 0;
+  }
+
+  .time-report-footer {
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .comment-icon {
+    display: none;
+  }
+
+  .comment-icon-mobile {
+    display: inline-block;
+  }
+
+  .comment-count {
+    font-size: 1.0em;
+    margin-top: 5px;
+  }
+}
+</style>
+
+<style>
+.fa-edit {
+  margin-bottom: 5px;
+}
+
+.fa-trash-alt {
+  margin-bottom: 5px;
 }
 </style>
