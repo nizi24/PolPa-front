@@ -21,7 +21,7 @@
       <ExperienceRanking
       style="margin-top: 20px;"
       />
-      <adsbygoogle ad-slot="2714915879" />
+      <!-- <adsbygoogle ad-slot="2714915879" /> -->
     </v-col>
   </v-row>
 </v-container>

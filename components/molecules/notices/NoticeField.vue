@@ -88,17 +88,18 @@ export default {
         if (!mutation.payload) { this.noticeField = false }
       }
     })
-    const that = this
     const getNotice = function () {
-      axios
-        .get(`/v1/users/${that.currentUser.id}/notices`, {
-          params: {
-            limit: true
-          }
-        })
-        .then((res) => {
-          that.notices = res.data
-        })
+      if (this.currentUser) {
+        axios
+          .get(`/v1/users/${this.currentUser.id}/notices`, {
+            params: {
+              limit: true
+            }
+          })
+          .then((res) => {
+            this.notices = res.data
+          })
+      }
     }
     setTimeout(getNotice, 3000)
     setInterval(getNotice, 60000)

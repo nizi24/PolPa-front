@@ -17,6 +17,9 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
+    script: [
+      { src: 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js', type: 'text/javascript' }
+    ],
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
     meta: [

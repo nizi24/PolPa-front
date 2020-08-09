@@ -1,8 +1,9 @@
 <template>
   <v-footer
-  :absolute="!fixed"
-  app
+  :absolute="true"
+  :app="true"
   color="#33692E"
+  id="footer"
   >
     <v-row justify="center">
       <v-col class="footer-list" cols="3" lg="1" sm="2">
