@@ -49,6 +49,7 @@
           >変更</v-btn>
         </v-col>
       </v-row>
+      <p class="errors">{{ error }}</p>
     </div>
   </ValidationObserver>
 </template>
@@ -84,6 +85,9 @@ export default {
     },
     value: {
       type: null
+    },
+    error: {
+      type: String
     }
   },
   data: () => ({
@@ -143,6 +147,11 @@ export default {
 
 .setting-text-field-btn-mobile {
   display: none;
+}
+
+.errors {
+  color: red;
+  margin-top: 20px;
 }
 
 @media (max-width: 1024px) {

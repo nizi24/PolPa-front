@@ -107,10 +107,10 @@ export default {
             this.followNotice = res.data.follow_notice
             this.commentLikeNotice = res.data.comment_like_notice
             this.timeReportLikeNotice = res.data.time_report_like_notice
-            this.disabled = res.data.user.guest
+            this.disabled = false
           }).catch((err) => {
             console.error(err)
-            this.disabled = true
+            this.disabled = false
           })
       }
     }

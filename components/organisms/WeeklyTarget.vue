@@ -52,7 +52,7 @@
     <v-col
     lg="10"
     sm="9"
-    cols="12"
+    cols="11"
     style="padding-top: 0 !important; margin-left: 38px;"
     v-if="!weeklyTarget"
     >

@@ -3,7 +3,8 @@
     :clipped-left="clipped"
     fixed
     app
-    style="background-color: #64DD17"
+    style="background-color: #64DD17;"
+    id="header"
   >
     <v-toolbar-title>
       <n-link to="/" style="color:white; text-decoration:none;">
@@ -224,6 +225,7 @@ h2.app-title {
 }
 
 @media (max-width: 480px) {
+
   h2.app-title {
     margin-left: 0px;
     font-size: 1.3em;

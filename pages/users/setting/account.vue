@@ -21,6 +21,7 @@
           rules="email|max:255|required"
           label="メールアドレス"
           icon="far fa-envelope"
+          :error="emailError"
           :disabled="disabled"
           @on="authDisplayEmail"
           />
@@ -30,6 +31,7 @@
           :rules="{ min: 5, max: 15, regex: /^[a-z0-9_]+$/i }"
           label="ユーザーID"
           icon="far fa-id-badge"
+          :error="screenNameError"
           :disabled="disabled"
           @on="updateScreenName"
           />
@@ -125,6 +127,8 @@ export default {
       password: '',
       passwordConfirm: '',
       prevEmail: '',
+      emailError: '',
+      screenNameError: '',
       show1: false,
       show2: false,
       emailFlag: false,
@@ -167,8 +171,20 @@ export default {
           }).catch(() => {
             this.$store.commit('drawing/setLoading', false)
           })
-      }).catch(() => {
-        this.$store.commit('drawing/setLoading', false)
+      }).catch((error) => {
+        this.emailError = ((code) => {
+          this.$store.commit('drawing/setLoading', false)
+          switch (code) {
+            case 'auth/email-already-in-use':
+              return '既にそのメールアドレスは使われています'
+            case 'auth/wrong-password':
+              return '※パスワードが正しくありません'
+            case 'auth/weak-password':
+              return '※パスワードは最低6文字以上にしてください'
+            default:
+              return '※メールアドレスとパスワードをご確認ください'
+          }
+        })(error.code)
       })
     },
     updateScreenName () {
@@ -186,8 +202,8 @@ export default {
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
-        }).catch((err) => {
-          console.error(err)
+        }).catch(() => {
+          this.screenNameError = '既に使用されているユーザー名です'
         })
     },
     updatePassword () {
