@@ -23,7 +23,13 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@nizi_24a" },
+      { property: "og:url", content: "https://polpa.work" },
+      { property: "og:title", content: "PolPa - レベルアップできる学習記録アプリ" },
+      { property: "og:description", content: "学習記録を投稿してレベルアップ" },
+      { property: "og:image", content: "https://polpa.work/ogp-image.jpg" }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
