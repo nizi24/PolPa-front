@@ -1,0 +1,44 @@
+<template>
+  <v-btn
+  :icon="icon"
+  v-bind="$attrs"
+  v-on="$listeners"
+  v-if="authDisplay"
+  >
+    <v-icon v-if="authDisplay" v-bind="$attrs" style="margin-right: 3px;">
+      {{ type }}
+    </v-icon>
+    <slot></slot>
+  </v-btn>
+</template>
+
+<script>
+export default {
+  props: {
+    type: {
+      type: String,
+      required: true
+    },
+    comparison: {
+      type: Number,
+      required: true
+    },
+    icon: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    currentUser () {
+      return this.$store.state.currentUser
+    },
+    authDisplay () {
+      if (this.currentUser && this.currentUser.id === this.comparison) {
+        return true
+      } else {
+        return false
+      }
+    }
+  }
+}
+</script>
