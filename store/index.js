@@ -72,7 +72,7 @@ export const mutations = {
   },
   removeFollowing (state, payload) {
     state.currentUser.following = state.currentUser.following.filter((l) => {
-      return l.id !== payload
+      return l !== payload
     })
   },
   setTagFollowing (state, payload) {
@@ -85,7 +85,7 @@ export const mutations = {
   },
   removeTagFollowing (state, payload) {
     state.currentUser.tagFollowing = state.currentUser.tagFollowing.filter((l) => {
-      return l.id !== payload
+      return l !== payload
     })
   },
   setRequiredExp (state, payload) {

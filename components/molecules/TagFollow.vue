@@ -18,22 +18,32 @@
       </v-icon>
       <span style="margin-bottom: 2px">フォロー</span>
     </v-btn>
-    <v-btn
-    small
-    class="ma-2"
-    outlined
-    color="primary"
-    @click="follow"
+    <v-tooltip
+    bottom
+    max-width="250px"
     v-if="!followed && !loading && iconOnly"
-    :disabled="disabled"
     >
-      <v-icon small style="margin-right: 4px;">
-        fas fa-tag
-      </v-icon>
-      <v-icon x-small>
-        fas fa-plus
-      </v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        v-bind="attrs"
+        v-on="on"
+        small
+        class="ma-2 tag-follow-button"
+        outlined
+        color="primary"
+        @click="follow"
+        :disabled="disabled"
+        >
+          <v-icon small style="margin-right: 4px;">
+            fas fa-tag
+          </v-icon>
+          <v-icon x-small>
+            fas fa-plus
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>タグをフォローできます</span>
+    </v-tooltip>
     <v-btn
     small
     class="ma-2"
@@ -47,21 +57,31 @@
       </v-icon>
       <span style="margin-bottom: 2px">フォロー解除</span>
     </v-btn>
-    <v-btn
-    small
-    class="ma-2"
-    color="primary"
-    @click="unfollow"
+    <v-tooltip
+    bottom
+    max-width="250px"
     v-if="followed && !loading && iconOnly"
-    :disabled="disabled"
     >
-      <v-icon small style="margin-right: 4px;">
-        fas fa-tag
-      </v-icon>
-      <v-icon x-small>
-        fas fa-minus
-      </v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        v-bind="attrs"
+        v-on="on"
+        small
+        class="ma-2 tag-unfollow-button"
+        color="primary"
+        @click="unfollow"
+        :disabled="disabled"
+        >
+          <v-icon small style="margin-right: 4px;">
+            fas fa-tag
+          </v-icon>
+          <v-icon x-small>
+            fas fa-minus
+          </v-icon>
+        </v-btn>
+      </template>
+      <span>タグをフォロー解除する</span>
+    </v-tooltip>
   </div>
 </template>
 

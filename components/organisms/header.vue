@@ -266,4 +266,21 @@ h2.app-title {
     display: inline-block;
   }
 }
+
+@media (max-width: 320px) {
+
+  .v-toolbar__content {
+    padding: 4px !important;
+  }
+
+  #time-report-modal {
+    margin-right: 0px;
+  }
+}
+</style>
+
+<style>
+#header .v-toolbar__content {
+  padding: 4px !important;
+}
 </style>

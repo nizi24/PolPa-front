@@ -84,9 +84,6 @@ export default {
     closeField () {
       this.$emit('closeField')
     }
-  },
-  mounted () {
-    return this.notice
   }
 }
 </script>

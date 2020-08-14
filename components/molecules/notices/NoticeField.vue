@@ -88,16 +88,17 @@ export default {
         if (!mutation.payload) { this.noticeField = false }
       }
     })
+    const that = this
     const getNotice = function () {
-      if (this.currentUser) {
+      if (that.currentUser) {
         axios
-          .get(`/v1/users/${this.currentUser.id}/notices`, {
+          .get(`/v1/users/${that.currentUser.id}/notices`, {
             params: {
               limit: true
             }
           })
           .then((res) => {
-            this.notices = res.data
+            that.notices = res.data
           })
       }
     }
