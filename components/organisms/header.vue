@@ -268,7 +268,6 @@ h2.app-title {
 }
 
 @media (max-width: 320px) {
-
   .v-toolbar__content {
     padding: 4px !important;
   }
