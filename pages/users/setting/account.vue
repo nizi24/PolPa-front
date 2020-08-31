@@ -85,7 +85,7 @@
                 <v-col cols="8" sm="9" class="password-update-mobile-col" />
                 <v-col cols="4" sm="3" class="password-update-mobile-col">
                   <v-btn
-                  @click="passes(update)"
+                  @click="passes(authDisplayPassword)"
                   color="primary"
                   depressed
                   :disabled="disabled"
