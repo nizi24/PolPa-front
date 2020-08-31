@@ -149,7 +149,7 @@ export default {
     guestLogin () {
       firebase
         .auth()
-        .signInWithEmailAndPassword('guest@example.com', 'password')
+        .signInWithEmailAndPassword('guest@example.com', process.env.GUEST_PASSWORD)
         .then((res) => {
           setUser(res.user, this.$store)
           this.$store.commit('drawing/setFlash', {
