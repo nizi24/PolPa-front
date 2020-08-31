@@ -169,6 +169,7 @@ export default {
               this.$store.commit('drawing/setFlash', {})
             }, 2000)
           }).catch(() => {
+            this.errorFlash()
             this.$store.commit('drawing/setLoading', false)
           })
       }).catch((error) => {
@@ -203,6 +204,7 @@ export default {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
         }).catch(() => {
+          this.errorFlash()
           this.screenNameError = '既に使用されているユーザー名です'
         })
     },
@@ -219,6 +221,7 @@ export default {
           this.$store.commit('drawing/setFlash', {})
         }, 2000)
       }).catch(() => {
+        this.errorFlash()
         this.$store.commit('drawing/setLoading', false)
       })
     },
@@ -229,6 +232,16 @@ export default {
     authDisplayEmail () {
       this.auth = true
       this.emailFlag = true
+    },
+    errorFlash () {
+      this.$store.commit('drawing/setFlash', {
+        status: true,
+        type: 'error',
+        message: 'エラーが発生しました'
+      })
+      setTimeout(() => {
+        this.$store.commit('drawing/setFlash', {})
+      }, 2000)
     }
   },
   mounted () {
