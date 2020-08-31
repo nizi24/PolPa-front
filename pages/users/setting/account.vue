@@ -85,7 +85,7 @@
                 <v-col cols="8" sm="9" class="password-update-mobile-col" />
                 <v-col cols="4" sm="3" class="password-update-mobile-col">
                   <v-btn
-                  @click="passes(update)"
+                  @click="passes(authDisplayPassword)"
                   color="primary"
                   depressed
                   :disabled="disabled"
@@ -169,6 +169,7 @@ export default {
               this.$store.commit('drawing/setFlash', {})
             }, 2000)
           }).catch(() => {
+            this.errorFlash()
             this.$store.commit('drawing/setLoading', false)
           })
       }).catch((error) => {
@@ -203,6 +204,7 @@ export default {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
         }).catch(() => {
+          this.errorFlash()
           this.screenNameError = '既に使用されているユーザー名です'
         })
     },
@@ -219,6 +221,7 @@ export default {
           this.$store.commit('drawing/setFlash', {})
         }, 2000)
       }).catch(() => {
+        this.errorFlash()
         this.$store.commit('drawing/setLoading', false)
       })
     },
@@ -229,6 +232,16 @@ export default {
     authDisplayEmail () {
       this.auth = true
       this.emailFlag = true
+    },
+    errorFlash () {
+      this.$store.commit('drawing/setFlash', {
+        status: true,
+        type: 'error',
+        message: 'エラーが発生しました'
+      })
+      setTimeout(() => {
+        this.$store.commit('drawing/setFlash', {})
+      }, 2000)
     }
   },
   mounted () {

@@ -279,7 +279,9 @@ h2.app-title {
 </style>
 
 <style>
-#header .v-toolbar__content {
-  padding: 4px !important;
+@media (max-width: 320px) {
+  #header .v-toolbar__content {
+    padding: 4px !important;
+  }
 }
 </style>

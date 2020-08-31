@@ -98,6 +98,8 @@ export default {
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
+        }).catch(() => {
+          this.errorFlash()
         })
     },
     updateProfile () {
@@ -117,10 +119,22 @@ export default {
           setTimeout(() => {
             this.$store.commit('drawing/setFlash', {})
           }, 2000)
+        }).catch(() => {
+          this.errorFlash()
         })
     },
     selectedFile (newVal) {
       this.avatar = newVal
+    },
+    errorFlash () {
+      this.$store.commit('drawing/setFlash', {
+        status: true,
+        type: 'error',
+        message: 'エラーが発生しました'
+      })
+      setTimeout(() => {
+        this.$store.commit('drawing/setFlash', {})
+      }, 2000)
     }
   },
   mounted () {
