@@ -12,7 +12,12 @@
     :id="progressProportionStyle"
     class="progress-proportion"
     >
-      {{ progressNumeretor }}/{{ requiredExp }}
+      <div v-if=!maxLevel>
+        {{ progressNumeretor }}/{{ requiredExp }}
+      </div>
+      <div v-else>
+        MAX
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -46,12 +51,21 @@ export default {
   },
   computed: {
     progressProportion () {
+      if (this.maxLevel) {
+        return 100
+      }
       const proportion = 100 - this.experienceToNext / this.requiredExp * 100
       if (proportion === 100) {
         return 0
       } else {
         return proportion
       }
+    },
+    maxLevel () {
+      if (this.requiredExp === 1660) {
+        return true
+      }
+      return false
     },
     progressNumeretor () {
       return this.requiredExp - this.experienceToNext
