@@ -82,7 +82,8 @@ export default {
       formData.append('avatar', this.avatar)
       const config = {
         headers: {
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
+          Authorization: `Bearer ${this.currentUser.id_token}`
         }
       }
       axios
@@ -107,7 +108,12 @@ export default {
         name: this.name,
         profile: this.profile
       }
-      axios.patch(`/v1/users/${this.currentUser.id}`, { user })
+      axios.patch(`/v1/users/${this.currentUser.id}`, { user },
+        {
+          headers: {
+            Authorization: `Bearer ${this.currentUser.id_token}`
+          }
+        })
         .then((res) => {
           this.$store.commit('setProfile', res.data.user.profile)
           this.$store.commit('setName', res.data.user.name)
