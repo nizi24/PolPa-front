@@ -18,7 +18,8 @@ export const state = () => ({
     weeklyTarget: {},
     following: [],
     tagFollowing: [],
-    required_exp: {}
+    required_exp: {},
+    id_token: ''
   }
 })
 
@@ -90,5 +91,8 @@ export const mutations = {
   },
   setRequiredExp (state, payload) {
     state.currentUser.required_exp = payload
+  },
+  setIdToken (state, payload) {
+    state.currentUser.id_token = payload
   }
 }
