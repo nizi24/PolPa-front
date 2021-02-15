@@ -34,6 +34,14 @@ const authCheck = ({ store, redirect }) => {
       setUser(user, store, idToken)
     })
   })
+  const user = firebase.auth().currentUser
+  if (user) {
+    user.getIdToken(true).then(function (idToken) {
+      authUser(idToken, store)
+    })
+  } else {
+    store.commit('setUser', null)
+  }
 }
 
 export default authCheck

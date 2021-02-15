@@ -139,29 +139,25 @@ export default {
   },
   mounted () {
     this.disabled = true
-    const that = this
-    const wait = (sec) => {
-      return new Promise((resolve) => {
-        setTimeout(resolve, sec * 1000)
-      })
-    }
-    async function mount () {
-      try {
-        if (!that.currentUser.id) {
-          await wait(1)
-        }
+    const getter = () => {
+      if (this.currentUser.id) {
         axios
-          .get(`/v1/users/${that.currentUser.id}/edit`)
-          .then((res) => {
-            that.name = res.data.user.name
-            that.profile = res.data.user.profile
-            that.disabled = res.data.user.guest
+          .get(`/v1/users/${this.currentUser.id}/edit`, {
+            headers: {
+              Authorization: `Bearer ${this.currentUser.id_token}`
+            }
+          }).then((res) => {
+            this.name = res.data.user.name
+            this.profile = res.data.user.profile
+            this.disabled = res.data.user.guest
           })
-      } catch {
-        that.disabled = true
       }
     }
-    mount()
+    if (this.currentUser.id) {
+      getter()
+    } else {
+      setTimeout(getter, 1000)
+    }
   },
   fetch ({ store, redirect }) {
     store.watch(

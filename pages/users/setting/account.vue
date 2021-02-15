@@ -156,6 +156,11 @@ export default {
         axios
           .patch(`/v1/users/${this.currentUser.id}`, {
             user: { email: this.email }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.currentUser.id_token}`
+            }
           })
           .then((res) => {
             this.$store.commit('drawing/setLoading', false)
@@ -190,9 +195,13 @@ export default {
     },
     updateScreenName () {
       axios
-        .patch(`/v1/users/${this.currentUser.id}`, {
-          user: { screen_name: this.screenName }
-        })
+        .patch(`/v1/users/${this.currentUser.id}`,
+          { user: { screen_name: this.screenName } },
+          {
+            headers: {
+              Authorization: `Bearer ${this.currentUser.id_token}`
+            }
+          })
         .then((res) => {
           this.$store.commit('setScreenName', res.data.user.screen_name)
           this.$store.commit('drawing/setFlash', {
@@ -248,7 +257,6 @@ export default {
     this.disabled = true
     const getter = () => {
       if (this.currentUser.id) {
-        console.log(this.currentUser)
         axios
           .get(`/v1/users/${this.currentUser.id}/edit`, {
             headers: {
