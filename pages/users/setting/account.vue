@@ -248,9 +248,13 @@ export default {
     this.disabled = true
     const getter = () => {
       if (this.currentUser.id) {
+        console.log(this.currentUser)
         axios
-          .get(`/v1/users/${this.currentUser.id}/edit`)
-          .then((res) => {
+          .get(`/v1/users/${this.currentUser.id}/edit`, {
+            headers: {
+              Authorization: `Bearer ${this.currentUser.id_token}`
+            }
+          }).then((res) => {
             this.email = res.data.user.email
             this.prevEmail = res.data.user.email
             this.screenName = res.data.user.screen_name
