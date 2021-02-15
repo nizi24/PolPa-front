@@ -72,8 +72,13 @@ export default {
       const confirm = window.confirm('削除しますか？') // eslint-disable-line
       if (confirm) {
         const commentId = this.comment.id
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.currentUser.id_token}`
+          }
+        }
         axios
-          .delete(`/v1/comments/${commentId}`)
+          .delete(`/v1/comments/${commentId}`, config)
           .then((res) => {
             this.$emit('deleteComment', commentId)
             this.$store.commit('drawing/setFlash', {
