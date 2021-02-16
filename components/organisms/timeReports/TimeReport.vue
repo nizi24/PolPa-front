@@ -164,6 +164,7 @@ import CommentField from '../comments/CommentField.vue'
 import ExpReductionAlert from '../ExpReductionAlert.vue'
 import TimeReportModal from './TimeReportModal.vue'
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
 
 export default {
   components: {
@@ -273,28 +274,39 @@ export default {
     },
     deleteTimeReport () {
       const timeReportId = this.timeReport.id
-      axios
-        .delete(`/v1/time_reports/${timeReportId}`, {
-          params: {
-            user_id: this.currentUser.id
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
           }
+          axios
+            .delete(`/v1/time_reports/${timeReportId}`, config, {
+              params: {
+                user_id: that.currentUser.id
+              }
+            })
+            .then((res) => {
+              that.$emit('updateTimeReport', res.data)
+              that.$store.commit('setTotalExperience', res.data.experience.total_experience)
+              that.$store.commit('setExperienceToNext', res.data.experience.experience_to_next)
+              that.$store.commit('setLevel', res.data.experience.level)
+              that.$store.commit('setRequiredExp', res.data.required_exp)
+              that.$emit('deleteTimeReport', timeReportId, res.data.weekly_target)
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: '記録を削除しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+            })
         })
-        .then((res) => {
-          this.$emit('updateTimeReport', res.data)
-          this.$store.commit('setTotalExperience', res.data.experience.total_experience)
-          this.$store.commit('setExperienceToNext', res.data.experience.experience_to_next)
-          this.$store.commit('setLevel', res.data.experience.level)
-          this.$store.commit('setRequiredExp', res.data.required_exp)
-          this.$emit('deleteTimeReport', timeReportId, res.data.weekly_target)
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: '記録を削除しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
-        })
+      }
     },
     cancel () {
       this.displayAlert = false

@@ -52,6 +52,7 @@
 
 <script>
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
 import SettingTextField from '~/components/organisms/setting/SettingTextField.vue'
 import SettingTextArea from '~/components/organisms/setting/SettingTextArea.vue'
 import SettingAvatarForm from '~/components/organisms/setting/SettingAvatarForm.vue'
@@ -80,54 +81,66 @@ export default {
     uploadFile () {
       const formData = new FormData()
       formData.append('avatar', this.avatar)
-      const config = {
-        headers: {
-          'content-type': 'multipart/form-data',
-          Authorization: `Bearer ${this.currentUser.id_token}`
-        }
-      }
-      axios
-        .patch(`/v1/users/${this.currentUser.id}/update_avatar`, formData, config)
-        .then((res) => {
-          const user = JSON.parse(res.data.user)
-          this.$store.commit('setAvatarUrl', user.avatar_url)
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: 'アイコン画像を変更しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
-        }).catch(() => {
-          this.errorFlash()
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              'content-type': 'multipart/form-data',
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .patch(`/v1/users/${that.currentUser.id}/update_avatar`, formData, config)
+            .then((res) => {
+              const user = JSON.parse(res.data.user)
+              that.$store.commit('setAvatarUrl', user.avatar_url)
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: 'アイコン画像を変更しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+            }).catch(() => {
+              that.errorFlash()
+            })
         })
+      }
     },
     updateProfile () {
-      const user = {
+      const params = {
         name: this.name,
         profile: this.profile
       }
-      axios.patch(`/v1/users/${this.currentUser.id}`, { user },
-        {
-          headers: {
-            Authorization: `Bearer ${this.currentUser.id_token}`
-          }
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          axios.patch(`/v1/users/${that.currentUser.id}`, { user: params },
+            {
+              headers: {
+                Authorization: `Bearer ${idToken}`
+              }
+            })
+            .then((res) => {
+              that.$store.commit('setProfile', res.data.user.profile)
+              that.$store.commit('setName', res.data.user.name)
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: 'プロフィールを変更しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+            }).catch(() => {
+              that.errorFlash()
+            })
         })
-        .then((res) => {
-          this.$store.commit('setProfile', res.data.user.profile)
-          this.$store.commit('setName', res.data.user.name)
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: 'プロフィールを変更しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
-        }).catch(() => {
-          this.errorFlash()
-        })
+      }
     },
     selectedFile (newVal) {
       this.avatar = newVal
@@ -147,16 +160,22 @@ export default {
     this.disabled = true
     const getter = () => {
       if (this.currentUser.id) {
-        axios
-          .get(`/v1/users/${this.currentUser.id}/edit`, {
-            headers: {
-              Authorization: `Bearer ${this.currentUser.id_token}`
-            }
-          }).then((res) => {
-            this.name = res.data.user.name
-            this.profile = res.data.user.profile
-            this.disabled = res.data.user.guest
+        const user = firebase.auth().currentUser
+        if (user) {
+          const that = this
+          user.getIdToken(true).then(function (idToken) {
+            axios
+              .get(`/v1/users/${that.currentUser.id}/edit`, {
+                headers: {
+                  Authorization: `Bearer ${idToken}`
+                }
+              }).then((res) => {
+                that.name = res.data.user.name
+                that.profile = res.data.user.profile
+                that.disabled = res.data.user.guest
+              })
           })
+        }
       }
     }
     if (this.currentUser.id) {

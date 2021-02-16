@@ -22,6 +22,7 @@
 <script>
 import VTextAreaWithValidation from '../../molecules/inputs/VTextAreaWithValidation.vue'
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
 export default {
   components: {
     VTextAreaWithValidation
@@ -46,25 +47,31 @@ export default {
         content: this.comment,
         time_report_id: this.timeReportId
       }
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.currentUser.id_token}`
-        }
-      }
-      axios
-        .post('/v1/comments', { comment }, config)
-        .then((res) => {
-          this.$emit('addComment', res.data)
-          this.comment = ''
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: 'コメントを投稿しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .post('/v1/comments', { comment }, config)
+            .then((res) => {
+              that.$emit('addComment', res.data)
+              that.comment = ''
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: 'コメントを投稿しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+            })
         })
+      }
     }
   }
 }
