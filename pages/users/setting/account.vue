@@ -153,25 +153,36 @@ export default {
     updateEmail () {
       const user = firebase.auth().currentUser
       user.updateEmail(this.email).then(() => {
-        axios
-          .patch(`/v1/users/${this.currentUser.id}`, {
-            user: { email: this.email }
+        const user = firebase.auth().currentUser
+        if (user) {
+          const that = this
+          user.getIdToken(true).then(function (idToken) {
+            axios
+              .patch(`/v1/users/${that.currentUser.id}`, {
+                user: { email: that.email }
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${idToken}`
+                }
+              })
+              .then((res) => {
+                that.$store.commit('drawing/setLoading', false)
+                that.prevEmail = res.data.user.email
+                that.$store.commit('drawing/setFlash', {
+                  status: true,
+                  type: 'success',
+                  message: 'メールアドレスを変更しました'
+                })
+                setTimeout(() => {
+                  that.$store.commit('drawing/setFlash', {})
+                }, 2000)
+              }).catch(() => {
+                that.errorFlash()
+                that.$store.commit('drawing/setLoading', false)
+              })
           })
-          .then((res) => {
-            this.$store.commit('drawing/setLoading', false)
-            this.prevEmail = res.data.user.email
-            this.$store.commit('drawing/setFlash', {
-              status: true,
-              type: 'success',
-              message: 'メールアドレスを変更しました'
-            })
-            setTimeout(() => {
-              this.$store.commit('drawing/setFlash', {})
-            }, 2000)
-          }).catch(() => {
-            this.errorFlash()
-            this.$store.commit('drawing/setLoading', false)
-          })
+        }
       }).catch((error) => {
         this.emailError = ((code) => {
           this.$store.commit('drawing/setLoading', false)
@@ -189,24 +200,34 @@ export default {
       })
     },
     updateScreenName () {
-      axios
-        .patch(`/v1/users/${this.currentUser.id}`, {
-          user: { screen_name: this.screenName }
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          axios
+            .patch(`/v1/users/${that.currentUser.id}`,
+              { user: { screen_name: that.screenName } },
+              {
+                headers: {
+                  Authorization: `Bearer ${idToken}`
+                }
+              })
+            .then((res) => {
+              that.$store.commit('setScreenName', res.data.user.screen_name)
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: 'ユーザーIDを変更しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+            }).catch(() => {
+              that.errorFlash()
+              that.screenNameError = '既に使用されているユーザー名です'
+            })
         })
-        .then((res) => {
-          this.$store.commit('setScreenName', res.data.user.screen_name)
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: 'ユーザーIDを変更しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
-        }).catch(() => {
-          this.errorFlash()
-          this.screenNameError = '既に使用されているユーザー名です'
-        })
+      }
     },
     updatePassword () {
       const user = firebase.auth().currentUser
@@ -248,14 +269,23 @@ export default {
     this.disabled = true
     const getter = () => {
       if (this.currentUser.id) {
-        axios
-          .get(`/v1/users/${this.currentUser.id}/edit`)
-          .then((res) => {
-            this.email = res.data.user.email
-            this.prevEmail = res.data.user.email
-            this.screenName = res.data.user.screen_name
-            this.disabled = res.data.user.guest
+        const user = firebase.auth().currentUser
+        if (user) {
+          const that = this
+          user.getIdToken(true).then(function (idToken) {
+            axios
+              .get(`/v1/users/${that.currentUser.id}/edit`, {
+                headers: {
+                  Authorization: `Bearer ${idToken}`
+                }
+              }).then((res) => {
+                that.email = res.data.user.email
+                that.prevEmail = res.data.user.email
+                that.screenName = res.data.user.screen_name
+                that.disabled = res.data.user.guest
+              })
           })
+        }
       }
     }
     if (this.currentUser.id) {

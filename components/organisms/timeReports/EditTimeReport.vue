@@ -12,6 +12,7 @@
 <script>
 import TimeReportForm from './TimeReportForm.vue'
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
 
 export default {
   components: {
@@ -36,25 +37,36 @@ export default {
   },
   methods: {
     editTimeReport (data) {
-      axios
-        .patch(`/v1/time_reports/${data.timeReport.id}`, {
-          time_report: data.timeReport,
-          user_id: this.currentUser.id,
-          tags: data.tags
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .patch(`/v1/time_reports/${data.timeReport.id}`, {
+              time_report: data.timeReport,
+              user_id: that.currentUser.id,
+              tags: data.tags
+            }, config)
+            .then((res) => {
+              that.$emit('closeModal')
+              that.$emit('updateTimeReport', res.data)
+              that.$store.commit('experience/setExperience', res.data.experience)
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: '記録を変更しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+            })
         })
-        .then((res) => {
-          this.$emit('closeModal')
-          this.$emit('updateTimeReport', res.data)
-          this.$store.commit('experience/setExperience', res.data.experience)
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: '記録を変更しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
-        })
+      }
     },
     closeModal () {
       this.$emit('closeModal')

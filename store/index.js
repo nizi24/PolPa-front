@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export const state = () => ({
   currentUser: {
     id: '',
+    id_token: '',
     name: '',
     email: '',
     screen_name: '',
@@ -18,8 +19,7 @@ export const state = () => ({
     weeklyTarget: {},
     following: [],
     tagFollowing: [],
-    required_exp: {},
-    id_token: ''
+    required_exp: {}
   }
 })
 

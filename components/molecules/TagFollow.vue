@@ -87,6 +87,8 @@
 
 <script>
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
+
 export default {
   props: {
     tagId: {
@@ -114,30 +116,52 @@ export default {
     follow () {
       if (this.disabled) { return }
       this.disabled = true
-      axios
-        .post(`/v1/tags/${this.tagId}/follow`, { user_id: this.currentUser.id })
-        .then((res) => {
-          this.followed = true
-          this.$store.commit('addTagFollowing', res.data)
-          this.$emit('addTagFollower')
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .post(`/v1/tags/${that.tagId}/follow`, { user_id: that.currentUser.id }, config)
+            .then((res) => {
+              that.followed = true
+              that.$store.commit('addTagFollowing', res.data)
+              that.$emit('addTagFollower')
+            })
+          setTimeout(() => {
+            that.disabled = false
+          }, 200)
         })
-      setTimeout(() => {
-        this.disabled = false
-      }, 200)
+      }
     },
     unfollow () {
       if (this.disabled) { return }
       this.disabled = true
-      axios
-        .delete(`/v1/tags/${this.tagId}/unfollow`, { params: { user_id: this.currentUser.id } })
-        .then((res) => {
-          this.followed = false
-          this.$store.commit('removeTagFollowing', res.data)
-          this.$emit('subTagFollower')
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .delete(`/v1/tags/${that.tagId}/unfollow`, config, { params: { user_id: that.currentUser.id } })
+            .then((res) => {
+              that.followed = false
+              that.$store.commit('removeTagFollowing', res.data)
+              that.$emit('subTagFollower')
+            })
+          setTimeout(() => {
+            that.disabled = false
+          }, 200)
         })
-      setTimeout(() => {
-        this.disabled = false
-      }, 200)
+      }
     }
   },
   mounted () {

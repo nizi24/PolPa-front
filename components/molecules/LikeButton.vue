@@ -41,6 +41,7 @@
 <script>
 import IconButton from '../atoms/icons/IconButton.vue'
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
 
 export default {
   components: {
@@ -86,17 +87,28 @@ export default {
         likeable_id: this.objectId,
         user_id: this.currentUser.id
       }
-      axios
-        .post('/v1/like', { like: likeParams })
-        .then((res) => {
-          this.liked = true
-          const likeable = {
-            likeable_type: this.objectType,
-            likeable_id: this.objectId
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
           }
-          this.$emit('addLiked')
-          this.$store.commit('addLiked', likeable)
+          axios
+            .post('/v1/like', { like: likeParams }, config)
+            .then((res) => {
+              that.liked = true
+              const likeable = {
+                likeable_type: that.objectType,
+                likeable_id: that.objectId
+              }
+              that.$emit('addLiked')
+              that.$store.commit('addLiked', likeable)
+            })
         })
+      }
       setTimeout(() => {
         this.disabled = false
       }, 200)
@@ -109,20 +121,31 @@ export default {
         likeable_id: this.objectId,
         user_id: this.currentUser.id
       }
-      axios
-        .delete('/v1/like/delete', { params: { like: likeParams } })
-        .then(() => {
-          this.liked = false
-          const likeable = {
-            likeable_type: this.objectType,
-            likeable_id: this.objectId
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
           }
-          this.$emit('destroyLike')
-          this.$store.commit('removeLiked', likeable)
-          setTimeout(() => {
-            this.disabled = false
-          }, 200)
+          axios
+            .delete('/v1/like/delete', { params: { like: likeParams } }, config)
+            .then(() => {
+              that.liked = false
+              const likeable = {
+                likeable_type: that.objectType,
+                likeable_id: that.objectId
+              }
+              that.$emit('destroyLike')
+              that.$store.commit('removeLiked', likeable)
+              setTimeout(() => {
+                that.disabled = false
+              }, 200)
+            })
         })
+      }
     }
   },
   mounted () {

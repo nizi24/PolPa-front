@@ -49,6 +49,7 @@
 <script>
 import LikeButton from '../../molecules/LikeButton.vue'
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
 export default {
   components: {
     LikeButton
@@ -72,19 +73,30 @@ export default {
       const confirm = window.confirm('削除しますか？') // eslint-disable-line
       if (confirm) {
         const commentId = this.comment.id
-        axios
-          .delete(`/v1/comments/${commentId}`)
-          .then((res) => {
-            this.$emit('deleteComment', commentId)
-            this.$store.commit('drawing/setFlash', {
-              status: true,
-              type: 'success',
-              message: 'コメントを削除しました'
-            })
-            setTimeout(() => {
-              this.$store.commit('drawing/setFlash', {})
-            }, 2000)
+        const user = firebase.auth().currentUser
+        if (user) {
+          const that = this
+          user.getIdToken(true).then(function (idToken) {
+            const config = {
+              headers: {
+                Authorization: `Bearer ${idToken}`
+              }
+            }
+            axios
+              .delete(`/v1/comments/${commentId}`, config)
+              .then((res) => {
+                that.$emit('deleteComment', commentId)
+                that.$store.commit('drawing/setFlash', {
+                  status: true,
+                  type: 'success',
+                  message: 'コメントを削除しました'
+                })
+                setTimeout(() => {
+                  that.$store.commit('drawing/setFlash', {})
+                }, 2000)
+              })
           })
+        }
       }
     },
     subCount () {
