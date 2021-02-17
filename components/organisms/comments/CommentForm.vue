@@ -44,11 +44,15 @@ export default {
     sendComment () {
       const comment = {
         content: this.comment,
-        user_id: this.currentUser.id,
         time_report_id: this.timeReportId
       }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.currentUser.id_token}`
+        }
+      }
       axios
-        .post('/v1/comments', { comment })
+        .post('/v1/comments', { comment }, config)
         .then((res) => {
           this.$emit('addComment', res.data)
           this.comment = ''

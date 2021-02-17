@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export const state = () => ({
   currentUser: {
     id: '',
+    id_token: '',
     name: '',
     email: '',
     screen_name: '',
@@ -90,5 +91,8 @@ export const mutations = {
   },
   setRequiredExp (state, payload) {
     state.currentUser.required_exp = payload
+  },
+  setIdToken (state, payload) {
+    state.currentUser.id_token = payload
   }
 }

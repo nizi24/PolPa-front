@@ -82,7 +82,8 @@ export default {
       formData.append('avatar', this.avatar)
       const config = {
         headers: {
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
+          Authorization: `Bearer ${this.currentUser.id_token}`
         }
       }
       axios
@@ -107,7 +108,12 @@ export default {
         name: this.name,
         profile: this.profile
       }
-      axios.patch(`/v1/users/${this.currentUser.id}`, { user })
+      axios.patch(`/v1/users/${this.currentUser.id}`, { user },
+        {
+          headers: {
+            Authorization: `Bearer ${this.currentUser.id_token}`
+          }
+        })
         .then((res) => {
           this.$store.commit('setProfile', res.data.user.profile)
           this.$store.commit('setName', res.data.user.name)
@@ -139,29 +145,25 @@ export default {
   },
   mounted () {
     this.disabled = true
-    const that = this
-    const wait = (sec) => {
-      return new Promise((resolve) => {
-        setTimeout(resolve, sec * 1000)
-      })
-    }
-    async function mount () {
-      try {
-        if (!that.currentUser.id) {
-          await wait(1)
-        }
+    const getter = () => {
+      if (this.currentUser.id) {
         axios
-          .get(`/v1/users/${that.currentUser.id}/edit`)
-          .then((res) => {
-            that.name = res.data.user.name
-            that.profile = res.data.user.profile
-            that.disabled = res.data.user.guest
+          .get(`/v1/users/${this.currentUser.id}/edit`, {
+            headers: {
+              Authorization: `Bearer ${this.currentUser.id_token}`
+            }
+          }).then((res) => {
+            this.name = res.data.user.name
+            this.profile = res.data.user.profile
+            this.disabled = res.data.user.guest
           })
-      } catch {
-        that.disabled = true
       }
     }
-    mount()
+    if (this.currentUser.id) {
+      getter()
+    } else {
+      setTimeout(getter, 1000)
+    }
   },
   fetch ({ store, redirect }) {
     store.watch(

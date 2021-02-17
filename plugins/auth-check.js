@@ -1,8 +1,8 @@
 import firebase from '@/plugins/firebase'
 import axios from '@/plugins/axios'
 
-export const setUser = (user, store) => {
-  async function set (user, store) {
+export const setUser = (user, store, idToken) => {
+  async function set (user, store, idToken) {
     if (user) {
       const { data } = await axios.get(`/v1/users?uid=${user.uid}`)
       const userParams = JSON.parse(data.user)
@@ -14,17 +14,34 @@ export const setUser = (user, store) => {
       store.commit('setFollowing', following)
       store.commit('setTagFollowing', tagFollowing)
       store.commit('setRequiredExp', data.required_exp)
+      store.commit('setIdToken', idToken)
     } else {
       store.commit('setUser', null)
     }
   }
-  set(user, store)
+  set(user, store, idToken)
+}
+
+export const authUser = (idToken, store) => {
+  if (idToken) {
+    store.commit('setIdToken', idToken)
+  }
 }
 
 const authCheck = ({ store, redirect }) => {
-  firebase.auth().onAuthStateChanged(async (user) => {
-    await setUser(user, store)
+  firebase.auth().onAuthStateChanged((user) => {
+    user.getIdToken(true).then(function (idToken) {
+      setUser(user, store, idToken)
+    })
   })
+  const user = firebase.auth().currentUser
+  if (user) {
+    user.getIdToken(true).then(function (idToken) {
+      authUser(idToken, store)
+    })
+  } else {
+    store.commit('setUser', null)
+  }
 }
 
 export default authCheck
