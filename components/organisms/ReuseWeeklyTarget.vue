@@ -27,6 +27,8 @@
 
 <script>
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
+
 export default {
   props: {
     dialog: {
@@ -44,22 +46,33 @@ export default {
   methods: {
     reuse () {
       const target_time = this.prevWeeklyTarget.target_time //eslint-disable-line
-      axios
-        .post(`/v1/users/${this.currentUser.id}/weekly_targets`, {
-          target_time
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .post(`/v1/users/${that.currentUser.id}/weekly_targets`, {
+              target_time
+            }, config)
+            .then((res) => {
+              that.$store.commit('drawing/setFlash', {
+                status: true,
+                type: 'success',
+                message: '今週の目標を設定しました'
+              })
+              setTimeout(() => {
+                that.$store.commit('drawing/setFlash', {})
+              }, 2000)
+              that.$emit('addTarget', res.data.weekly_target)
+              that.$emit('close')
+            })
         })
-        .then((res) => {
-          this.$store.commit('drawing/setFlash', {
-            status: true,
-            type: 'success',
-            message: '今週の目標を設定しました'
-          })
-          setTimeout(() => {
-            this.$store.commit('drawing/setFlash', {})
-          }, 2000)
-          this.$emit('addTarget', res.data.weekly_target)
-          this.$emit('close')
-        })
+      }
     }
   }
 }

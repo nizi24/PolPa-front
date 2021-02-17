@@ -86,6 +86,8 @@
 
 <script>
 import axios from '@/plugins/axios'
+import firebase from '@/plugins/firebase'
+
 export default {
   props: {
     userId: {
@@ -113,35 +115,57 @@ export default {
     follow () {
       if (this.disabled) { return }
       this.disabled = true
-      axios
-        .post(`/v1/users/${this.userId}/follow`, {
-          current_user_id: this.currentUser.id
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .post(`/v1/users/${that.userId}/follow`, {
+              current_user_id: that.currentUser.id
+            }, config)
+            .then((res) => {
+              that.$store.commit('addFollowing', res.data)
+              that.followed = true
+              that.$emit('addFollower')
+            })
+          setTimeout(() => {
+            that.disabled = false
+          }, 200)
         })
-        .then((res) => {
-          this.$store.commit('addFollowing', res.data)
-          this.followed = true
-          this.$emit('addFollower')
-        })
-      setTimeout(() => {
-        this.disabled = false
-      }, 200)
+      }
     },
     unfollow () {
       if (this.disabled) { return }
       this.disabled = true
-      axios
-        .delete(`/v1/users/${this.userId}/unfollow`, {
-          params:
-            { current_user_id: this.currentUser.id }
+      const user = firebase.auth().currentUser
+      if (user) {
+        const that = this
+        user.getIdToken(true).then(function (idToken) {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${idToken}`
+            }
+          }
+          axios
+            .delete(`/v1/users/${that.userId}/unfollow`, config, {
+              params:
+                { current_user_id: that.currentUser.id }
+            })
+            .then((res) => {
+              that.$store.commit('removeFollowing', res.data)
+              that.followed = false
+              that.$emit('subFollower')
+            })
+          setTimeout(() => {
+            that.disabled = false
+          }, 200)
         })
-        .then((res) => {
-          this.$store.commit('removeFollowing', res.data)
-          this.followed = false
-          this.$emit('subFollower')
-        })
-      setTimeout(() => {
-        this.disabled = false
-      }, 200)
+      }
     }
   },
   mounted () {
