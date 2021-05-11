@@ -21,7 +21,7 @@
     "firebase": "^7.15.5",
     "jquery": "^3.5.1",
     "loaders.css": "^0.1.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "nuxt": "^2.13.0",
     "vee-validate": "^3.3.6",
     "vue-chart-heatmap": "^1.2.5",
